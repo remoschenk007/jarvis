@@ -443,48 +443,129 @@ setInterval(()=>{document.getElementById('cpu').textContent=((7+Date.now()/950%2
 // AUDIO — JARVIS SOUND ENGINE
 // ═══════════════════════════════════════════
 function arcSound(ctx){
-  const t=ctx.currentTime;
-  // Sub thud
-  const buf=ctx.createBuffer(1,ctx.sampleRate*0.28,ctx.sampleRate);
-  const dat=buf.getChannelData(0);
-  for(let i=0;i<dat.length;i++) dat[i]=(Math.random()*2-1)*Math.pow(1-i/dat.length,2.2)*0.85;
-  const ns=ctx.createBufferSource(); ns.buffer=buf;
-  const nf=ctx.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=160;
-  const ng=ctx.createGain(); ng.gain.setValueAtTime(1,t); ng.gain.exponentialRampToValueAtTime(0.001,t+0.32);
-  ns.connect(nf); nf.connect(ng); ng.connect(ctx.destination); ns.start(t);
-  // Hum
-  const hum=ctx.createOscillator(),hg=ctx.createGain();
-  hum.type='sawtooth'; hum.frequency.setValueAtTime(50,t+0.1); hum.frequency.linearRampToValueAtTime(115,t+2);
-  hg.gain.setValueAtTime(0,t+0.1); hg.gain.linearRampToValueAtTime(0.16,t+0.5); hg.gain.linearRampToValueAtTime(0,t+3.5);
-  const hf=ctx.createBiquadFilter(); hf.type='bandpass'; hf.frequency.value=280; hf.Q.value=1.2;
-  hum.connect(hf); hf.connect(hg); hg.connect(ctx.destination); hum.start(t+0.1); hum.stop(t+3.5);
-  // Sweep
-  const sw=ctx.createOscillator(),sg=ctx.createGain();
-  sw.type='sine'; sw.frequency.setValueAtTime(280,t+0.35); sw.frequency.exponentialRampToValueAtTime(4600,t+2.1);
-  sg.gain.setValueAtTime(0,t+0.35); sg.gain.linearRampToValueAtTime(0.22,t+1.3); sg.gain.linearRampToValueAtTime(0.3,t+2.0); sg.gain.exponentialRampToValueAtTime(0.001,t+2.2);
-  sw.connect(sg); sg.connect(ctx.destination); sw.start(t+0.35); sw.stop(t+2.25);
-  // Power click
-  const cl=ctx.createOscillator(),cg=ctx.createGain();
-  cl.type='square'; cl.frequency.setValueAtTime(260,t+2.1); cl.frequency.linearRampToValueAtTime(45,t+2.38);
-  cg.gain.setValueAtTime(0.52,t+2.1); cg.gain.exponentialRampToValueAtTime(0.001,t+2.38);
-  cl.connect(cg); cg.connect(ctx.destination); cl.start(t+2.1); cl.stop(t+2.4);
-  // Run hum
-  const rn=ctx.createOscillator(),rg=ctx.createGain();
-  rn.type='sine'; rn.frequency.value=125;
-  rg.gain.setValueAtTime(0,t+2.3); rg.gain.linearRampToValueAtTime(0.055,t+2.8);
-  rn.connect(rg); rg.connect(ctx.destination); rn.start(t+2.3); rn.stop(t+7);
-  // JARVIS pings
-  [[2.45,1047,.09],[2.6,1319,.07],[2.75,880,.08],[2.9,1568,.09],[3.05,1047,.06]].forEach(([tt,f,v])=>{
+  const t = ctx.currentTime;
+
+  // MASTER COMPRESSOR — glues everything, makes it punch harder
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -18;
+  comp.knee.value = 6;
+  comp.ratio.value = 8;
+  comp.attack.value = 0.003;
+  comp.release.value = 0.25;
+  comp.connect(ctx.destination);
+
+  // MASTER GAIN
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(1.4, t);
+  master.connect(comp);
+
+  // ── LAYER 1: MASSIVE SUB BOOM on impact ──────────────────────
+  // White noise burst filtered to sub-bass — the "thud" felt in chest
+  const boom = ctx.createBuffer(1, ctx.sampleRate * 0.6, ctx.sampleRate);
+  const bd = boom.getChannelData(0);
+  for(let i=0;i<bd.length;i++) bd[i]=(Math.random()*2-1)*Math.pow(1-i/bd.length,1.8);
+  const bs = ctx.createBufferSource(); bs.buffer=boom;
+  const bf1 = ctx.createBiquadFilter(); bf1.type='lowpass'; bf1.frequency.value=90; bf1.Q.value=2;
+  const bf2 = ctx.createBiquadFilter(); bf2.type='peaking'; bf2.frequency.value=60; bf2.gain.value=18;
+  const bg = ctx.createGain(); bg.gain.setValueAtTime(2.2,t); bg.gain.exponentialRampToValueAtTime(0.001,t+0.65);
+  bs.connect(bf1); bf1.connect(bf2); bf2.connect(bg); bg.connect(master);
+  bs.start(t);
+
+  // ── LAYER 2: DEEP SINE PULSE — sub bass heartbeat ────────────
+  const sub = ctx.createOscillator(), sg2 = ctx.createGain();
+  sub.type = 'sine'; sub.frequency.setValueAtTime(28,t); sub.frequency.linearRampToValueAtTime(55,t+0.4);
+  sg2.gain.setValueAtTime(0,t); sg2.gain.linearRampToValueAtTime(0.9,t+0.06);
+  sg2.gain.setValueAtTime(0.9,t+0.06); sg2.gain.linearRampToValueAtTime(0,t+0.8);
+  sub.connect(sg2); sg2.connect(master); sub.start(t); sub.stop(t+0.85);
+
+  // ── LAYER 3: ELECTRIC REACTOR HUM building up ────────────────
+  const hum = ctx.createOscillator(), hg2 = ctx.createGain();
+  hum.type = 'sawtooth';
+  hum.frequency.setValueAtTime(40,t+0.15);
+  hum.frequency.linearRampToValueAtTime(80,t+1.0);
+  hum.frequency.linearRampToValueAtTime(130,t+2.2);
+  hg2.gain.setValueAtTime(0,t+0.15);
+  hg2.gain.linearRampToValueAtTime(0.28,t+0.7);
+  hg2.gain.linearRampToValueAtTime(0.18,t+2.5);
+  hg2.gain.linearRampToValueAtTime(0,t+4.0);
+  const hfilt = ctx.createBiquadFilter(); hfilt.type='bandpass'; hfilt.frequency.value=220; hfilt.Q.value=0.8;
+  hum.connect(hfilt); hfilt.connect(hg2); hg2.connect(master);
+  hum.start(t+0.15); hum.stop(t+4.0);
+
+  // ── LAYER 4: DISTORTED GROWL — gritty reactor power ──────────
+  const growl = ctx.createOscillator(), gg = ctx.createGain();
+  growl.type = 'square';
+  growl.frequency.setValueAtTime(55,t+0.2);
+  growl.frequency.linearRampToValueAtTime(95,t+1.8);
+  gg.gain.setValueAtTime(0,t+0.2);
+  gg.gain.linearRampToValueAtTime(0.12,t+0.6);
+  gg.gain.linearRampToValueAtTime(0,t+2.8);
+  const gfilt = ctx.createBiquadFilter(); gfilt.type='lowpass'; gfilt.frequency.value=400;
+  growl.connect(gfilt); gfilt.connect(gg); gg.connect(master);
+  growl.start(t+0.2); growl.stop(t+2.8);
+
+  // ── LAYER 5: HIGH WHINE SWEEP — iconic capacitor charge ──────
+  const sweep = ctx.createOscillator(), swg = ctx.createGain();
+  sweep.type = 'sine';
+  sweep.frequency.setValueAtTime(200,t+0.5);
+  sweep.frequency.exponentialRampToValueAtTime(5200,t+2.15);
+  swg.gain.setValueAtTime(0,t+0.5);
+  swg.gain.linearRampToValueAtTime(0.0,t+0.6);
+  swg.gain.linearRampToValueAtTime(0.22,t+1.4);
+  swg.gain.linearRampToValueAtTime(0.38,t+2.1);
+  swg.gain.exponentialRampToValueAtTime(0.001,t+2.3);
+  sweep.connect(swg); swg.connect(master);
+  sweep.start(t+0.5); sweep.stop(t+2.35);
+
+  // ── LAYER 6: POWER-ON CRACK + metallic CLANG ─────────────────
+  // Noise burst for the crack
+  const crackBuf = ctx.createBuffer(1, ctx.sampleRate*0.08, ctx.sampleRate);
+  const cd = crackBuf.getChannelData(0);
+  for(let i=0;i<cd.length;i++) cd[i]=(Math.random()*2-1)*Math.pow(1-i/cd.length,0.5);
+  const cs = ctx.createBufferSource(); cs.buffer=crackBuf;
+  const cf = ctx.createBiquadFilter(); cf.type='highpass'; cf.frequency.value=1200;
+  const cg3 = ctx.createGain(); cg3.gain.setValueAtTime(1.8,t+2.18); cg3.gain.exponentialRampToValueAtTime(0.001,t+2.28);
+  cs.connect(cf); cf.connect(cg3); cg3.connect(master); cs.start(t+2.18);
+  // Metallic clang oscillator
+  const clang = ctx.createOscillator(), clg = ctx.createGain();
+  clang.type = 'square';
+  clang.frequency.setValueAtTime(320,t+2.18); clang.frequency.linearRampToValueAtTime(35,t+2.55);
+  clg.gain.setValueAtTime(0.65,t+2.18); clg.gain.exponentialRampToValueAtTime(0.001,t+2.55);
+  clang.connect(clg); clg.connect(master); clang.start(t+2.18); clang.stop(t+2.58);
+
+  // ── LAYER 7: STEADY REACTOR RUNNING HUM ──────────────────────
+  const run = ctx.createOscillator(), rg3 = ctx.createGain();
+  run.type = 'sine'; run.frequency.value = 118;
+  rg3.gain.setValueAtTime(0,t+2.4); rg3.gain.linearRampToValueAtTime(0.07,t+3.0);
+  run.connect(rg3); rg3.connect(master); run.start(t+2.4); run.stop(t+8);
+  // Harmonics for richness
+  const run2 = ctx.createOscillator(), rg4 = ctx.createGain();
+  run2.type = 'sine'; run2.frequency.value = 236;
+  rg4.gain.setValueAtTime(0,t+2.4); rg4.gain.linearRampToValueAtTime(0.025,t+3.0);
+  run2.connect(rg4); rg4.connect(master); run2.start(t+2.4); run2.stop(t+8);
+
+  // ── LAYER 8: JARVIS DIGITAL INIT PINGS ───────────────────────
+  [[2.5,1047,0.12],[2.64,1319,0.09],[2.78,880,0.11],[2.92,1568,0.12],[3.06,1047,0.08],[3.18,1760,0.07]].forEach(([tt,f,v])=>{
     const o=ctx.createOscillator(),g=ctx.createGain();
     o.type='sine'; o.frequency.value=f;
-    g.gain.setValueAtTime(v,t+tt); g.gain.exponentialRampToValueAtTime(0.001,t+tt+0.14);
-    o.connect(g); g.connect(ctx.destination); o.start(t+tt); o.stop(t+tt+0.17);
+    g.gain.setValueAtTime(v,t+tt); g.gain.exponentialRampToValueAtTime(0.001,t+tt+0.18);
+    o.connect(g); g.connect(master); o.start(t+tt); o.stop(t+tt+0.2);
   });
-  // Sub pulse
-  const sb=ctx.createOscillator(),sbg=ctx.createGain();
-  sb.type='sine'; sb.frequency.value=38;
-  sbg.gain.setValueAtTime(0,t); sbg.gain.linearRampToValueAtTime(0.32,t+0.07); sbg.gain.linearRampToValueAtTime(0,t+0.5);
-  sb.connect(sbg); sbg.connect(ctx.destination); sb.start(t); sb.stop(t+0.55);
+
+  // ── LAYER 9: CINEMATIC LOW-END RUMBLE texture ─────────────────
+  const rumbBuf = ctx.createBuffer(1, ctx.sampleRate*3.5, ctx.sampleRate);
+  const rd = rumbBuf.getChannelData(0);
+  for(let i=0;i<rd.length;i++) rd[i]=(Math.random()*2-1)*0.35;
+  const rs = ctx.createBufferSource(); rs.buffer=rumbBuf;
+  const rf1=ctx.createBiquadFilter(); rf1.type='lowpass'; rf1.frequency.value=80;
+  const rf2=ctx.createBiquadFilter(); rf2.type='peaking'; rf2.frequency.value=45; rf2.gain.value=14;
+  const rumbleG=ctx.createGain();
+  rumbleG.gain.setValueAtTime(0,t+0.3);
+  rumbleG.gain.linearRampToValueAtTime(0.55,t+0.8);
+  rumbleG.gain.linearRampToValueAtTime(0.3,t+2.0);
+  rumbleG.gain.linearRampToValueAtTime(0,t+3.8);
+  rs.connect(rf1); rf1.connect(rf2); rf2.connect(rumbleG); rumbleG.connect(master);
+  rs.start(t+0.3);
 }
 
 function jarvisSpeak(text,rate,pitch){
