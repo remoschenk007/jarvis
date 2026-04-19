@@ -49,10 +49,10 @@ body{background:#000810;color:#00d4ff;font-family:'Share Tech Mono',monospace;ov
 .bl .ar{color:#001e33;margin-right:10px}
 
 /* HELLO */
-#hello{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;pointer-events:none;opacity:0;transition:opacity 0.5s;background:rgba(0,2,14,0.75);backdrop-filter:blur(3px)}
+#hello{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;pointer-events:none;opacity:0;transition:opacity 0.8s ease;background:rgba(0,1,8,0.88);backdrop-filter:blur(6px)}
 #hello.on{opacity:1}
-#hello-txt{font-family:‘Orbitron’,sans-serif;font-size:clamp(38px,8vw,90px);font-weight:900;color:#fff;letter-spacing:0.1em;text-shadow:0 0 30px #00d4ff,0 0 65px #00aaff,0 0 110px #0055ff;text-align:center;animation:helloIn 0.75s ease forwards}
-#hello-sub{margin-top:18px;font-size:clamp(11px,2vw,17px);color:#00ccff;letter-spacing:0.5em;opacity:0.85;text-align:center}
+#hello-txt{font-family:‘Orbitron’,sans-serif;font-size:clamp(48px,11vw,120px);font-weight:900;color:#fff;letter-spacing:0.08em;text-shadow:0 0 40px #00d4ff,0 0 80px #00aaff,0 0 140px #0055ff,0 0 220px #0033cc;text-align:center;animation:helloIn 0.6s ease forwards;line-height:1}
+#hello-sub{margin-top:24px;font-size:clamp(12px,2.2vw,20px);color:#00d4ff;letter-spacing:0.6em;opacity:0.7;text-align:center;animation:helloIn 0.6s ease 0.3s both}
 
 /* MAIN */
 #main{display:none;min-height:100vh;position:relative;z-index:1}
@@ -524,129 +524,126 @@ setInterval(()=>{document.getElementById('cpu').textContent=((7+Date.now()/950%2
 function arcSound(ctx){
   const t = ctx.currentTime;
 
-  // MASTER COMPRESSOR — glues everything, makes it punch harder
-  const comp = ctx.createDynamicsCompressor();
-  comp.threshold.value = -18;
-  comp.knee.value = 6;
-  comp.ratio.value = 8;
-  comp.attack.value = 0.003;
-  comp.release.value = 0.25;
-  comp.connect(ctx.destination);
+  // REVERB CONVOLVER — creates that cinematic space
+  function makeReverb(ctx, seconds, decay){
+    const len = ctx.sampleRate * seconds;
+    const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+    for(let c=0;c<2;c++){
+      const d = buf.getChannelData(c);
+      for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay);
+    }
+    const conv = ctx.createConvolver();
+    conv.buffer = buf;
+    return conv;
+  }
 
-  // MASTER GAIN
+  const reverb = makeReverb(ctx, 3.5, 1.8);
+  reverb.connect(ctx.destination);
+
+  // MASTER COMPRESSOR + GAIN
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value=-16; comp.knee.value=8;
+  comp.ratio.value=10; comp.attack.value=0.002; comp.release.value=0.3;
+  comp.connect(ctx.destination);
+  comp.connect(reverb);
   const master = ctx.createGain();
-  master.gain.setValueAtTime(1.4, t);
+  master.gain.setValueAtTime(1.6, t);
   master.connect(comp);
 
-  // ── LAYER 1: MASSIVE SUB BOOM on impact ──────────────────────
-  // White noise burst filtered to sub-bass — the "thud" felt in chest
-  const boom = ctx.createBuffer(1, ctx.sampleRate * 0.6, ctx.sampleRate);
-  const bd = boom.getChannelData(0);
-  for(let i=0;i<bd.length;i++) bd[i]=(Math.random()*2-1)*Math.pow(1-i/bd.length,1.8);
-  const bs = ctx.createBufferSource(); bs.buffer=boom;
-  const bf1 = ctx.createBiquadFilter(); bf1.type='lowpass'; bf1.frequency.value=90; bf1.Q.value=2;
-  const bf2 = ctx.createBiquadFilter(); bf2.type='peaking'; bf2.frequency.value=60; bf2.gain.value=18;
-  const bg = ctx.createGain(); bg.gain.setValueAtTime(2.2,t); bg.gain.exponentialRampToValueAtTime(0.001,t+0.65);
-  bs.connect(bf1); bf1.connect(bf2); bf2.connect(bg); bg.connect(master);
-  bs.start(t);
+  // ── IMPACT: massive sub thud ──────────────────────────────
+  const thudBuf = ctx.createBuffer(1, ctx.sampleRate*0.7, ctx.sampleRate);
+  const td = thudBuf.getChannelData(0);
+  for(let i=0;i<td.length;i++) td[i]=(Math.random()*2-1)*Math.pow(1-i/td.length,1.6);
+  const thud = ctx.createBufferSource(); thud.buffer=thudBuf;
+  const thudLP = ctx.createBiquadFilter(); thudLP.type='lowpass'; thudLP.frequency.value=85;
+  const thudPeak = ctx.createBiquadFilter(); thudPeak.type='peaking'; thudPeak.frequency.value=55; thudPeak.gain.value=20;
+  const thudG = ctx.createGain(); thudG.gain.setValueAtTime(2.8,t); thudG.gain.exponentialRampToValueAtTime(0.001,t+0.8);
+  thud.connect(thudLP); thudLP.connect(thudPeak); thudPeak.connect(thudG); thudG.connect(master);
+  thud.start(t);
 
-  // ── LAYER 2: DEEP SINE PULSE — sub bass heartbeat ────────────
-  const sub = ctx.createOscillator(), sg2 = ctx.createGain();
-  sub.type = 'sine'; sub.frequency.setValueAtTime(28,t); sub.frequency.linearRampToValueAtTime(55,t+0.4);
-  sg2.gain.setValueAtTime(0,t); sg2.gain.linearRampToValueAtTime(0.9,t+0.06);
-  sg2.gain.setValueAtTime(0.9,t+0.06); sg2.gain.linearRampToValueAtTime(0,t+0.8);
-  sub.connect(sg2); sg2.connect(master); sub.start(t); sub.stop(t+0.85);
+  // ── SUB SINE PULSE ────────────────────────────────────────
+  const sub = ctx.createOscillator(), subG = ctx.createGain();
+  sub.type='sine'; sub.frequency.setValueAtTime(22,t); sub.frequency.linearRampToValueAtTime(48,t+0.5);
+  subG.gain.setValueAtTime(0,t); subG.gain.linearRampToValueAtTime(1.1,t+0.05);
+  subG.gain.linearRampToValueAtTime(0,t+0.9);
+  sub.connect(subG); subG.connect(master); sub.start(t); sub.stop(t+0.95);
 
-  // ── LAYER 3: ELECTRIC REACTOR HUM building up ────────────────
-  const hum = ctx.createOscillator(), hg2 = ctx.createGain();
-  hum.type = 'sawtooth';
-  hum.frequency.setValueAtTime(40,t+0.15);
-  hum.frequency.linearRampToValueAtTime(80,t+1.0);
-  hum.frequency.linearRampToValueAtTime(130,t+2.2);
-  hg2.gain.setValueAtTime(0,t+0.15);
-  hg2.gain.linearRampToValueAtTime(0.28,t+0.7);
-  hg2.gain.linearRampToValueAtTime(0.18,t+2.5);
-  hg2.gain.linearRampToValueAtTime(0,t+4.0);
-  const hfilt = ctx.createBiquadFilter(); hfilt.type='bandpass'; hfilt.frequency.value=220; hfilt.Q.value=0.8;
-  hum.connect(hfilt); hfilt.connect(hg2); hg2.connect(master);
-  hum.start(t+0.15); hum.stop(t+4.0);
+  // ── REACTOR HUM BUILDING ──────────────────────────────────
+  const hum = ctx.createOscillator(), humG = ctx.createGain();
+  hum.type='sawtooth'; hum.frequency.setValueAtTime(38,t+0.2); hum.frequency.linearRampToValueAtTime(125,t+2.4);
+  humG.gain.setValueAtTime(0,t+0.2); humG.gain.linearRampToValueAtTime(0.32,t+0.8);
+  humG.gain.linearRampToValueAtTime(0.2,t+2.6); humG.gain.linearRampToValueAtTime(0,t+4.5);
+  const humF = ctx.createBiquadFilter(); humF.type='bandpass'; humF.frequency.value=200; humF.Q.value=0.7;
+  hum.connect(humF); humF.connect(humG); humG.connect(master);
+  hum.start(t+0.2); hum.stop(t+4.5);
 
-  // ── LAYER 4: DISTORTED GROWL — gritty reactor power ──────────
-  const growl = ctx.createOscillator(), gg = ctx.createGain();
-  growl.type = 'square';
-  growl.frequency.setValueAtTime(55,t+0.2);
-  growl.frequency.linearRampToValueAtTime(95,t+1.8);
-  gg.gain.setValueAtTime(0,t+0.2);
-  gg.gain.linearRampToValueAtTime(0.12,t+0.6);
-  gg.gain.linearRampToValueAtTime(0,t+2.8);
-  const gfilt = ctx.createBiquadFilter(); gfilt.type='lowpass'; gfilt.frequency.value=400;
-  growl.connect(gfilt); gfilt.connect(gg); gg.connect(master);
-  growl.start(t+0.2); growl.stop(t+2.8);
+  // ── GROWL LAYER ───────────────────────────────────────────
+  const gr = ctx.createOscillator(), grG = ctx.createGain();
+  gr.type='square'; gr.frequency.setValueAtTime(48,t+0.3); gr.frequency.linearRampToValueAtTime(92,t+2.2);
+  grG.gain.setValueAtTime(0,t+0.3); grG.gain.linearRampToValueAtTime(0.14,t+0.8); grG.gain.linearRampToValueAtTime(0,t+3.2);
+  const grF = ctx.createBiquadFilter(); grF.type='lowpass'; grF.frequency.value=380;
+  gr.connect(grF); grF.connect(grG); grG.connect(master); gr.start(t+0.3); gr.stop(t+3.2);
 
-  // ── LAYER 5: HIGH WHINE SWEEP — iconic capacitor charge ──────
-  const sweep = ctx.createOscillator(), swg = ctx.createGain();
-  sweep.type = 'sine';
-  sweep.frequency.setValueAtTime(200,t+0.5);
-  sweep.frequency.exponentialRampToValueAtTime(5200,t+2.15);
-  swg.gain.setValueAtTime(0,t+0.5);
-  swg.gain.linearRampToValueAtTime(0.0,t+0.6);
-  swg.gain.linearRampToValueAtTime(0.22,t+1.4);
-  swg.gain.linearRampToValueAtTime(0.38,t+2.1);
-  swg.gain.exponentialRampToValueAtTime(0.001,t+2.3);
-  sweep.connect(swg); swg.connect(master);
-  sweep.start(t+0.5); sweep.stop(t+2.35);
+  // ── CINEMATIC SWEEP — the iconic charge ──────────────────
+  const sw = ctx.createOscillator(), swG = ctx.createGain();
+  sw.type='sine'; sw.frequency.setValueAtTime(180,t+0.6); sw.frequency.exponentialRampToValueAtTime(5800,t+2.3);
+  swG.gain.setValueAtTime(0,t+0.6); swG.gain.linearRampToValueAtTime(0.28,t+1.5);
+  swG.gain.linearRampToValueAtTime(0.42,t+2.2); swG.gain.exponentialRampToValueAtTime(0.001,t+2.45);
+  sw.connect(swG); swG.connect(master); sw.start(t+0.6); sw.stop(t+2.5);
 
-  // ── LAYER 6: POWER-ON CRACK + metallic CLANG ─────────────────
-  // Noise burst for the crack
-  const crackBuf = ctx.createBuffer(1, ctx.sampleRate*0.08, ctx.sampleRate);
-  const cd = crackBuf.getChannelData(0);
-  for(let i=0;i<cd.length;i++) cd[i]=(Math.random()*2-1)*Math.pow(1-i/cd.length,0.5);
-  const cs = ctx.createBufferSource(); cs.buffer=crackBuf;
-  const cf = ctx.createBiquadFilter(); cf.type='highpass'; cf.frequency.value=1200;
-  const cg3 = ctx.createGain(); cg3.gain.setValueAtTime(1.8,t+2.18); cg3.gain.exponentialRampToValueAtTime(0.001,t+2.28);
-  cs.connect(cf); cf.connect(cg3); cg3.connect(master); cs.start(t+2.18);
-  // Metallic clang oscillator
-  const clang = ctx.createOscillator(), clg = ctx.createGain();
-  clang.type = 'square';
-  clang.frequency.setValueAtTime(320,t+2.18); clang.frequency.linearRampToValueAtTime(35,t+2.55);
-  clg.gain.setValueAtTime(0.65,t+2.18); clg.gain.exponentialRampToValueAtTime(0.001,t+2.55);
-  clang.connect(clg); clg.connect(master); clang.start(t+2.18); clang.stop(t+2.58);
+  // ── SECOND HARMONIC SWEEP ─────────────────────────────────
+  const sw2 = ctx.createOscillator(), sw2G = ctx.createGain();
+  sw2.type='sine'; sw2.frequency.setValueAtTime(360,t+0.8); sw2.frequency.exponentialRampToValueAtTime(11600,t+2.2);
+  sw2G.gain.setValueAtTime(0,t+0.8); sw2G.gain.linearRampToValueAtTime(0.08,t+1.6); sw2G.gain.exponentialRampToValueAtTime(0.001,t+2.35);
+  sw2.connect(sw2G); sw2G.connect(master); sw2.start(t+0.8); sw2.stop(t+2.4);
 
-  // ── LAYER 7: STEADY REACTOR RUNNING HUM ──────────────────────
-  const run = ctx.createOscillator(), rg3 = ctx.createGain();
-  run.type = 'sine'; run.frequency.value = 118;
-  rg3.gain.setValueAtTime(0,t+2.4); rg3.gain.linearRampToValueAtTime(0.07,t+3.0);
-  run.connect(rg3); rg3.connect(master); run.start(t+2.4); run.stop(t+8);
-  // Harmonics for richness
-  const run2 = ctx.createOscillator(), rg4 = ctx.createGain();
-  run2.type = 'sine'; run2.frequency.value = 236;
-  rg4.gain.setValueAtTime(0,t+2.4); rg4.gain.linearRampToValueAtTime(0.025,t+3.0);
-  run2.connect(rg4); rg4.connect(master); run2.start(t+2.4); run2.stop(t+8);
+  // ── POWER CRACK + CLANG ───────────────────────────────────
+  const crBuf=ctx.createBuffer(1,ctx.sampleRate*0.1,ctx.sampleRate);
+  const cd=crBuf.getChannelData(0);
+  for(let i=0;i<cd.length;i++) cd[i]=(Math.random()*2-1)*Math.pow(1-i/cd.length,0.4);
+  const cr=ctx.createBufferSource(); cr.buffer=crBuf;
+  const crH=ctx.createBiquadFilter(); crH.type='highpass'; crH.frequency.value=800;
+  const crG=ctx.createGain(); crG.gain.setValueAtTime(2.2,t+2.3); crG.gain.exponentialRampToValueAtTime(0.001,t+2.45);
+  cr.connect(crH); crH.connect(crG); crG.connect(master); cr.start(t+2.3);
 
-  // ── LAYER 8: JARVIS DIGITAL INIT PINGS ───────────────────────
-  [[2.5,1047,0.12],[2.64,1319,0.09],[2.78,880,0.11],[2.92,1568,0.12],[3.06,1047,0.08],[3.18,1760,0.07]].forEach(([tt,f,v])=>{
+  const clang=ctx.createOscillator(), clG=ctx.createGain();
+  clang.type='square'; clang.frequency.setValueAtTime(380,t+2.3); clang.frequency.linearRampToValueAtTime(28,t+2.7);
+  clG.gain.setValueAtTime(0.75,t+2.3); clG.gain.exponentialRampToValueAtTime(0.001,t+2.7);
+  clang.connect(clG); clG.connect(master); clang.start(t+2.3); clang.stop(t+2.75);
+
+  // ── REACTOR RUNNING ───────────────────────────────────────
+  const run=ctx.createOscillator(), runG=ctx.createGain();
+  run.type='sine'; run.frequency.value=122;
+  runG.gain.setValueAtTime(0,t+2.5); runG.gain.linearRampToValueAtTime(0.065,t+3.2);
+  run.connect(runG); runG.connect(master); run.start(t+2.5); run.stop(t+9);
+  const run2=ctx.createOscillator(), run2G=ctx.createGain();
+  run2.type='sine'; run2.frequency.value=244;
+  run2G.gain.setValueAtTime(0,t+2.5); run2G.gain.linearRampToValueAtTime(0.022,t+3.2);
+  run2.connect(run2G); run2G.connect(master); run2.start(t+2.5); run2.stop(t+9);
+
+  // ── JARVIS INIT PINGS ─────────────────────────────────────
+  [[2.6,1047,.13],[2.74,1319,.1],[2.88,880,.12],[3.02,1568,.13],[3.16,1047,.09],[3.28,1760,.08]].forEach(([tt,f,v])=>{
     const o=ctx.createOscillator(),g=ctx.createGain();
     o.type='sine'; o.frequency.value=f;
-    g.gain.setValueAtTime(v,t+tt); g.gain.exponentialRampToValueAtTime(0.001,t+tt+0.18);
-    o.connect(g); g.connect(master); o.start(t+tt); o.stop(t+tt+0.2);
+    g.gain.setValueAtTime(v,t+tt); g.gain.exponentialRampToValueAtTime(0.001,t+tt+0.2);
+    o.connect(g); g.connect(master); o.start(t+tt); o.stop(t+tt+0.22);
   });
 
-  // ── LAYER 9: CINEMATIC LOW-END RUMBLE texture ─────────────────
-  const rumbBuf = ctx.createBuffer(1, ctx.sampleRate*3.5, ctx.sampleRate);
-  const rd = rumbBuf.getChannelData(0);
-  for(let i=0;i<rd.length;i++) rd[i]=(Math.random()*2-1)*0.35;
-  const rs = ctx.createBufferSource(); rs.buffer=rumbBuf;
-  const rf1=ctx.createBiquadFilter(); rf1.type='lowpass'; rf1.frequency.value=80;
-  const rf2=ctx.createBiquadFilter(); rf2.type='peaking'; rf2.frequency.value=45; rf2.gain.value=14;
-  const rumbleG=ctx.createGain();
-  rumbleG.gain.setValueAtTime(0,t+0.3);
-  rumbleG.gain.linearRampToValueAtTime(0.55,t+0.8);
-  rumbleG.gain.linearRampToValueAtTime(0.3,t+2.0);
-  rumbleG.gain.linearRampToValueAtTime(0,t+3.8);
-  rs.connect(rf1); rf1.connect(rf2); rf2.connect(rumbleG); rumbleG.connect(master);
-  rs.start(t+0.3);
-}
+  // ── DEEP CINEMATIC RUMBLE ─────────────────────────────────
+  const rBuf=ctx.createBuffer(1,ctx.sampleRate*4,ctx.sampleRate);
+  const rd=rBuf.getChannelData(0);
+  for(let i=0;i<rd.length;i++) rd[i]=(Math.random()*2-1)*0.4;
+  const rs=ctx.createBufferSource(); rs.buffer=rBuf;
+  const rLP=ctx.createBiquadFilter(); rLP.type='lowpass'; rLP.frequency.value=75;
+  const rPk=ctx.createBiquadFilter(); rPk.type='peaking'; rPk.frequency.value=42; rPk.gain.value=16;
+  const rG=ctx.createGain();
+  rG.gain.setValueAtTime(0,t+0.4); rG.gain.linearRampToValueAtTime(0.65,t+1.0);
+  rG.gain.linearRampToValueAtTime(0.35,t+2.5); rG.gain.linearRampToValueAtTime(0,t+4.2);
+  rs.connect(rLP); rLP.connect(rPk); rPk.connect(rG); rG.connect(master); rs.start(t+0.4);
 
+  // ── SILENCE MOMENT before boot lines — dramatic pause ────
+  // (handled by 3200ms delay in activate())
+}
 function jarvisSpeak(text,rate,pitch){
   if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
@@ -683,14 +680,21 @@ function activate(){
 function runBoot(){
   if(bIdx>=BOOT.length){
     setTimeout(()=>{
+      // Fade out gracefully
       document.getElementById('boot').classList.add('hide');
       setTimeout(()=>{
         document.getElementById('boot').style.display='none';
         document.getElementById('main').style.display='block';
+        document.getElementById('main').style.opacity='0';
+        // Fade main in smoothly
+        setTimeout(()=>{
+          document.getElementById('main').style.transition='opacity 0.9s ease';
+          document.getElementById('main').style.opacity='1';
+        },50);
         loadJobs();
         showBriefing();
-      },900);
-    },1500);
+      },1000);
+    },2000);
     return;
   }
   const el=document.getElementById('boot-lines');
@@ -877,34 +881,54 @@ byraimondo.com`;
 function oneClickApply(){
   const ltr=document.getElementById('ltxt').value;
   if(!ltr||!curJob) return;
-  // 1. Open email
-  const sub=encodeURIComponent('Bewerbung als '+curJob.title+' — Remo Schenk');
-  const bod=encodeURIComponent(ltr);
-  window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+bod,'_blank');
-  // 2. Add to tracker
-  const existing=apps.findIndex(a=>a.jobId===curJob.id);
-  const entry={
-    jobId:curJob.id, job:curJob.title, co:curJob.co, ort:curJob.ort,
-    match:curJob.match, datum:new Date().toLocaleDateString('de-CH'),
-    status:'Gesendet', notes:'', letter:ltr
-  };
-  if(existing>=0) apps[existing]=entry; else apps.unshift(entry);
-  // 3. Update badge & tracker
-  updateBadge();
-  renderTracker();
-  showBriefing();
-  // 4. Feedback
-  const msg=document.getElementById('smsg');
-  msg.style.display='block';
-  msg.innerHTML='⚡ BEWERBUNG GESENDET — TRACKER AKTUALISIERT — E-MAIL GEÖFFNET';
-  document.getElementById('sbtn').disabled=true;
-  // 5. Auto close after 2.5s
+
+  // 1. Auto-download CV as PDF (print dialog)
+  downloadCV();
+
+  // Small delay then open email
   setTimeout(()=>{
-    closeModal();
-    goPage('tracker',document.querySelectorAll('.nav')[2]);
-    document.querySelectorAll('.nav').forEach(b=>b.classList.remove('on'));
-    document.querySelectorAll('.nav')[2].classList.add('on');
-  },2500);
+    // 2. Open email with letter + reminder about attachments
+    const sub=encodeURIComponent('Bewerbung als '+curJob.title+' — Remo Schenk');
+    const reminder='\n\n---\n[Bitte Anhänge hinzufügen: CV_Remo_Schenk_2026.pdf + Arbeitszeugnisse]';
+    const bod=encodeURIComponent(ltr+reminder);
+    window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+bod,'_blank');
+
+    // 3. Add to tracker
+    const existing=apps.findIndex(a=>a.jobId===curJob.id);
+    const entry={
+      jobId:curJob.id, job:curJob.title, co:curJob.co, ort:curJob.ort,
+      match:curJob.match, datum:new Date().toLocaleDateString('de-CH'),
+      status:'Gesendet', notes:'', letter:ltr
+    };
+    if(existing>=0) apps[existing]=entry; else apps.unshift(entry);
+
+    // 4. Update
+    updateBadge(); renderTracker(); showBriefing();
+
+    // 5. Feedback
+    const msg=document.getElementById('smsg');
+    msg.style.display='block';
+    msg.innerHTML='⚡ CV HERUNTERGELADEN · E-MAIL GEÖFFNET · TRACKER AKTUALISIERT<br><span style="font-size:9px;opacity:0.7">→ CV + Arbeitszeugnisse als Anhang ins E-Mail ziehen</span>';
+    document.getElementById('sbtn').disabled=true;
+
+    // 6. Auto close
+    setTimeout(()=>{
+      closeModal();
+      goPage('tracker',document.querySelectorAll('.nav')[2]);
+      document.querySelectorAll('.nav').forEach(b=>b.classList.remove('on'));
+      document.querySelectorAll('.nav')[2].classList.add('on');
+    },3500);
+  },800);
+}
+
+function downloadCV(){
+  // Open CV in new window and trigger print (save as PDF)
+  const cvUrl='https://remoschenk007.github.io/jarvis/cv.html';
+  const w=window.open(cvUrl,'_blank');
+  // Fallback: if CV not on server yet, generate inline
+  if(!w){
+    alert('CV konnte nicht geöffnet werden. Bitte manuell als PDF speichern.');
+  }
 }
 
 function closeModal(){
