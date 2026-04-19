@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<title>Remo Schenk — CV 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+–ink:#08080f;
+–paper:#f5f4f0;
+–mid:#c8c6be;
+–accent:#e8320a;
+–steel:#1c1c28;
+–ghost:#e2e0d8;
+–mono:‘JetBrains Mono’,monospace;
+–sans:‘Space Grotesk’,sans-serif;
+–display:‘Syne’,sans-serif;
+}
+
+@media print{
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{margin:0;size:A4}
+.noprint{display:none!important}
+html,body{background:#fff}
+}
+
+body{
+background:#eceae4;
+font-family:var(–sans);
+font-size:9.5px;
+color:var(–ink);
+min-height:100vh;
+padding:24px;
+}
+
+/* ── PRINT BAR ── */
+.print-bar{
+max-width:794px;
+margin:0 auto 16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 4px;
+}
+.print-note{font-size:9px;color:#888;font-family:var(–mono);letter-spacing:0.05em}
+.print-btn{
+background:var(–ink);
+color:#fff;
+border:none;
+padding:8px 22px;
+font-family:var(–mono);
+font-size:9px;
+letter-spacing:0.15em;
+text-transform:uppercase;
+cursor:pointer;
+}
+.print-btn:hover{background:var(–accent)}
+
+/* ── PAGE ── */
+.page{
+max-width:794px;
+margin:0 auto;
+background:#fff;
+position:relative;
+overflow:hidden;
+}
+
+/* ── HEADER ── */
+.hdr{
+background:var(–ink);
+padding:44px 48px 38px;
+position:relative;
+overflow:hidden;
+}
+
+/* Big number background */
+.hdr-num{
+position:absolute;
+right:-20px;
+top:-30px;
+font-family:var(–display);
+font-size:240px;
+font-weight:800;
+color:rgba(255,255,255,0.03);
+line-height:1;
+user-select:none;
+pointer-events:none;
+letter-spacing:-0.05em;
+}
+
+/* Top row */
+.hdr-row1{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+margin-bottom:24px;
+}
+
+.hdr-left{}
+
+.hdr-tag{
+font-family:var(–mono);
+font-size:8px;
+color:var(–accent);
+letter-spacing:0.3em;
+text-transform:uppercase;
+margin-bottom:10px;
+}
+
+.hdr-name{
+font-family:var(–display);
+font-size:64px;
+font-weight:800;
+color:#fff;
+line-height:0.92;
+letter-spacing:-0.02em;
+margin-bottom:12px;
+}
+
+.hdr-title{
+font-family:var(–sans);
+font-size:11px;
+font-weight:300;
+color:rgba(255,255,255,0.45);
+letter-spacing:0.12em;
+text-transform:uppercase;
+}
+
+.hdr-right{
+text-align:right;
+padding-top:4px;
+}
+
+.hdr-contact-line{
+font-family:var(–mono);
+font-size:8.5px;
+color:rgba(255,255,255,0.35);
+line-height:2.1;
+}
+
+.hdr-contact-line a{color:rgba(255,255,255,0.55);text-decoration:none}
+
+/* Bottom row of header */
+.hdr-row2{
+display:flex;
+justify-content:space-between;
+align-items:flex-end;
+border-top:1px solid rgba(255,255,255,0.07);
+padding-top:18px;
+}
+
+.hdr-statement{
+font-family:var(–sans);
+font-size:12px;
+font-weight:400;
+color:rgba(255,255,255,0.6);
+max-width:420px;
+line-height:1.6;
+}
+
+.hdr-statement em{
+color:#fff;
+font-style:normal;
+font-weight:700;
+}
+
+.hdr-avail{
+font-family:var(–mono);
+font-size:8px;
+color:var(–accent);
+letter-spacing:0.2em;
+text-transform:uppercase;
+border:1px solid rgba(232,50,10,0.4);
+padding:5px 12px;
+white-space:nowrap;
+}
+
+/* ── BODY ── */
+.body{
+display:grid;
+grid-template-columns:1fr 196px;
+}
+
+.col-main{
+padding:36px 40px 40px 48px;
+border-right:1px solid var(–ghost);
+}
+
+.col-side{
+padding:36px 24px 40px;
+background:var(–paper);
+}
+
+/* ── SECTION ── */
+.sec{margin-bottom:30px}
+.sec:last-child{margin-bottom:0}
+
+.sec-hdr{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:18px;
+}
+
+.sec-label{
+font-family:var(–mono);
+font-size:8px;
+font-weight:400;
+letter-spacing:0.35em;
+text-transform:uppercase;
+color:var(–mid);
+white-space:nowrap;
+}
+
+.sec-line{flex:1;height:1px;background:var(–ghost)}
+
+/* ── EXPERIENCE ── */
+.job{
+margin-bottom:20px;
+padding-bottom:20px;
+border-bottom:1px solid var(–ghost);
+}
+.job:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}
+
+.job-top{
+display:flex;
+justify-content:space-between;
+align-items:baseline;
+margin-bottom:2px;
+}
+
+.job-role{
+font-family:var(–display);
+font-size:14px;
+font-weight:700;
+color:var(–ink);
+letter-spacing:-0.01em;
+}
+
+.job-period{
+font-family:var(–mono);
+font-size:8px;
+color:var(–mid);
+letter-spacing:0.08em;
+}
+
+.job-co{
+font-size:9px;
+color:var(–accent);
+font-weight:500;
+letter-spacing:0.06em;
+margin-bottom:7px;
+}
+
+.job-body{
+font-size:9.5px;
+color:#3a3a48;
+line-height:1.7;
+}
+
+.job-quote{
+margin-top:8px;
+padding:7px 12px;
+background:var(–paper);
+border-left:2px solid var(–accent);
+font-size:8.5px;
+color:#5a5a6a;
+line-height:1.6;
+font-style:italic;
+}
+
+/* ── KI PROJECTS ── */
+.proj{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:2px;
+}
+
+.proj-card{
+border:1px solid var(–ghost);
+padding:12px 14px;
+position:relative;
+overflow:hidden;
+}
+
+.proj-card::before{
+content:’’;
+position:absolute;
+top:0;left:0;right:0;
+height:2px;
+background:var(–accent);
+}
+
+.proj-name{
+font-family:var(–display);
+font-size:12px;
+font-weight:700;
+color:var(–ink);
+margin-bottom:3px;
+}
+
+.proj-url{
+font-family:var(–mono);
+font-size:8px;
+color:var(–accent);
+letter-spacing:0.08em;
+margin-bottom:6px;
+}
+
+.proj-desc{
+font-size:8.5px;
+color:#5a5a6a;
+line-height:1.6;
+}
+
+.proj-tags{
+margin-top:7px;
+display:flex;
+flex-wrap:wrap;
+gap:3px;
+}
+
+.proj-tag{
+font-family:var(–mono);
+font-size:7.5px;
+color:var(–mid);
+border:1px solid var(–ghost);
+padding:1px 6px;
+}
+
+/* ── SIDE ── */
+.side-sec{margin-bottom:22px}
+.side-sec:last-child{margin-bottom:0}
+
+.side-label{
+font-family:var(–mono);
+font-size:7.5px;
+letter-spacing:0.3em;
+text-transform:uppercase;
+color:var(–mid);
+margin-bottom:10px;
+padding-bottom:6px;
+border-bottom:1px solid var(–ghost);
+}
+
+/* Skills */
+.sk{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:6px;
+font-size:9px;
+color:#3a3a48;
+}
+
+.sk-bar{
+width:56px;
+height:2px;
+background:var(–ghost);
+position:relative;
+}
+.sk-fill{height:100%;background:var(–ink)}
+
+/* Languages */
+.lang{
+display:flex;
+justify-content:space-between;
+margin-bottom:7px;
+font-size:9px;
+}
+.lang-n{color:var(–ink);font-weight:500}
+.lang-l{color:var(–mid);font-family:var(–mono);font-size:8px}
+
+/* Tag cloud */
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.stag{
+font-size:8px;
+font-family:var(–mono);
+border:1px solid #d8d6ce;
+padding:2px 6px;
+color:#5a5a6a;
+}
+
+/* AI highlight */
+.ai-block{
+background:var(–ink);
+padding:13px 14px;
+margin-top:16px;
+}
+
+.ai-block-hdr{
+font-family:var(–mono);
+font-size:8px;
+letter-spacing:0.2em;
+color:var(–accent);
+margin-bottom:6px;
+text-transform:uppercase;
+}
+
+.ai-block-body{
+font-size:8px;
+color:rgba(255,255,255,0.5);
+line-height:1.7;
+}
+
+.ai-block-live{
+font-family:var(–mono);
+font-size:8px;
+color:rgba(255,255,255,0.3);
+margin-top:7px;
+}
+
+.ai-block-live span{color:var(–accent)}
+
+/* ── FOOTER ── */
+.ftr{
+background:var(–ink);
+padding:12px 48px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.ftr-l{
+font-family:var(–mono);
+font-size:7.5px;
+color:rgba(255,255,255,0.2);
+letter-spacing:0.1em;
+}
+
+.ftr-r{
+font-family:var(–mono);
+font-size:7.5px;
+color:rgba(255,255,255,0.2);
+letter-spacing:0.1em;
+text-align:right;
+}
+
+/* ── PROFIL STATEMENT ── */
+.profil-text{
+font-size:10px;
+color:#2a2a38;
+line-height:1.8;
+padding:0 0 0 2px;
+border-left:2px solid var(–ink);
+padding-left:14px;
+font-style:italic;
+margin-bottom:4px;
+}
+
+.profil-sub{
+font-family:var(–mono);
+font-size:8px;
+color:var(–mid);
+padding-left:16px;
+letter-spacing:0.05em;
+}
+</style>
+
+</head>
+<body>
+
+<div class="print-bar noprint">
+  <span class="print-note">// remo_schenk_cv_2026.pdf</span>
+  <button class="print-btn" onclick="window.print()">↓ PDF exportieren</button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+
+  <div class="hdr">
+    <div class="hdr-num">RS</div>
+
+```
+<div class="hdr-row1">
+  <div class="hdr-left">
+    <div class="hdr-tag">// CV · 2026 · Zürich, CH</div>
+    <div class="hdr-name">REMO<br>SCHENK</div>
+    <div class="hdr-title">Creative Director · Unternehmer · KI-Builder</div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-contact-line">+41 77 445 01 02</div>
+    <div class="hdr-contact-line">remoschenk@me.com</div>
+    <div class="hdr-contact-line">Horgen / Zürich, CH</div>
+    <div class="hdr-contact-line" style="margin-top:8px;color:rgba(255,255,255,0.2)">github.com/remoschenk007</div>
+  </div>
+</div>
+
+<div class="hdr-row2">
+  <div class="hdr-statement">
+    19 Jahre Unternehmer. Mehrfach von Null aufgebaut.<br>
+    <em>Emotion, Design und Business verbinden</em> — und jetzt baue ich<br>
+    damit digitale Produkte, die live gehen. Auf einem iPad.
+  </div>
+  <div class="hdr-avail">● verfügbar per sofort</div>
+</div>
+```
+
+  </div>
+
+  <!-- BODY -->
+
+  <div class="body">
+
+```
+<!-- MAIN -->
+<div class="col-main">
+
+  <!-- PROFIL -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-label">Profil</div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="profil-text">
+      Kreativer Unternehmer mit über 19 Jahren Erfahrung in Creative Direction, Branding, Business Development und digitalen Geschäftsmodellen. Ich erkenne Potenziale, entwickle Ideen und baue daraus funktionsfähige Produkte und Firmen — vom Konzept bis zum Live-Deployment. Meine Stärke liegt im Verbinden von Emotion, Design und Business. 2026 baue ich zusätzlich produktionsreife KI-Produkte — und das unterscheidet mich.
+    </div>
+    <div class="profil-sub">// CEO · Founder · Creative Director · KI-Builder · Art Photographer</div>
+  </div>
+
+  <!-- ERFAHRUNG -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-label">Berufserfahrung</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div class="job-role">Founder & Creative Director</div>
+        <div class="job-period">2025 — heute</div>
+      </div>
+      <div class="job-co">House of Silent Art · Galerie Reitz Zürich</div>
+      <div class="job-body">Art Photography Studio. Creative Direction, visuelle Konzepte, Markenentwicklung. Marketing & Creative Consulting Galerie Reitz.</div>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div class="job-role">Property & Operations Manager</div>
+        <div class="job-period">Feb — Jul 2025</div>
+      </div>
+      <div class="job-co">COSY Stay GmbH · Zürich / Hergiswil</div>
+      <div class="job-body">Operativer Aufbau der gesamten Firmenstruktur. 5 Premium-Apartments Zürich. Digitale Infrastruktur, Channel-Management, Revenue-Management, Personalführung. Auslastung 90%+, Superhost-Status.</div>
+      <div class="job-quote">Mit herausragender Fachkompetenz, Weitsicht und Eigeninitiative — würden ihn jederzeit wieder einstellen.</div>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div class="job-role">Inhaber & Geschäftsführer</div>
+        <div class="job-period">2006 — 2023</div>
+      </div>
+      <div class="job-co">Schenk Real Estate GmbH · Zürich</div>
+      <div class="job-body">17 Jahre eigenständige Unternehmensführung. Objekt- und Kundenakquise, Strategie, SEO, Marketing, Verkaufspräsentationen, Notariat.</div>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div class="job-role">CEO · Founder · VR-Mitglied</div>
+        <div class="job-period">2012 — 2018</div>
+      </div>
+      <div class="job-co">homespeed AG · Zürich — Immobilienportal</div>
+      <div class="job-body">Selbst gegründet. Gesamtleitung, 5 Mitarbeitende. Business Development, Produktentwicklung, Marketing-Budget, Google Ads/SEO, Corporate Design.</div>
+      <div class="job-quote">Äusserst wertvolle Führungskraft. Hervorragendes Fachwissen. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt.</div>
+    </div>
+
+    <div class="job">
+      <div class="job-top">
+        <div class="job-role">Selbständiger Immobilienhändler</div>
+        <div class="job-period">2024</div>
+      </div>
+      <div class="job-co">Zürich</div>
+      <div class="job-body">Akquise, Bewertung, Vermittlung, Verhandlung, Exposés, Besichtigungen.</div>
+    </div>
+  </div>
+
+  <!-- KI PROJEKTE -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-label">KI-Projekte · Live 2026</div>
+      <div class="sec-line"></div>
+    </div>
+    <div class="proj">
+      <div class="proj-card">
+        <div class="proj-name">Stadtpuls</div>
+        <div class="proj-url">depuls.ch · live</div>
+        <div class="proj-desc">City Guide Zürich. 230+ Locations, Supabase DB, API-Anbindung, SEO, Analytics. Soft Launch 4. Juni 2026. Roadmap: Hamburg → Berlin → Wien.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Supabase</span>
+          <span class="proj-tag">PostgreSQL</span>
+          <span class="proj-tag">GitHub</span>
+          <span class="proj-tag">Claude AI</span>
+          <span class="proj-tag">SEO</span>
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-name">JARVIS Bot</div>
+        <div class="proj-url">github.com/remoschenk007/jarvis</div>
+        <div class="proj-desc">KI-Recruitment-System. Auto-Matching, personalisierte Motivationsschreiben, Bewerbungs-Tracker, PDF-Reports, Follow-Up Alerts.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Claude AI</span>
+          <span class="proj-tag">Web Audio</span>
+          <span class="proj-tag">GitHub Pages</span>
+          <span class="proj-tag">Vibe Coding</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SIDE -->
+<div class="col-side">
+
+  <div class="side-sec">
+    <div class="side-label">Kernkompetenzen</div>
+    <div class="tags">
+      <span class="stag">Creative Direction</span>
+      <span class="stag">Art Direction</span>
+      <span class="stag">Branding</span>
+      <span class="stag">Markenentwicklung</span>
+      <span class="stag">Visual Storytelling</span>
+      <span class="stag">Business Dev</span>
+      <span class="stag">Startup-Aufbau</span>
+      <span class="stag">CEO-Erfahrung</span>
+      <span class="stag">Operations</span>
+      <span class="stag">Immobilienhandel</span>
+      <span class="stag">Sales</span>
+      <span class="stag">SEO</span>
+      <span class="stag">Google Ads</span>
+      <span class="stag">Social Media</span>
+      <span class="stag">Teamführung</span>
+      <span class="stag">Projektleitung</span>
+      <span class="stag">Art Photography</span>
+    </div>
+  </div>
+
+  <div class="side-sec">
+    <div class="side-label">Sprachen</div>
+    <div class="lang"><div class="lang-n">Deutsch</div><div class="lang-l">Muttersprache</div></div>
+    <div class="lang"><div class="lang-n">Italiano</div><div class="lang-l">Muttersprache</div></div>
+    <div class="lang"><div class="lang-n">English</div><div class="lang-l">Verhandlungssicher</div></div>
+    <div class="lang"><div class="lang-n">Español</div><div class="lang-l">Verhandlungssicher</div></div>
+    <div class="lang"><div class="lang-n">Français</div><div class="lang-l">Grundkenntnisse</div></div>
+  </div>
+
+  <div class="side-sec">
+    <div class="side-label">Tools & Tech</div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="font-size:8.5px;color:#3a3a48;font-family:var(--mono)">Claude AI · ChatGPT</div>
+      <div style="font-size:8.5px;color:#3a3a48;font-family:var(--mono)">GitHub · Supabase</div>
+      <div style="font-size:8.5px;color:#3a3a48;font-family:var(--mono)">PostgreSQL · PostGIS</div>
+      <div style="font-size:8.5px;color:#3a3a48;font-family:var(--mono)">Google Analytics / Ads</div>
+      <div style="font-size:8.5px;color:#3a3a48;font-family:var(--mono)">MS Office · G Suite</div>
+      <div style="font-size:8.5px;color:#3a3a48;font-family:var(--mono)">Airtable · Plausible</div>
+    </div>
+  </div>
+
+  <div class="side-sec">
+    <div class="side-label">Ausbildung</div>
+    <div style="font-size:9px;color:#3a3a48;line-height:1.9">
+      Privatschule ZG<br>
+      Gymnasium GR<br>
+      <span style="color:var(--mid);font-size:8.5px">+ 19 Jahre on-the-job</span>
+    </div>
+  </div>
+
+  <div class="side-sec">
+    <div class="side-label">Interessen</div>
+    <div style="font-size:9px;color:#3a3a48;line-height:1.9">
+      Kunst & Fotografie<br>
+      Innenarchitektur & Design<br>
+      KI & Produktentwicklung<br>
+      Reisen · Segeln · Schwimmen
+    </div>
+  </div>
+
+  <div class="ai-block">
+    <div class="ai-block-hdr">◈ KI aktiv · 2026</div>
+    <div class="ai-block-body">Ich baue produktionsreife digitale Produkte mit KI. Vom Konzept bis Live. Auf einem iPad.</div>
+    <div class="ai-block-live"><span>●</span> depuls.ch — live</div>
+    <div class="ai-block-live"><span>●</span> JARVIS Bot — live</div>
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <div class="ftr">
+    <div class="ftr-l">© 2026 Remo Schenk · Alle Rechte vorbehalten</div>
+    <div class="ftr-r">remoschenk@me.com · +41 77 445 01 02</div>
+  </div>
+
+</div>
+
+</body>
+</html>
