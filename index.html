@@ -882,53 +882,36 @@ function oneClickApply(){
   const ltr=document.getElementById('ltxt').value;
   if(!ltr||!curJob) return;
 
-  // 1. Auto-download CV as PDF (print dialog)
-  downloadCV();
+  // 1. Open email
+  const sub=encodeURIComponent('Bewerbung als '+curJob.title+' — Remo Schenk');
+  const bod=encodeURIComponent(ltr);
+  window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+bod,'_blank');
 
-  // Small delay then open email
+  // 2. Add to tracker
+  const existing=apps.findIndex(a=>a.jobId===curJob.id);
+  const entry={
+    jobId:curJob.id, job:curJob.title, co:curJob.co, ort:curJob.ort,
+    match:curJob.match, datum:new Date().toLocaleDateString('de-CH'),
+    status:'Gesendet', notes:'', letter:ltr
+  };
+  if(existing>=0) apps[existing]=entry; else apps.unshift(entry);
+
+  // 3. Update
+  updateBadge(); renderTracker(); showBriefing();
+
+  // 4. Feedback
+  const msg=document.getElementById('smsg');
+  msg.style.display='block';
+  msg.innerHTML='⚡ E-MAIL GEÖFFNET · TRACKER AKTUALISIERT<br><span style="font-size:9px;opacity:0.7">→ CV + Arbeitszeugnisse manuell als Anhang hinzufügen</span>';
+  document.getElementById('sbtn').disabled=true;
+
+  // 5. Auto close
   setTimeout(()=>{
-    // 2. Open email with letter + reminder about attachments
-    const sub=encodeURIComponent('Bewerbung als '+curJob.title+' — Remo Schenk');
-    const reminder='\n\n---\n[Bitte Anhänge hinzufügen: CV_Remo_Schenk_2026.pdf + Arbeitszeugnisse]';
-    const bod=encodeURIComponent(ltr+reminder);
-    window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+bod,'_blank');
-
-    // 3. Add to tracker
-    const existing=apps.findIndex(a=>a.jobId===curJob.id);
-    const entry={
-      jobId:curJob.id, job:curJob.title, co:curJob.co, ort:curJob.ort,
-      match:curJob.match, datum:new Date().toLocaleDateString('de-CH'),
-      status:'Gesendet', notes:'', letter:ltr
-    };
-    if(existing>=0) apps[existing]=entry; else apps.unshift(entry);
-
-    // 4. Update
-    updateBadge(); renderTracker(); showBriefing();
-
-    // 5. Feedback
-    const msg=document.getElementById('smsg');
-    msg.style.display='block';
-    msg.innerHTML='⚡ CV HERUNTERGELADEN · E-MAIL GEÖFFNET · TRACKER AKTUALISIERT<br><span style="font-size:9px;opacity:0.7">→ CV + Arbeitszeugnisse als Anhang ins E-Mail ziehen</span>';
-    document.getElementById('sbtn').disabled=true;
-
-    // 6. Auto close
-    setTimeout(()=>{
-      closeModal();
-      goPage('tracker',document.querySelectorAll('.nav')[2]);
-      document.querySelectorAll('.nav').forEach(b=>b.classList.remove('on'));
-      document.querySelectorAll('.nav')[2].classList.add('on');
-    },3500);
-  },800);
-}
-
-function downloadCV(){
-  // Open CV in new window and trigger print (save as PDF)
-  const cvUrl='https://remoschenk007.github.io/jarvis/cv.html';
-  const w=window.open(cvUrl,'_blank');
-  // Fallback: if CV not on server yet, generate inline
-  if(!w){
-    alert('CV konnte nicht geöffnet werden. Bitte manuell als PDF speichern.');
-  }
+    closeModal();
+    goPage('tracker',document.querySelectorAll('.nav')[2]);
+    document.querySelectorAll('.nav').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('.nav')[2].classList.add('on');
+  },3000);
 }
 
 function closeModal(){
