@@ -375,7 +375,8 @@ function activateJarvis(){
   sp.textContent='JARVIS SPEAKING';
   sp.style.cssText='font-size:8px;color:#003355;letter-spacing:0.15em;margin-left:5px';
   wv.appendChild(sp);
-  startBoot();
+  // Wait for reactor sound to build up before boot lines start
+  setTimeout(startBoot, 2500);
 }
 
 function startBoot(){
@@ -384,24 +385,48 @@ function startBoot(){
   const el=document.getElementById('bootLines');
   const line=BOOT_LINES[bootIdx];
   const div=document.createElement('div');
-  div.style.cssText='font-size:12px;color:'+(bootIdx===BOOT_LINES.length-1?'#00ff88':'#00aaff')+';margin-bottom:7px;animation:bootLine 0.28s ease forwards';
-  div.innerHTML='<span style="color:#003355">> </span>'+line;
+  // Each line fades in slowly
+  div.style.cssText='font-size:13px;color:'+(bootIdx===BOOT_LINES.length-1?'#00ff88':'#00aaff')+';margin-bottom:14px;opacity:0;transition:opacity 0.8s ease;line-height:1.6';
+  div.innerHTML='<span style="color:#003355;margin-right:8px">></span>'+line;
   el.appendChild(div);
+  // Fade in after a tiny delay
+  setTimeout(()=>{ div.style.opacity='1'; },50);
   if(soundOn) speak(line);
   bootIdx++;
   bootRunning=false;
   if(bootIdx<BOOT_LINES.length){
-    setTimeout(startBoot,85);
+    setTimeout(startBoot,2200);
   } else {
+    // Show greeting after last line
+    setTimeout(()=>{
+      const greetDiv=document.createElement('div');
+      greetDiv.style.cssText='margin-top:28px;font-size:clamp(14px,3vw,20px);color:#00d4ff;font-family:Orbitron,sans-serif;font-weight:700;letter-spacing:0.12em;text-shadow:0 0 20px #00d4ff,0 0 40px #0088ff;opacity:0;transition:opacity 1.2s ease;text-align:center';
+      greetDiv.textContent='Hallo, Remo. Wie kann ich dir heute helfen?';
+      el.appendChild(greetDiv);
+      setTimeout(()=>{ greetDiv.style.opacity='1'; },100);
+      if(soundOn){
+        setTimeout(()=>{
+          if(!window.speechSynthesis) return;
+          window.speechSynthesis.cancel();
+          const g=new SpeechSynthesisUtterance('Hallo Remo. Wie kann ich dir heute helfen?');
+          const vs=window.speechSynthesis.getVoices();
+          const v=vs.find(x=>/en.GB/i.test(x.lang))||vs.find(x=>/en/i.test(x.lang))||vs[0];
+          if(v) g.voice=v;
+          g.rate=0.88; g.pitch=0.68; g.volume=0.9;
+          window.speechSynthesis.speak(g);
+        },400);
+      }
+    },600);
+    // Switch to main after greeting is shown & read
     setTimeout(()=>{
       document.getElementById('boot').style.display='none';
       document.getElementById('main').style.display='block';
-    },1100);
+    },6000);
   }
 }
 
 // Start boot without sound immediately (silent auto-boot)
-setTimeout(startBoot, 400);
+// Boot only starts after button click - removed auto-boot
 
 // NAVIGATION
 function showPage(name, btn){
