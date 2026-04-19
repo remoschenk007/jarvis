@@ -19,6 +19,7 @@ body{background:#000810;color:#00d4ff;font-family:'Share Tech Mono',monospace;ov
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes glow{0%,100%{filter:drop-shadow(0 0 14px #00d4ff) drop-shadow(0 0 32px #0088cc)}50%{filter:drop-shadow(0 0 26px #00d4ff) drop-shadow(0 0 60px #00aaff)}}
+@keyframes reactorGlow{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
 @keyframes helloIn{0%{opacity:0;transform:scale(0.75) translateY(20px)}70%{transform:scale(1.04) translateY(-4px)}100%{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes modalIn{from{opacity:0;transform:scale(0.94) translateY(22px)}to{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes scanCard{0%{transform:translateY(-100%);opacity:0.6}100%{transform:translateY(400%);opacity:0}}
@@ -31,20 +32,21 @@ body{background:#000810;color:#00d4ff;font-family:'Share Tech Mono',monospace;ov
 .hex{position:fixed;inset:0;width:100%;height:100%;opacity:0.04;pointer-events:none;z-index:0}
 
 /* BOOT */
-#boot{position:fixed;inset:0;background:#000810;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s ease}
+#boot{position:fixed;inset:0;background:radial-gradient(ellipse at center,#000f1e 0%,#000508 60%,#000000 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.9s ease}
 #boot.hide{opacity:0;pointer-events:none}
-#reactor-wrap{cursor:pointer;margin-bottom:24px;transition:transform 0.15s;animation:glow 3s ease-in-out infinite}
+#reactor-wrap{cursor:pointer;margin-bottom:24px;transition:transform 0.15s;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
 #reactor-wrap:hover{transform:scale(1.1)}
 #reactor-wrap:active{transform:scale(0.93)}
+#reactor-glow{position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,rgba(0,180,255,0.18) 0%,rgba(0,100,200,0.08) 40%,transparent 70%);animation:reactorGlow 3s ease-in-out infinite;pointer-events:none}
 #click-hint{font-size:11px;color:#003355;letter-spacing:0.3em;margin-bottom:36px;animation:blink 2s ease-in-out infinite}
-#boot-label{font-size:9px;color:#002233;letter-spacing:0.5em;margin-bottom:28px}
+/* boot-label styled inline */
 #wave{display:none;align-items:center;gap:4px;margin-bottom:12px}
 .wbar{width:3px;border-radius:2px;background:#00d4ff;opacity:0.7}
 #boot-lines{width:580px;max-width:93vw}
-.bl{font-size:13px;color:#00aaff;margin-bottom:11px;opacity:0;transition:opacity 0.7s ease;line-height:1.55}
+.bl{font-size:13px;color:#00aaff;margin-bottom:11px;opacity:0;transition:opacity 0.7s ease;line-height:1.55;max-width:580px}
 .bl.show{opacity:1}
-.bl.last{color:#00ff88;font-size:15px;font-weight:600}
-.bl .ar{color:#002233;margin-right:10px}
+.bl.last{color:#00ff88;font-size:15px;font-weight:600;letter-spacing:0.05em}
+.bl .ar{color:#001e33;margin-right:10px}
 
 /* HELLO */
 #hello{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;pointer-events:none;opacity:0;transition:opacity 0.5s;background:rgba(0,2,14,0.75);backdrop-filter:blur(3px)}
@@ -133,10 +135,11 @@ select option{background:#000c22}
 <!-- BOOT -->
 
 <div id="boot">
-  <div class="orb" id="boot-label">STARK INDUSTRIES · RECRUITMENT INTELLIGENCE</div>
+  <div class="orb" id="boot-label" style="font-size:9px;color:#001e33;letter-spacing:0.55em;margin-bottom:32px;text-transform:uppercase">STARK INDUSTRIES · RECRUITMENT INTELLIGENCE</div>
   <div id="wave"></div>
   <div id="reactor-wrap" onclick="activate()" title="Tap to activate JARVIS">
-    <svg id="arc-main" width="150" height="150" viewBox="0 0 140 140"></svg>
+    <div id="reactor-glow"></div>
+    <svg id="arc-main" width="160" height="160" viewBox="0 0 140 140" style="position:relative;z-index:1;filter:drop-shadow(0 0 16px #00d4ff) drop-shadow(0 0 38px rgba(0,136,204,0.7)) drop-shadow(0 0 65px rgba(0,80,180,0.4))"></svg>
   </div>
   <div id="click-hint">◈ TAP ARC REACTOR TO ACTIVATE</div>
   <div id="boot-lines"></div>
@@ -410,7 +413,7 @@ function arcSVG(s){
 
 function initArcs(){
   document.getElementById('arc-main').innerHTML=arcSVG(150);
-  document.getElementById('arc-main').style.filter='drop-shadow(0 0 18px #00d4ff) drop-shadow(0 0 40px #0088cc) drop-shadow(0 0 70px #0055aa)';
+  document.getElementById('arc-main').style.cssText='display:block;overflow:visible';
   document.querySelectorAll('.arc-s').forEach(el=>{
     const s=parseInt(el.getAttribute('width'))||40;
     el.innerHTML=arcSVG(s);
