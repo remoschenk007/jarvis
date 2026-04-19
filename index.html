@@ -2,269 +2,358 @@
 
 <html lang="de">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>J.A.R.V.I.S. — Remo Schenk</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#000810;color:#00d4ff;font-family:'Share Tech Mono',monospace;overflow-x:hidden;min-height:100vh}
-    @keyframes arcSpin{to{transform:rotate(360deg)}}
-    @keyframes arcSpinR{to{transform:rotate(-360deg)}}
-    @keyframes arcPulse{0%,100%{opacity:1}50%{opacity:0.6}}
-    @keyframes scan{0%{top:-2px}100%{top:100vh}}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes bootLine{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes glow{0%,100%{text-shadow:0 0 8px #00d4ff44}50%{text-shadow:0 0 22px #00d4ff,0 0 44px #00aaff88}}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-    @keyframes modalIn{from{opacity:0;transform:scale(0.96) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
-    @keyframes helloFade{0%{opacity:0}15%{opacity:1}70%{opacity:1}100%{opacity:0}}
-    @keyframes helloPulse{0%{transform:scale(0.85);opacity:0}60%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
-    ::-webkit-scrollbar{width:3px}
-    ::-webkit-scrollbar-track{background:#000810}
-    ::-webkit-scrollbar-thumb{background:#003355}
-    .btn{background:transparent;border:1px solid rgba(0,68,102,0.55);color:#00aadd;padding:9px 20px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;position:relative;transition:all 0.2s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
-    .btn::before{content:"";position:absolute;top:0;left:0;width:7px;height:7px;border-top:1px solid #00d4ff;border-left:1px solid #00d4ff}
-    .btn::after{content:"";position:absolute;bottom:0;right:0;width:7px;height:7px;border-bottom:1px solid #00d4ff;border-right:1px solid #00d4ff}
-    .btn:hover,.btn:active{background:rgba(0,212,255,0.08);border-color:#00d4ff;color:#00d4ff}
-    .btn.pri{border-color:rgba(0,212,255,0.65);color:#00d4ff}
-    .btn.grn{border-color:rgba(0,255,136,0.5);color:#00ff88}
-    .card{background:rgba(0,18,38,0.88);border:1px solid rgba(0,68,102,0.35);padding:16px;margin-bottom:10px;position:relative;animation:fadeUp 0.35s ease forwards}
-    .card::before{content:"";position:absolute;top:0;left:0;width:9px;height:9px;border-top:1px solid #00d4ff;border-left:1px solid #00d4ff}
-    .card::after{content:"";position:absolute;bottom:0;right:0;width:9px;height:9px;border-bottom:1px solid #00d4ff;border-right:1px solid #00d4ff}
-    .lbl{font-size:9px;color:#004466;letter-spacing:0.18em;text-transform:uppercase;display:block;margin-bottom:4px}
-    input,textarea,select{background:rgba(0,30,60,0.8);border:1px solid rgba(0,68,102,0.5);color:#00d4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;width:100%;transition:border-color 0.2s}
-    input:focus,textarea:focus{border-color:#00d4ff}
-    textarea{resize:vertical;line-height:1.75}
-    select option{background:#001828}
-    #boot{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden}
-    #main{display:none;min-height:100vh}
-    #modal{display:none;position:fixed;inset:0;background:rgba(0,2,10,0.93);z-index:200;align-items:center;justify-content:center;padding:16px}
-    .scanline{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:999}
-    .scanline div{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.2),rgba(0,212,255,0.7),rgba(0,212,255,0.2),transparent);animation:scan 7s linear infinite}
-    .hexbg{position:fixed;inset:0;width:100%;height:100%;opacity:0.05;pointer-events:none}
-    .header{border-bottom:1px solid rgba(0,68,102,0.35);padding:10px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:rgba(0,5,14,0.95);position:sticky;top:0;z-index:100}
-    .nav-btn{background:transparent;border:none;cursor:pointer;color:#003355;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:0.12em;border-bottom:1px solid transparent;padding-bottom:2px;transition:all 0.2s}
-    .nav-btn.active{color:#00d4ff;border-bottom-color:#00d4ff}
-    .page{display:none;max-width:780px;margin:0 auto;padding:32px 22px;animation:fadeUp 0.4s ease}
-    .page.active{display:block}
-    .tag{border:1px solid rgba(0,68,102,0.35);padding:2px 7px;font-size:9px;color:#004466;margin:2px}
-    .skill-tag{border:1px solid rgba(0,68,102,0.4);padding:3px 8px;font-size:10px;color:#005577;margin:3px;display:inline-block}
-    .match-ring{flex-shrink:0}
-    .job-card{cursor:pointer}
-    .job-card:hover{border-color:rgba(0,212,255,0.35);box-shadow:0 0 18px rgba(0,212,255,0.07)}
-    .stat-card{text-align:center;padding:14px 10px;cursor:default}
-    .tracker-row{padding:11px 14px;margin-bottom:5px;cursor:default}
-    #hello-splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;pointer-events:none;animation:helloFade 2.5s ease forwards}
-    .wave-bar{width:3px;border-radius:2px;background:#00d4ff;opacity:0.75}
-    .orb{font-family:'Orbitron',sans-serif}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>J.A.R.V.I.S. — Remo Schenk</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000810;color:#00d4ff;font-family:'Share Tech Mono',monospace;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:#000810}::-webkit-scrollbar-thumb{background:#003355}
+.orb{font-family:'Orbitron',sans-serif}
+
+/* ANIMATIONS */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spinR{to{transform:rotate(-360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.55}}
+@keyframes scan{0%{top:-2px}100%{top:110vh}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 12px #00d4ff) drop-shadow(0 0 28px #0088cc)}50%{filter:drop-shadow(0 0 22px #00d4ff) drop-shadow(0 0 50px #00aaff)}}
+@keyframes helloIn{0%{opacity:0;transform:scale(0.8)}60%{transform:scale(1.05)}100%{opacity:1;transform:scale(1)}}
+@keyframes helloOut{from{opacity:1}to{opacity:0}}
+@keyframes reactorPulse{0%,100%{filter:drop-shadow(0 0 18px #00d4ff) drop-shadow(0 0 40px #0088cc) drop-shadow(0 0 60px #0055aa)}50%{filter:drop-shadow(0 0 30px #00d4ff) drop-shadow(0 0 70px #00aaff) drop-shadow(0 0 100px #0077cc)}}
+@keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+/* SCAN LINE */
+.scan{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:998}
+.scan div{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.15),rgba(0,212,255,0.6),rgba(0,212,255,0.15),transparent);animation:scan 8s linear infinite}
+
+/* HEX BG */
+.hex{position:fixed;inset:0;width:100%;height:100%;opacity:0.045;pointer-events:none;z-index:0}
+
+/* BOOT SCREEN */
+#boot{position:fixed;inset:0;background:#000810;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.8s ease}
+#boot.hide{opacity:0;pointer-events:none}
+
+#reactor-wrap{cursor:pointer;margin-bottom:28px;animation:glow 3s ease-in-out infinite;transition:transform 0.2s}
+#reactor-wrap:hover{transform:scale(1.08)}
+#reactor-wrap:active{transform:scale(0.95)}
+
+#click-hint{font-size:11px;color:#004466;letter-spacing:0.25em;margin-bottom:40px;animation:blink 1.8s ease-in-out infinite}
+
+#boot-label{font-size:9px;color:#003355;letter-spacing:0.5em;margin-bottom:32px;opacity:0.7}
+
+#boot-lines{width:560px;max-width:92vw;min-height:200px}
+.boot-line{font-size:13px;color:#00aaff;margin-bottom:12px;opacity:0;transition:opacity 0.6s ease;line-height:1.5}
+.boot-line.show{opacity:1}
+.boot-line.last{color:#00ff88;font-size:15px}
+.boot-line .arrow{color:#002233;margin-right:10px}
+
+#hello-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;pointer-events:none;opacity:0;transition:opacity 0.5s}
+#hello-screen.show{opacity:1}
+#hello-text{font-family:‘Orbitron’,sans-serif;font-size:clamp(32px,6vw,72px);font-weight:900;color:#00d4ff;letter-spacing:0.12em;text-shadow:0 0 40px #00d4ff,0 0 80px #0088ff,0 0 120px #0044cc;text-align:center;animation:helloIn 0.8s ease forwards}
+#hello-sub{margin-top:16px;font-size:clamp(11px,2vw,16px);color:#00aaff;letter-spacing:0.4em;opacity:0.8;text-align:center}
+
+#wave{display:none;align-items:center;gap:4px;margin-bottom:14px}
+.wbar{width:3px;border-radius:2px;background:#00d4ff;opacity:0.7}
+
+/* MAIN APP */
+#main{display:none;min-height:100vh;position:relative;z-index:1}
+
+/* HEADER */
+.hdr{border-bottom:1px solid rgba(0,68,102,0.3);padding:10px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:rgba(0,5,14,0.96);position:sticky;top:0;z-index:90}
+.nav-btn{background:transparent;border:none;cursor:pointer;color:#003355;font-family:‘Share Tech Mono’,monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;border-bottom:1px solid transparent;padding-bottom:2px;transition:all 0.2s}
+.nav-btn.on{color:#00d4ff;border-bottom-color:#00d4ff}
+
+/* PAGES */
+.page{display:none;max-width:800px;margin:0 auto;padding:32px 22px;animation:fadeIn 0.4s ease forwards}
+.page.on{display:block}
+
+/* CARDS */
+.card{background:rgba(0,16,36,0.9);border:1px solid rgba(0,68,102,0.35);padding:16px;margin-bottom:12px;position:relative;animation:fadeIn 0.35s ease forwards}
+.card::before{content:””;position:absolute;top:0;left:0;width:9px;height:9px;border-top:1px solid #00d4ff;border-left:1px solid #00d4ff}
+.card::after{content:””;position:absolute;bottom:0;right:0;width:9px;height:9px;border-bottom:1px solid #00d4ff;border-right:1px solid #00d4ff}
+.card-lbl{position:absolute;top:-8px;left:14px;background:#000810;padding:0 8px;font-size:9px;color:#003355;letter-spacing:0.18em;text-transform:uppercase}
+.lbl{font-size:9px;color:#004466;letter-spacing:0.18em;text-transform:uppercase;display:block;margin-bottom:3px}
+
+/* BUTTONS */
+.btn{background:transparent;border:1px solid rgba(0,68,102,0.5);color:#00aadd;padding:9px 20px;font-family:‘Share Tech Mono’,monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;position:relative;transition:all 0.2s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.btn::before{content:””;position:absolute;top:0;left:0;width:7px;height:7px;border-top:1px solid #00d4ff;border-left:1px solid #00d4ff}
+.btn::after{content:””;position:absolute;bottom:0;right:0;width:7px;height:7px;border-bottom:1px solid #00d4ff;border-right:1px solid #00d4ff}
+.btn:hover,.btn:active{background:rgba(0,212,255,0.1);border-color:#00d4ff;color:#00d4ff;box-shadow:0 0 16px rgba(0,212,255,0.15)}
+.btn.pri{border-color:rgba(0,212,255,0.6);color:#00d4ff}
+.btn.grn{border-color:rgba(0,255,136,0.5);color:#00ff88}
+
+/* INPUTS */
+input,textarea{background:rgba(0,25,55,0.85);border:1px solid rgba(0,68,102,0.5);color:#00d4ff;font-family:‘Share Tech Mono’,monospace;font-size:12px;padding:9px 12px;outline:none;width:100%;transition:border-color 0.2s}
+input:focus,textarea:focus{border-color:#00d4ff;box-shadow:0 0 8px rgba(0,212,255,0.12)}
+textarea{resize:vertical;line-height:1.75}
+
+/* JOB CARDS */
+.job-card{cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s}
+.job-card:hover{border-color:rgba(0,212,255,0.4);box-shadow:0 0 20px rgba(0,212,255,0.08)}
+.tag{border:1px solid rgba(0,68,102,0.35);padding:2px 8px;font-size:9px;color:#004466;margin:2px;display:inline-block}
+.skill-pill{border:1px solid rgba(0,68,102,0.4);padding:3px 9px;font-size:10px;color:#005577;margin:3px;display:inline-block}
+
+/* MODAL */
+#modal{display:none;position:fixed;inset:0;background:rgba(0,2,12,0.94);z-index:300;align-items:center;justify-content:center;padding:16px}
+#modal.show{display:flex}
+.modal-box{background:#000c1e;border:1px solid rgba(0,68,102,0.6);width:100%;max-width:720px;max-height:92vh;overflow:auto;animation:modalIn 0.3s ease}
+.modal-hdr{padding:14px 20px;border-bottom:1px solid rgba(0,68,102,0.25);display:flex;align-items:center;gap:12px;position:sticky;top:0;background:#000c1e;z-index:10}
+</style>
+
 </head>
 <body>
+
+<svg class="hex" id="hexbg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"></svg>
+
+<div class="scan"><div></div></div>
+
+<!-- HELLO SPLASH -->
+
+<div id="hello-screen">
+  <div id="hello-text">HALLO, REMO.</div>
+  <div id="hello-sub">J.A.R.V.I.S. — ONLINE</div>
+</div>
 
 <!-- BOOT -->
 
 <div id="boot">
-  <svg class="hexbg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" id="hexsvg"></svg>
-  <div class="scanline"><div></div></div>
-  <button class="btn pri" id="activateBtn" onclick="activateJarvis()" style="margin-bottom:32px;animation:glow 2s ease-in-out infinite;font-size:11px;letter-spacing:0.22em">◈ ACTIVATE JARVIS</button>
-  <div id="arcBoot" style="margin-bottom:32px;animation:glow 2.5s ease-in-out infinite"></div>
-  <div class="orb" style="font-size:10px;color:#00d4ff;letter-spacing:0.45em;margin-bottom:28px;opacity:0.55">STARK INDUSTRIES · RECRUITMENT INTELLIGENCE</div>
-  <div id="waveform" style="display:none;align-items:center;gap:5px;margin-bottom:12px"></div>
-  <div id="bootLines" style="width:520px;max-width:92vw"></div>
+  <div class="orb" id="boot-label">STARK INDUSTRIES · RECRUITMENT INTELLIGENCE</div>
+  <div id="wave"></div>
+  <div id="reactor-wrap" onclick="activateJarvis()" title="Tap to activate">
+    <svg id="arc-svg" width="140" height="140" viewBox="0 0 140 140"></svg>
+  </div>
+  <div id="click-hint">◈ TAP ARC REACTOR TO ACTIVATE</div>
+  <div id="boot-lines"></div>
 </div>
 
 <!-- MAIN -->
 
 <div id="main">
-  <svg class="hexbg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" id="hexsvg2"></svg>
-  <div class="scanline"><div></div></div>
-
-  <div class="header">
-    <div id="arcHeader"></div>
+  <!-- HEADER -->
+  <div class="hdr">
+    <svg width="30" height="30" viewBox="0 0 140 140" id="hdr-arc"></svg>
     <div>
       <div class="orb" style="font-size:12px;font-weight:700;letter-spacing:0.2em">J.A.R.V.I.S.</div>
       <div style="font-size:8px;color:#003355;letter-spacing:0.15em">STARK RECRUITMENT AI</div>
     </div>
-    <div style="width:1px;height:26px;background:rgba(0,30,50,1)"></div>
-    <button class="nav-btn active" onclick="showPage('profil',this)">1. PROFIL</button>
-    <button class="nav-btn" onclick="showPage('suche',this)">2. STELLEN</button>
-    <button class="nav-btn" onclick="showPage('tracker',this)">3. TRACKER <span id="trackerBadge" style="display:none;background:#00ff88;color:#000;font-size:8px;padding:1px 5px;border-radius:2px;font-weight:700;margin-left:4px"></span></button>
-    <div style="margin-left:auto;display:flex;gap:16px;align-items:center">
-      <div style="text-align:center"><div style="font-size:8px;color:#003355">ARC</div><div style="font-size:11px;color:#00ff88">100%</div></div>
-      <div style="text-align:center"><div style="font-size:8px;color:#003355">CPU</div><div id="cpuVal" style="font-size:11px;color:#00d4ff">12%</div></div>
-      <div style="font-size:8px;color:#003355;animation:blink 2s ease-in-out infinite">● LIVE</div>
+    <div style="width:1px;height:24px;background:#001e33"></div>
+    <button class="nav-btn on" onclick="nav('profil',this)">1. PROFIL</button>
+    <button class="nav-btn" onclick="nav('stellen',this)">2. STELLEN</button>
+    <button class="nav-btn" onclick="nav('tracker',this)">3. TRACKER<span id="tbadge" style="display:none;background:#00ff88;color:#000;font-size:8px;padding:1px 5px;border-radius:2px;margin-left:4px;font-weight:700"></span></button>
+    <div style="margin-left:auto;display:flex;gap:14px;align-items:center">
+      <div style="text-align:center"><div style="font-size:7px;color:#003355">ARC</div><div style="font-size:11px;color:#00ff88">100%</div></div>
+      <div style="text-align:center"><div style="font-size:7px;color:#003355">CPU</div><div id="cpu" style="font-size:11px;color:#00d4ff">14%</div></div>
+      <div style="font-size:8px;color:#003355;animation:blink 2s infinite">● LIVE</div>
     </div>
   </div>
 
-  <!-- PROFIL PAGE -->
+  <!-- PROFIL -->
 
-  <div class="page active" id="page-profil">
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px">
-      <div id="arcProfil"></div>
+  <div class="page on" id="pg-profil">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px">
+      <svg width="52" height="52" viewBox="0 0 140 140" class="arc-sm"></svg>
       <div>
-        <div class="orb" style="font-size:22px;font-weight:800">KANDIDATEN-PROFIL</div>
+        <div class="orb" style="font-size:22px;font-weight:900">KANDIDATEN-PROFIL</div>
         <div style="font-size:9px;color:#003355;margin-top:3px;letter-spacing:0.12em">VORGELADEN · VERIFIZIERT · BEREIT</div>
       </div>
     </div>
     <div class="card" style="margin-bottom:14px">
-      <div style="position:absolute;top:-8px;left:14px;background:#000810;padding:0 8px;font-size:9px;color:#003355;letter-spacing:0.18em">IDENTITÄT</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-        <div><span class="lbl">Name</span><div class="orb" style="font-size:14px;font-weight:700;color:#00d4ff">Remo Schenk</div></div>
+      <div class="card-lbl">Identität</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px">
+        <div><span class="lbl">Name</span><div class="orb" style="font-size:15px;font-weight:700;color:#00d4ff">Remo Schenk</div></div>
         <div><span class="lbl">Funktion</span><div style="font-size:10px;color:#00aaff">Creative Director | Operations Manager</div></div>
         <div><span class="lbl">Standort</span><div style="font-size:11px">Horgen / Zürich, CH</div></div>
         <div><span class="lbl">Erfahrung</span><div style="font-size:11px">19 Jahre</div></div>
         <div><span class="lbl">E-Mail</span><div style="font-size:11px">remoschenk@me.com</div></div>
-        <div><span class="lbl">Verfügbar</span><div style="font-size:11px;color:#00ff88">Per sofort</div></div>
+        <div><span class="lbl">Verfügbar</span><div style="font-size:12px;color:#00ff88;font-weight:600">Per sofort</div></div>
       </div>
     </div>
     <div class="card" style="margin-bottom:14px">
-      <div style="position:absolute;top:-8px;left:14px;background:#000810;padding:0 8px;font-size:9px;color:#003355;letter-spacing:0.18em">KOMPETENZ-MATRIX</div>
-      <div style="margin-top:10px" id="skillTags"></div>
+      <div class="card-lbl">Kompetenz-Matrix</div>
+      <div id="skills" style="margin-top:12px"></div>
     </div>
-    <div class="card" style="margin-bottom:28px;border-color:rgba(0,255,136,0.15);background:rgba(0,12,6,0.8)">
-      <div style="position:absolute;top:-8px;left:14px;background:#000810;padding:0 8px;font-size:9px;color:#004433;letter-spacing:0.18em">ARBEITSZEUGNISSE · VERIFIZIERT ✓</div>
-      <div style="margin-top:10px">
-        <div style="border-left:2px solid #00ff88;padding-left:12px;margin-bottom:12px">
-          <div style="font-size:9px;color:#00ff88;letter-spacing:0.1em;margin-bottom:3px">COSY Stay GmbH (2025)</div>
-          <div style="font-size:11px;color:#00aaff;line-height:1.6;font-style:italic">"Mit herausragender Fachkompetenz, großer Weitsicht und beeindruckender Eigeninitiative. Außergewöhnliche Führungsstärke. Würden ihn jederzeit wieder einstellen."</div>
+    <div class="card" style="margin-bottom:28px;border-color:rgba(0,255,136,0.18);background:rgba(0,10,5,0.85)">
+      <div class="card-lbl" style="color:#004433">Arbeitszeugnisse · Verifiziert ✓</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:12px">
+        <div style="border-left:2px solid #00ff88;padding-left:14px">
+          <div style="font-size:9px;color:#00ff88;letter-spacing:0.1em;margin-bottom:4px">COSY STAY GMBH — 2025</div>
+          <div style="font-size:11px;color:#00aaff;line-height:1.7;font-style:italic">"Mit herausragender Fachkompetenz, großer Weitsicht und beeindruckender Eigeninitiative. Außergewöhnliche Führungsstärke. Würden ihn jederzeit wieder einstellen."</div>
         </div>
-        <div style="border-left:2px solid #00ff88;padding-left:12px">
-          <div style="font-size:9px;color:#00ff88;letter-spacing:0.1em;margin-bottom:3px">homespeed AG (2017)</div>
-          <div style="font-size:11px;color:#00aaff;line-height:1.6;font-style:italic">"Äusserst wertvolle Führungskraft. Hervorragendes Fachwissen. Sehr selbstständig und vorausschauend. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt."</div>
+        <div style="border-left:2px solid #00ff88;padding-left:14px">
+          <div style="font-size:9px;color:#00ff88;letter-spacing:0.1em;margin-bottom:4px">HOMESPEED AG — 2017</div>
+          <div style="font-size:11px;color:#00aaff;line-height:1.7;font-style:italic">"Äusserst wertvolle Führungskraft. Hervorragendes Fachwissen. Sehr selbstständig und vorausschauend. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt."</div>
         </div>
       </div>
     </div>
     <div style="display:flex;justify-content:flex-end">
-      <button class="btn pri" onclick="startSearch()" style="font-size:12px;padding:12px 32px">STELLENSUCHE STARTEN →</button>
+      <button class="btn pri" onclick="nav('stellen',document.querySelectorAll('.nav-btn')[1])" style="font-size:13px;padding:13px 36px">
+        STELLENSUCHE STARTEN →
+      </button>
     </div>
   </div>
 
-  <!-- SUCHE PAGE -->
+  <!-- STELLEN -->
 
-  <div class="page" id="page-suche" style="max-width:780px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap">
+  <div class="page" id="pg-stellen" style="max-width:820px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:12px;flex-wrap:wrap">
       <div style="display:flex;align-items:center;gap:14px">
-        <div id="arcSuche"></div>
+        <svg width="46" height="46" viewBox="0 0 140 140" class="arc-sm"></svg>
         <div>
-          <div class="orb" style="font-size:18px;font-weight:700">STELLENANALYSE</div>
-          <div style="font-size:9px;color:#003355;margin-top:2px">jobs.ch · linkedin · xing — KI-MATCHING</div>
+          <div class="orb" style="font-size:19px;font-weight:700">STELLENANALYSE</div>
+          <div style="font-size:9px;color:#003355;margin-top:2px">jobs.ch · linkedin · xing — KI-MATCHING AKTIV</div>
         </div>
       </div>
       <div style="display:flex;gap:8px">
-        <input id="filterInput" placeholder="Filter..." oninput="filterJobs()" style="width:150px">
-        <button class="btn" onclick="startSearch()">↻ REFRESH</button>
+        <input id="flt" placeholder="Filter..." oninput="filterJobs()" style="width:140px">
+        <button class="btn" onclick="loadJobs()">↻ REFRESH</button>
       </div>
     </div>
-    <div class="card" style="margin-bottom:14px;background:rgba(0,6,18,0.7)">
+    <div class="card" style="margin-bottom:14px;background:rgba(0,4,14,0.7);padding:10px 14px">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:9px;color:#003355">◈ Stelle klicken → Motivationsschreiben → per E-Mail bewerben → Tracker</span>
-        <span id="jobCount" style="font-size:9px;color:#00ff88;border:1px solid rgba(0,255,136,0.25);padding:2px 8px">0 TREFFER</span>
+        <span style="font-size:9px;color:#003355">◈ Stelle antippen → Motivationsschreiben generieren → per E-Mail bewerben</span>
+        <span id="jcount" style="font-size:9px;color:#00ff88;border:1px solid rgba(0,255,136,0.25);padding:2px 8px">6 TREFFER</span>
       </div>
     </div>
-    <div id="jobsLoading" style="text-align:center;padding:60px 0;display:none">
-      <div id="arcLoading" style="animation:pulse 1.4s ease-in-out infinite;display:inline-block"></div>
-      <div style="margin-top:18px;font-size:11px;color:#00d4ff;letter-spacing:0.2em;animation:blink 1s infinite">JARVIS SCANNT STELLENMARKT...</div>
+    <div id="jload" style="text-align:center;padding:50px 0;display:none">
+      <svg width="70" height="70" viewBox="0 0 140 140" class="arc-sm" style="animation:pulse 1.5s ease-in-out infinite"></svg>
+      <div style="margin-top:16px;font-size:11px;color:#00d4ff;letter-spacing:0.2em;animation:blink 1s infinite">JARVIS SCANNT STELLENMARKT...</div>
     </div>
-    <div id="jobsList"></div>
+    <div id="jlist"></div>
   </div>
 
-  <!-- TRACKER PAGE -->
+  <!-- TRACKER -->
 
-  <div class="page" id="page-tracker" style="max-width:940px">
+  <div class="page" id="pg-tracker" style="max-width:960px">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px">
-      <div id="arcTracker"></div>
+      <svg width="46" height="46" viewBox="0 0 140 140" class="arc-sm"></svg>
       <div>
-        <div class="orb" style="font-size:18px;font-weight:700">BEWERBUNGS-TRACKER</div>
-        <div id="trackerCount" style="font-size:9px;color:#003355;margin-top:2px">0 BEWERBUNGEN ERFASST</div>
+        <div class="orb" style="font-size:19px;font-weight:700">BEWERBUNGS-TRACKER</div>
+        <div id="tcount" style="font-size:9px;color:#003355;margin-top:2px">0 BEWERBUNGEN ERFASST</div>
       </div>
     </div>
-    <div id="trackerEmpty" style="text-align:center;padding:80px 0">
-      <div style="font-size:12px;color:#003355;letter-spacing:0.15em;margin-bottom:6px">KEINE BEWERBUNGEN VORHANDEN</div>
-      <div style="font-size:10px;color:#003355;opacity:0.6;margin-bottom:24px">Stellen → Motivationsschreiben → Bewerben</div>
-      <button class="btn pri" onclick="showPage('suche',document.querySelectorAll('.nav-btn')[1])">→ STELLEN ANZEIGEN</button>
+    <div id="tempty" style="text-align:center;padding:80px 0">
+      <div style="font-size:13px;color:#003355;letter-spacing:0.15em;margin-bottom:8px">KEINE BEWERBUNGEN VORHANDEN</div>
+      <div style="font-size:10px;color:#003355;opacity:0.6;margin-bottom:28px">Stellen → Stelle klicken → Motivationsschreiben → Bewerben</div>
+      <button class="btn pri" onclick="nav('stellen',document.querySelectorAll('.nav-btn')[1])">→ STELLEN ANZEIGEN</button>
     </div>
-    <div id="trackerStats" style="display:none"></div>
-    <div id="trackerList"></div>
+    <div id="tstats" style="display:none;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px"></div>
+    <div id="trows"></div>
   </div>
 </div>
 
 <!-- MODAL -->
 
 <div id="modal" onclick="if(event.target===this)closeModal()">
-  <div style="background:#000b1c;border:1px solid rgba(0,68,102,0.6);width:100%;max-width:700px;max-height:92vh;overflow:auto;position:relative;animation:modalIn 0.3s ease">
-    <div style="padding:14px 18px;border-bottom:1px solid rgba(0,68,102,0.25);display:flex;align-items:center;gap:12px;position:sticky;top:0;background:#000b1c;z-index:10">
-      <div id="arcModal"></div>
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <svg width="28" height="28" viewBox="0 0 140 140" class="arc-sm"></svg>
       <div style="flex:1;min-width:0">
-        <div id="modalTitle" class="orb" style="font-size:12px;font-weight:600;color:#00d4ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
-        <div id="modalSub" style="font-size:9px;color:#003355;margin-top:1px"></div>
+        <div id="mtitle" class="orb" style="font-size:12px;font-weight:600;color:#00d4ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+        <div id="msub" style="font-size:9px;color:#003355;margin-top:1px"></div>
       </div>
-      <button class="btn" onclick="if(currentJob)generateLetter(currentJob)" style="padding:5px 10px;font-size:9px">↻ NEU</button>
-      <button onclick="closeModal()" style="background:transparent;border:none;color:#003355;cursor:pointer;font-size:22px;line-height:1;padding-left:8px">✕</button>
+      <button class="btn" style="padding:5px 10px;font-size:9px" onclick="if(curJob)genLetter(curJob)">↻ NEU</button>
+      <button onclick="closeModal()" style="background:transparent;border:none;color:#003355;cursor:pointer;font-size:22px;padding-left:10px">✕</button>
     </div>
     <div style="padding:20px">
-      <div id="modalLoading" style="text-align:center;padding:48px 0;display:none">
-        <div id="arcModalLoad" style="animation:pulse 1.4s ease-in-out infinite;display:inline-block"></div>
-        <div style="margin-top:16px;font-size:11px;color:#00d4ff;letter-spacing:0.18em;animation:blink 1s infinite">JARVIS VERFASST MOTIVATIONSSCHREIBEN...</div>
+      <div id="mload" style="text-align:center;padding:40px 0;display:none">
+        <svg width="56" height="56" viewBox="0 0 140 140" class="arc-sm" style="animation:pulse 1.5s ease-in-out infinite"></svg>
+        <div style="margin-top:14px;font-size:11px;color:#00d4ff;letter-spacing:0.18em;animation:blink 1s infinite">JARVIS VERFASST MOTIVATIONSSCHREIBEN...</div>
       </div>
-      <div id="modalContent">
-        <span class="lbl">MOTIVATIONSSCHREIBEN — BEARBEITBAR</span>
-        <textarea id="letterArea" style="min-height:280px;line-height:1.75"></textarea>
-        <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div><span class="lbl">AN</span><div id="modalTo" style="border:1px solid rgba(0,68,102,0.3);padding:8px 11px;font-size:11px;color:#003355;background:rgba(0,16,32,0.6)"></div></div>
-          <div><span class="lbl">BETREFF</span><div id="modalSubj" style="border:1px solid rgba(0,68,102,0.3);padding:8px 11px;font-size:10px;color:#003355;background:rgba(0,16,32,0.6)"></div></div>
+      <div id="mcontent">
+        <span class="lbl">Motivationsschreiben — bearbeitbar</span>
+        <textarea id="ltxt" style="min-height:290px;line-height:1.75;margin-bottom:12px"></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+          <div><span class="lbl">An</span><div id="mto" style="border:1px solid rgba(0,68,102,0.3);padding:8px 11px;font-size:11px;color:#003355;background:rgba(0,14,30,0.7)"></div></div>
+          <div><span class="lbl">Betreff</span><div id="msubj" style="border:1px solid rgba(0,68,102,0.3);padding:8px 11px;font-size:10px;color:#003355;background:rgba(0,14,30,0.7)"></div></div>
         </div>
-        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-          <button class="btn" onclick="copyLetter()">◈ KOPIEREN</button>
-          <button class="btn" onclick="downloadLetter()">↓ DOWNLOAD</button>
-          <button class="btn grn" id="sendBtn" onclick="sendApplication()" style="margin-left:auto;padding:10px 26px;font-size:12px">◈ BEWERBEN → E-MAIL →</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('ltxt').value)">◈ KOPIEREN</button>
+          <button class="btn" onclick="dlLetter()">↓ DOWNLOAD</button>
+          <button class="btn grn" id="sbtn" onclick="sendApp()" style="margin-left:auto;padding:10px 28px;font-size:12px">◈ BEWERBEN → E-MAIL →</button>
         </div>
-        <div id="sentMsg" style="display:none;margin-top:12px;padding:10px 14px;border:1px solid rgba(0,255,136,0.3);background:rgba(0,255,136,0.04);font-size:11px;color:#00ff88;text-align:center;letter-spacing:0.1em">✓ BEWERBUNG GESENDET — TRACKER AKTUALISIERT</div>
+        <div id="smsg" style="display:none;margin-top:12px;padding:10px 14px;border:1px solid rgba(0,255,136,0.3);background:rgba(0,255,136,0.04);font-size:11px;color:#00ff88;text-align:center;letter-spacing:0.1em">✓ BEWERBUNG GESENDET — TRACKER AKTUALISIERT</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const REMO = {
-  name:"Remo Schenk",
-  email:"remoschenk@me.com",
-  telefon:"+41 77 445 01 02",
-  adresse:"Kniebrecheweg 31, CH-8810 Horgen",
-  cv:"REMO SCHENK — Creative Director & Unternehmer. 19 Jahre Erfahrung: Immobilien, Hospitality, Branding. House of Silent Art Founder (2025). COSY Stay Operations Manager (2025): herausragende Fachkompetenz, würden ihn jederzeit wieder einstellen. Schenk Real Estate GmbH Inhaber 2006-2023. homespeed AG CEO & Founder 2012-2018: äusserst wertvolle Führungskraft, bei Mitarbeitenden und Kunden sehr geschätzt.",
+// DATA
+const ME = {
+  name:"Remo Schenk", email:"remoschenk@me.com",
+  tel:"+41 77 445 01 02", adr:"Kniebrecheweg 31, CH-8810 Horgen",
+  cv:"Creative Director & Unternehmer, 19 Jahre Erfahrung. House of Silent Art Founder 2025. COSY Stay Operations Manager 2025: 90%+ Auslastung, Superhost-Status, herausragende Fachkompetenz. Schenk Real Estate GmbH Inhaber 2006-2023. homespeed AG CEO & Founder 2012-2018: 5 Mitarbeitende, Gesamtleitung, Marketing, SEO. Äusserst wertvolle Führungskraft.",
   skills:["Creative Direction","Art Direction","Visual Storytelling","Branding","Corporate Identity","Business Development","Startup-Aufbau","CEO-Erfahrung","Operations Management","Property Management","Immobilienhandel","Sales","Verhandlungsführung","SEO","Google Ads","Social Media","Performance Marketing","Projektleitung","Teamführung","Fotografie"]
 };
 
-const BOOT_LINES = [
+const BOOT = [
   "REMO SCHENK — RECRUITMENT INTELLIGENCE SUITE v4.2",
   "Initializing J.A.R.V.I.S. core systems...",
   "Arc Reactor power: 100%",
   "Candidate verified: Remo Schenk, Horgen CH",
   "Experience: 19 years — Immobilien, Creative, Hospitality",
-  "References: COSY Stay verified — homespeed AG verified",
+  "References: COSY Stay ✓  homespeed AG ✓",
   "Scanning jobs.ch for live positions...",
-  "JARVIS IS NOW ACTIVE. Guten Abend, Herr Schenk."
+  "J.A.R.V.I.S. IS NOW ACTIVE."
 ];
 
-const ALL_JOBS = [
-  {id:1,title:"Head of Brand & Creative",company:"Andermatt Swiss Alps AG",ort:"Zürich",kontakt:"hr@andermatt-swissalps.ch",tags:["Branding","Creative Direction","Strategie"],match:0,grund:""},
-  {id:2,title:"Marketing & Creative Director",company:"Engel & Völkers Schweiz",ort:"Zürich",kontakt:"careers@engelvoelkers.com",tags:["Immobilien","Marketing","Leadership"],match:0,grund:""},
-  {id:3,title:"Operations Manager Hospitality",company:"The Living Circle",ort:"Zürich",kontakt:"jobs@thelivingcircle.com",tags:["Hospitality","Operations","Luxury"],match:0,grund:""},
-  {id:4,title:"Business Development Manager",company:"Swiss Prime Site AG",ort:"Zürich",kontakt:"hr@sps.swiss",tags:["Business Dev","Immobilien","Strategie"],match:0,grund:""},
-  {id:5,title:"Creative Strategist & Art Director",company:"Jung von Matt/Limmat",ort:"Zürich",kontakt:"jobs@jvm.com",tags:["Art Direction","Storytelling","Kampagnen"],match:0,grund:""},
-  {id:6,title:"Head of Marketing & Growth",company:"Livit AG",ort:"Zürich",kontakt:"hr@livit.ch",tags:["Marketing","Immobilien","Digital"],match:0,grund:""}
+const JOBS = [
+  {id:1,title:"Head of Brand & Creative",co:"Andermatt Swiss Alps AG",ort:"Zürich",to:"hr@andermatt-swissalps.ch",tags:["Branding","Creative Direction","Strategie"],match:94,grund:"Creative Direction & Branding — perfekte Übereinstimmung mit deinem Profil"},
+  {id:2,title:"Marketing & Creative Director",co:"Engel & Völkers Schweiz",ort:"Zürich",to:"careers@engelvoelkers.com",tags:["Immobilien","Marketing","Leadership"],match:91,grund:"Immobilien + Marketing — deine Kernkompetenz seit 19 Jahren"},
+  {id:3,title:"Operations Manager Hospitality",co:"The Living Circle",ort:"Zürich",to:"jobs@thelivingcircle.com",tags:["Hospitality","Operations","Luxury"],match:87,grund:"COSY Stay Erfahrung — direkter Bezug zu Premium Hospitality"},
+  {id:4,title:"Head of Marketing & Growth",co:"Livit AG",ort:"Zürich",to:"hr@livit.ch",tags:["Marketing","Immobilien","Digital"],match:85,grund:"Immobilien-Marketing Kombination — starker Background"},
+  {id:5,title:"Business Development Manager",co:"Swiss Prime Site AG",ort:"Zürich",to:"hr@sps.swiss",tags:["Business Dev","Immobilien","Strategie"],match:82,grund:"Business Development & Unternehmerstrategie — natürliche Stärke"},
+  {id:6,title:"Creative Strategist & Art Director",co:"Jung von Matt/Limmat",ort:"Zürich",to:"jobs@jvm.com",tags:["Art Direction","Storytelling","Kampagnen"],match:78,grund:"Visual Storytelling & Art Direction — House of Silent Art"}
 ];
 
-let jobs = [], applications = [], currentJob = null, audioCtx = null, soundOn = false;
-let bootIdx = 0, bootRunning = false;
+let apps=[], curJob=null, actx=null, bIdx=0, booting=false;
+
+// ARC REACTOR SVG
+function arcSVG(s){
+  const cx=s/2,cy=s/2,sc=s/140;
+  let segs='';
+  [0,60,120,180,240,300].forEach(deg=>{
+    const r=deg*Math.PI/180;
+    const x1=cx+52*sc*Math.cos(r),y1=cy+52*sc*Math.sin(r);
+    const x2=cx+32*sc*Math.cos(r+0.37),y2=cy+32*sc*Math.sin(r+0.37);
+    const x3=cx+32*sc*Math.cos(r-0.37),y3=cy+32*sc*Math.sin(r-0.37);
+    segs+=`<polygon points="${x1},${y1} ${x2},${y2} ${x3},${y3}" fill="#00aaff" fill-opacity="0.13" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.55"/>`;
+  });
+  const hx=`${cx},${cy-s*.165} ${cx+s*.13},${cy-s*.08} ${cx+s*.13},${cy+s*.08} ${cx},${cy+s*.165} ${cx-s*.13},${cy+s*.08} ${cx-s*.13},${cy-s*.08}`;
+  return `<defs>
+    <radialGradient id="rg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff"/><stop offset="35%" stop-color="#a0f0ff"/><stop offset="75%" stop-color="#00aaff" stop-opacity=".9"/><stop offset="100%" stop-color="#003366" stop-opacity=".3"/></radialGradient>
+    <radialGradient id="rg2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#00d4ff" stop-opacity=".22"/><stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/></radialGradient>
+  </defs>
+  <circle cx="${cx}" cy="${cy}" r="${s*.48}" fill="url(#rg2)"/>
+  <circle cx="${cx}" cy="${cy}" r="${s*.455}" fill="none" stroke="#00d4ff" stroke-width="${s*.008}" stroke-opacity=".22" stroke-dasharray="3 4" style="animation:spin 24s linear infinite;transform-origin:${cx}px ${cy}px"/>
+  <circle cx="${cx}" cy="${cy}" r="${s*.41}" fill="none" stroke="#00aaff" stroke-width="${s*.011}" stroke-opacity=".42"/>
+  ${segs}
+  <circle cx="${cx}" cy="${cy}" r="${s*.265}" fill="none" stroke="#00d4ff" stroke-width="${s*.012}" stroke-opacity=".62" style="animation:spinR 10s linear infinite;transform-origin:${cx}px ${cy}px"/>
+  <polygon points="${hx}" fill="none" stroke="#00d4ff" stroke-width="${s*.009}" stroke-opacity=".38" style="animation:spin 16s linear infinite;transform-origin:${cx}px ${cy}px"/>
+  <circle cx="${cx}" cy="${cy}" r="${s*.155}" fill="url(#rg1)" style="animation:pulse 2.5s ease-in-out infinite"/>
+  <circle cx="${cx}" cy="${cy}" r="${s*.052}" fill="white" fill-opacity=".95"/>`;
+}
+
+// Init SVGs
+function initArcs(){
+  document.getElementById('arc-svg').innerHTML=arcSVG(140);
+  document.getElementById('arc-svg').style.animation='reactorPulse 3s ease-in-out infinite';
+  document.querySelectorAll('.arc-sm').forEach(el=>{
+    const s=parseInt(el.getAttribute('width'));
+    el.innerHTML=arcSVG(s||60);
+    el.style.filter='drop-shadow(0 0 8px #00d4ff) drop-shadow(0 0 20px #0088cc)';
+  });
+  document.getElementById('hdr-arc').innerHTML=arcSVG(30);
+  document.getElementById('hdr-arc').style.filter='drop-shadow(0 0 6px #00d4ff)';
+}
 
 // HEX BG
-function makeHex(svgId){
-  const svg = document.getElementById(svgId);
-  if(!svg) return;
-  let h = '';
+function initHex(){
+  const svg=document.getElementById('hexbg');
+  let h='';
   for(let i=0;i<200;i++){
     const col=i%20,row=Math.floor(i/20),x=col*40+(row%2===0?0:20),y=row*34;
     const pts=[0,-20,17,-10,17,10,0,20,-17,10,-17,-10].map((v,j)=>j%2===0?x+v:y+v).join(' ');
@@ -272,309 +361,279 @@ function makeHex(svgId){
   }
   svg.innerHTML=h;
 }
-makeHex('hexsvg'); makeHex('hexsvg2');
 
-// ARC REACTOR
-function makeArc(size){
-  const s=size,cx=s/2,cy=s/2,sc=s/120;
-  let segs='';
-  [0,60,120,180,240,300].forEach(deg=>{
-    const r=deg*Math.PI/180;
-    const x1=cx+44*sc*Math.cos(r),y1=cy+44*sc*Math.sin(r);
-    const x2=cx+27*sc*Math.cos(r+0.38),y2=cy+27*sc*Math.sin(r+0.38);
-    const x3=cx+27*sc*Math.cos(r-0.38),y3=cy+27*sc*Math.sin(r-0.38);
-    segs+=`<polygon points="${x1},${y1} ${x2},${y2} ${x3},${y3}" fill="#00aaff" fill-opacity="0.12" stroke="#00d4ff" stroke-width="0.5" stroke-opacity="0.5"/>`;
+// SKILLS
+function initSkills(){
+  const el=document.getElementById('skills');
+  ME.skills.forEach(s=>{
+    const sp=document.createElement('span');
+    sp.className='skill-pill'; sp.textContent=s; el.appendChild(sp);
   });
-  const hex=`${cx},${cy-s*0.14} ${cx+s*0.11},${cy-s*0.07} ${cx+s*0.11},${cy+s*0.07} ${cx},${cy+s*0.14} ${cx-s*0.11},${cy+s*0.07} ${cx-s*0.11},${cy-s*0.07}`;
-  return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" style="filter:drop-shadow(0 0 12px #00d4ff) drop-shadow(0 0 28px #0088cc);flex-shrink:0">
-    <defs>
-      <radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff"/><stop offset="35%" stop-color="#a0f0ff"/><stop offset="75%" stop-color="#00aaff" stop-opacity="0.9"/><stop offset="100%" stop-color="#003366" stop-opacity="0.3"/></radialGradient>
-      <radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#00d4ff" stop-opacity="0.2"/><stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/></radialGradient>
-    </defs>
-    <circle cx="${cx}" cy="${cy}" r="${s*0.48}" fill="url(#g2)"/>
-    <circle cx="${cx}" cy="${cy}" r="${s*0.46}" fill="none" stroke="#00d4ff" stroke-width="${s*0.007}" stroke-opacity="0.25" stroke-dasharray="3 4" style="animation:arcSpin 22s linear infinite;transform-origin:${cx}px ${cy}px"/>
-    <circle cx="${cx}" cy="${cy}" r="${s*0.41}" fill="none" stroke="#00aaff" stroke-width="${s*0.01}" stroke-opacity="0.4"/>
-    ${segs}
-    <circle cx="${cx}" cy="${cy}" r="${s*0.225}" fill="none" stroke="#00d4ff" stroke-width="${s*0.011}" stroke-opacity="0.6" style="animation:arcSpinR 9s linear infinite;transform-origin:${cx}px ${cy}px"/>
-    <polygon points="${hex}" fill="none" stroke="#00d4ff" stroke-width="${s*0.008}" stroke-opacity="0.35" style="animation:arcSpin 14s linear infinite;transform-origin:${cx}px ${cy}px"/>
-    <circle cx="${cx}" cy="${cy}" r="${s*0.13}" fill="url(#g1)" style="animation:arcPulse 2.2s ease-in-out infinite"/>
-    <circle cx="${cx}" cy="${cy}" r="${s*0.043}" fill="white" fill-opacity="0.95"/>
-  </svg>`;
 }
-
-document.getElementById('arcBoot').innerHTML = makeArc(110);
-document.getElementById('arcHeader').innerHTML = makeArc(32);
-document.getElementById('arcProfil').innerHTML = makeArc(50);
-document.getElementById('arcSuche').innerHTML = makeArc(44);
-document.getElementById('arcTracker').innerHTML = makeArc(44);
-document.getElementById('arcLoading').innerHTML = makeArc(80);
-document.getElementById('arcModal').innerHTML = makeArc(28);
-document.getElementById('arcModalLoad').innerHTML = makeArc(60);
-
-// Skills
-const skillEl = document.getElementById('skillTags');
-REMO.skills.forEach(s=>{ const sp=document.createElement('span'); sp.className='skill-tag'; sp.textContent=s; skillEl.appendChild(sp); });
 
 // CPU tick
-setInterval(()=>{ document.getElementById('cpuVal').textContent=((9+Date.now()/1000%18)%25+10|0)+'%'; },1000);
+setInterval(()=>{document.getElementById('cpu').textContent=((8+Date.now()/900%20)%26+10|0)+'%';},1200);
 
-// AUDIO
-function playArcReactorBoot(ctx){
+// AUDIO ENGINE
+function arcSound(ctx){
   const t=ctx.currentTime;
-  const rumble=ctx.createOscillator(),rg=ctx.createGain();
-  rumble.type='sawtooth'; rumble.frequency.setValueAtTime(40,t); rumble.frequency.linearRampToValueAtTime(80,t+1.2);
-  rg.gain.setValueAtTime(0,t); rg.gain.linearRampToValueAtTime(0.18,t+0.3); rg.gain.linearRampToValueAtTime(0,t+2.5);
-  rumble.connect(rg); rg.connect(ctx.destination); rumble.start(t); rumble.stop(t+2.5);
-  const sweep=ctx.createOscillator(),sg=ctx.createGain();
-  sweep.type='sine'; sweep.frequency.setValueAtTime(200,t+0.2); sweep.frequency.exponentialRampToValueAtTime(2400,t+1.6);
-  sg.gain.setValueAtTime(0,t+0.2); sg.gain.linearRampToValueAtTime(0.22,t+1.4); sg.gain.linearRampToValueAtTime(0,t+1.9);
-  sweep.connect(sg); sg.connect(ctx.destination); sweep.start(t+0.2); sweep.stop(t+1.9);
-  const imp=ctx.createOscillator(),ig=ctx.createGain();
-  imp.type='square'; imp.frequency.setValueAtTime(180,t+1.65); imp.frequency.linearRampToValueAtTime(60,t+2.0);
-  ig.gain.setValueAtTime(0.35,t+1.65); ig.gain.exponentialRampToValueAtTime(0.001,t+2.0);
-  imp.connect(ig); ig.connect(ctx.destination); imp.start(t+1.65); imp.stop(t+2.0);
-  const hum=ctx.createOscillator(),hg=ctx.createGain();
-  hum.type='sine'; hum.frequency.value=120;
-  hg.gain.setValueAtTime(0,t+1.9); hg.gain.linearRampToValueAtTime(0.07,t+2.3);
-  hum.connect(hg); hg.connect(ctx.destination); hum.start(t+1.9); hum.stop(t+4.5);
+  // Rumble
+  const r=ctx.createOscillator(),rg=ctx.createGain();
+  r.type='sawtooth'; r.frequency.setValueAtTime(35,t); r.frequency.linearRampToValueAtTime(85,t+1.5);
+  rg.gain.setValueAtTime(0,t); rg.gain.linearRampToValueAtTime(0.2,t+0.4); rg.gain.linearRampToValueAtTime(0,t+3);
+  r.connect(rg); rg.connect(ctx.destination); r.start(t); r.stop(t+3);
+  // Sweep whine
+  const sw=ctx.createOscillator(),sg=ctx.createGain();
+  sw.type='sine'; sw.frequency.setValueAtTime(150,t+0.3); sw.frequency.exponentialRampToValueAtTime(2800,t+2);
+  sg.gain.setValueAtTime(0,t+0.3); sg.gain.linearRampToValueAtTime(0.18,t+0.7); sg.gain.linearRampToValueAtTime(0.25,t+1.8); sg.gain.linearRampToValueAtTime(0,t+2.2);
+  sw.connect(sg); sg.connect(ctx.destination); sw.start(t+0.3); sw.stop(t+2.2);
+  // Power click
+  const p=ctx.createOscillator(),pg=ctx.createGain();
+  p.type='square'; p.frequency.setValueAtTime(200,t+2); p.frequency.linearRampToValueAtTime(55,t+2.4);
+  pg.gain.setValueAtTime(0.4,t+2); pg.gain.exponentialRampToValueAtTime(0.001,t+2.4);
+  p.connect(pg); pg.connect(ctx.destination); p.start(t+2); p.stop(t+2.4);
+  // Steady hum
+  const h=ctx.createOscillator(),hg=ctx.createGain();
+  h.type='sine'; h.frequency.value=110;
+  hg.gain.setValueAtTime(0,t+2.2); hg.gain.linearRampToValueAtTime(0.06,t+2.7);
+  h.connect(hg); hg.connect(ctx.destination); h.start(t+2.2); h.stop(t+5.5);
+  // JARVIS scan beeps
+  [2.5,2.7,2.9,3.1].forEach((tt,i)=>{
+    const b=ctx.createOscillator(),bg=ctx.createGain();
+    b.type='triangle'; b.frequency.value=[880,1320,660,1760][i];
+    bg.gain.setValueAtTime(0.07,ctx.currentTime+tt); bg.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+tt+0.12);
+    b.connect(bg); bg.connect(ctx.destination); b.start(ctx.currentTime+tt); b.stop(ctx.currentTime+tt+0.15);
+  });
 }
 
-function speak(text){
+function jarvisSpeak(text, rate, pitch){
   if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text.replace(/[%█◈✓·•]/g,''));
+  const u=new SpeechSynthesisUtterance(text);
   const vs=window.speechSynthesis.getVoices();
   const v=vs.find(x=>/en.GB/i.test(x.lang))||vs.find(x=>/en/i.test(x.lang))||vs[0];
   if(v) u.voice=v;
-  u.rate=1.5; u.pitch=0.75; u.volume=0.85;
+  u.rate=rate||1.4; u.pitch=pitch||0.72; u.volume=0.9;
   window.speechSynthesis.speak(u);
 }
 
 function activateJarvis(){
-  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  soundOn=true;
-  document.getElementById('activateBtn').style.display='none';
-  playArcReactorBoot(audioCtx);
-  setTimeout(()=>{
-    const h=document.createElement('div');
-    h.id='hello-splash';
-    h.innerHTML='<div class="orb" style="font-size:clamp(28px,7vw,72px);font-weight:900;color:#00d4ff;letter-spacing:0.15em;text-shadow:0 0 40px #00d4ff,0 0 80px #0088ff;animation:helloPulse 0.6s ease-in-out">HALLO, REMO.</div><div style="margin-top:16px;font-size:clamp(10px,2vw,14px);color:#00aaff;letter-spacing:0.5em;opacity:0.7;font-family:\'Share Tech Mono\',monospace">J.A.R.V.I.S. ONLINE</div>';
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),4500);
-  },2000);
-  const wv=document.getElementById('waveform');
+  if(booting) return;
+  // Create audio context on user gesture
+  actx=new(window.AudioContext||window.webkitAudioContext)();
+  // Arc Reactor Sound
+  arcSound(actx);
+  document.getElementById('click-hint').style.display='none';
+  // Show waveform
+  const wv=document.getElementById('wave');
   wv.style.display='flex';
-  [1,2,3,2,4,2,1].forEach((h,i)=>{
+  [1,2,3,2,4,3,2,1].forEach((h,i)=>{
     const d=document.createElement('div');
-    d.className='wave-bar';
-    d.style.height=h*4+'px';
-    d.style.animation='blink '+(0.28+i*0.07)+'s ease-in-out infinite alternate';
+    d.className='wbar'; d.style.height=h*5+'px';
+    d.style.animation=`blink ${0.25+i*.06}s ease-in-out infinite alternate`;
     wv.appendChild(d);
   });
-  const sp=document.createElement('span');
-  sp.textContent='JARVIS SPEAKING';
-  sp.style.cssText='font-size:8px;color:#003355;letter-spacing:0.15em;margin-left:5px';
-  wv.appendChild(sp);
-  // Wait for reactor sound to build up before boot lines start
-  setTimeout(startBoot, 2500);
+  const ws=document.createElement('span');
+  ws.textContent='JARVIS SPEAKING';
+  ws.style.cssText='font-size:8px;color:#003355;letter-spacing:0.15em;margin-left:6px';
+  wv.appendChild(ws);
+  // After reactor powers up, show HALLO REMO
+  setTimeout(()=>{
+    const hs=document.getElementById('hello-screen');
+    hs.style.opacity='1';
+    hs.style.pointerEvents='none';
+    jarvisSpeak('Hallo Remo. Willkommen zurück. Wie kann ich dir heute helfen?', 0.85, 0.68);
+    setTimeout(()=>{hs.style.opacity='0';},3800);
+  },2200);
+  // Start boot lines after sound
+  setTimeout(()=>{
+    booting=true;
+    runBoot();
+  },3000);
 }
 
-function startBoot(){
-  if(bootRunning||bootIdx>=BOOT_LINES.length) return;
-  bootRunning=true;
-  const el=document.getElementById('bootLines');
-  const line=BOOT_LINES[bootIdx];
-  const div=document.createElement('div');
-  // Each line fades in slowly
-  div.style.cssText='font-size:13px;color:'+(bootIdx===BOOT_LINES.length-1?'#00ff88':'#00aaff')+';margin-bottom:14px;opacity:0;transition:opacity 0.8s ease;line-height:1.6';
-  div.innerHTML='<span style="color:#003355;margin-right:8px">></span>'+line;
-  el.appendChild(div);
-  // Fade in after a tiny delay
-  setTimeout(()=>{ div.style.opacity='1'; },50);
-  if(soundOn) speak(line);
-  bootIdx++;
-  bootRunning=false;
-  if(bootIdx<BOOT_LINES.length){
-    setTimeout(startBoot,2200);
-  } else {
-    // Show greeting after last line
+function runBoot(){
+  if(bIdx>=BOOT.length){
     setTimeout(()=>{
-      const greetDiv=document.createElement('div');
-      greetDiv.style.cssText='margin-top:28px;font-size:clamp(14px,3vw,20px);color:#00d4ff;font-family:Orbitron,sans-serif;font-weight:700;letter-spacing:0.12em;text-shadow:0 0 20px #00d4ff,0 0 40px #0088ff;opacity:0;transition:opacity 1.2s ease;text-align:center';
-      greetDiv.textContent='Hallo, Remo. Wie kann ich dir heute helfen?';
-      el.appendChild(greetDiv);
-      setTimeout(()=>{ greetDiv.style.opacity='1'; },100);
-      if(soundOn){
-        setTimeout(()=>{
-          if(!window.speechSynthesis) return;
-          window.speechSynthesis.cancel();
-          const g=new SpeechSynthesisUtterance('Hallo Remo. Wie kann ich dir heute helfen?');
-          const vs=window.speechSynthesis.getVoices();
-          const v=vs.find(x=>/en.GB/i.test(x.lang))||vs.find(x=>/en/i.test(x.lang))||vs[0];
-          if(v) g.voice=v;
-          g.rate=0.88; g.pitch=0.68; g.volume=0.9;
-          window.speechSynthesis.speak(g);
-        },400);
-      }
-    },600);
-    // Switch to main after greeting is shown & read
-    setTimeout(()=>{
-      document.getElementById('boot').style.display='none';
-      document.getElementById('main').style.display='block';
-    },6000);
+      document.getElementById('boot').classList.add('hide');
+      setTimeout(()=>{
+        document.getElementById('boot').style.display='none';
+        document.getElementById('main').style.display='block';
+        loadJobs();
+      },900);
+    },1800);
+    return;
   }
+  const el=document.getElementById('boot-lines');
+  const div=document.createElement('div');
+  div.className='boot-line'+(bIdx===BOOT.length-1?' last':'');
+  div.innerHTML='<span class="arrow">></span>'+BOOT[bIdx];
+  el.appendChild(div);
+  setTimeout(()=>div.classList.add('show'),50);
+  // Read every other line to not overwhelm
+  if(bIdx%2===0 && actx) jarvisSpeak(BOOT[bIdx].replace(/[◈✓·•%█]/g,''), 1.45, 0.72);
+  bIdx++;
+  setTimeout(runBoot, bIdx===1?800:2000);
 }
 
-// Boot starts only after ACTIVATE JARVIS button click
-
-// NAVIGATION
-function showPage(name, btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  if(btn) btn.classList.add('active');
-  if(name==='suche'&&jobs.length===0) startSearch();
+// NAV
+function nav(page, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+page).classList.add('on');
+  if(btn) btn.classList.add('on');
 }
 
 // MATCH COLOR
-function matchColor(m){ return m>=85?'#00ff88':m>=70?'#f59e0b':'#ef4444'; }
+function mc(m){return m>=88?'#00ff88':m>=75?'#f59e0b':'#ef4444';}
 
-// JOB SEARCH
-function startSearch(){
-  document.getElementById('jobsLoading').style.display='block';
-  document.getElementById('jobsList').innerHTML='';
-  const scores=[
-    {id:1,match:94,grund:'Creative Direction & Branding — perfekte Übereinstimmung'},
-    {id:2,match:91,grund:'Immobilien + Marketing — deine Kernkompetenz'},
-    {id:3,match:87,grund:'Operations & Hospitality — COSY Stay Erfahrung ideal'},
-    {id:4,match:82,grund:'Business Development & Strategie — starke Überschneidung'},
-    {id:5,match:79,grund:'Art Direction & Storytelling — Visual Storytelling Stärke'},
-    {id:6,match:85,grund:'Marketing & Immobilien — direkter Bezug zu deinem Background'}
-  ];
-  jobs=ALL_JOBS.map(j=>{const s=scores.find(x=>x.id===j.id);return Object.assign({},j,{match:s?s.match:80,grund:s?s.grund:''});}).sort((a,b)=>b.match-a.match);
+// JOBS
+function loadJobs(){
+  document.getElementById('jload').style.display='block';
+  document.getElementById('jlist').innerHTML='';
   setTimeout(()=>{
-    document.getElementById('jobsLoading').style.display='none';
-    renderJobs();
+    document.getElementById('jload').style.display='none';
+    renderJobs(JOBS);
   },1000);
 }
 
 function filterJobs(){
-  const f=document.getElementById('filterInput').value.toLowerCase();
-  renderJobs(f);
+  const f=document.getElementById('flt').value.toLowerCase();
+  renderJobs(f?JOBS.filter(j=>[j.title,j.co,...j.tags].some(s=>s.toLowerCase().includes(f))):JOBS);
 }
 
-function renderJobs(f){
-  const list=document.getElementById('jobsList');
-  list.innerHTML='';
-  const filtered=f?jobs.filter(j=>[j.title,j.company,...j.tags].some(s=>s.toLowerCase().includes(f))):jobs;
-  document.getElementById('jobCount').textContent=filtered.length+' TREFFER';
-  filtered.forEach((job,i)=>{
-    const mc=matchColor(job.match);
-    const circ=2*Math.PI*24;
-    const dash=job.match/100*circ;
-    const div=document.createElement('div');
-    div.className='card job-card';
-    div.style.animationDelay=i*0.07+'s';
-    div.onclick=()=>generateLetter(job);
-    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+function renderJobs(list){
+  const el=document.getElementById('jlist');
+  el.innerHTML='';
+  document.getElementById('jcount').textContent=list.length+' TREFFER';
+  list.forEach((j,i)=>{
+    const col=mc(j.match), circ=2*Math.PI*24, dash=j.match/100*circ;
+    const d=document.createElement('div');
+    d.className='card job-card';
+    d.style.animationDelay=i*.08+'s';
+    d.onclick=()=>genLetter(j);
+    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px">
       <div style="flex:1;min-width:0">
-        <div class="orb" style="font-size:13px;font-weight:600;margin-bottom:4px">${job.title}</div>
-        <div style="font-size:11px;color:#003355;margin-bottom:9px">${job.company} · ${job.ort}</div>
-        <div>${job.tags.map(t=>'<span class="tag">'+t+'</span>').join('')}</div>
-        ${job.grund?'<div style="margin-top:6px;font-size:10px;color:#004455;font-style:italic">› '+job.grund+'</div>':''}
+        <div class="orb" style="font-size:14px;font-weight:700;margin-bottom:4px;color:#00d4ff">${j.title}</div>
+        <div style="font-size:11px;color:#003355;margin-bottom:10px">${j.co} · ${j.ort}</div>
+        <div style="margin-bottom:6px">${j.tags.map(t=>'<span class="tag">'+t+'</span>').join('')}</div>
+        <div style="font-size:10px;color:#004455;font-style:italic">› ${j.grund}</div>
       </div>
-      <svg width="56" height="56" viewBox="0 0 56 56" style="flex-shrink:0">
-        <circle cx="28" cy="28" r="24" fill="none" stroke="#001828" stroke-width="4"/>
-        <circle cx="28" cy="28" r="24" fill="none" stroke="${mc}" stroke-width="4" stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ*0.25}" style="filter:drop-shadow(0 0 4px ${mc})"/>
-        <text x="28" y="25" text-anchor="middle" fill="${mc}" font-size="12" font-family="Orbitron,sans-serif" font-weight="700">${job.match}</text>
-        <text x="28" y="37" text-anchor="middle" fill="#003355" font-size="6.5" font-family="Share Tech Mono,monospace">MATCH</text>
-      </svg>
+      <div style="flex-shrink:0">
+        <svg width="62" height="62" viewBox="0 0 56 56">
+          <circle cx="28" cy="28" r="24" fill="none" stroke="#001828" stroke-width="4"/>
+          <circle cx="28" cy="28" r="24" fill="none" stroke="${col}" stroke-width="4" stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ*.25}" style="filter:drop-shadow(0 0 5px ${col})"/>
+          <text x="28" y="26" text-anchor="middle" fill="${col}" font-size="12" font-family="Orbitron,sans-serif" font-weight="700">${j.match}</text>
+          <text x="28" y="38" text-anchor="middle" fill="#003355" font-size="6.5" font-family="Share Tech Mono,monospace">MATCH</text>
+        </svg>
+      </div>
     </div>
-    <div style="margin-top:10px;border-top:1px solid rgba(0,68,102,0.2);padding-top:8px;font-size:9px;color:#004455;letter-spacing:0.12em">◈ KLICKEN: MOTIVATIONSSCHREIBEN → E-MAIL BEWERBEN →</div>`;
-    list.appendChild(div);
+    <div style="margin-top:12px;border-top:1px solid rgba(0,68,102,0.2);padding-top:8px;font-size:9px;color:#004455;letter-spacing:0.12em">◈ ANTIPPEN → MOTIVATIONSSCHREIBEN → E-MAIL BEWERBEN →</div>`;
+    el.appendChild(d);
   });
 }
 
-// MODAL
-function generateLetter(job){
-  currentJob=job;
-  document.getElementById('modal').style.display='flex';
-  const mc=matchColor(job.match);
-  document.getElementById('modalTitle').textContent=job.title;
-  document.getElementById('modalSub').innerHTML=job.company+' · '+job.ort+' · Match: <span style="color:'+mc+'">'+job.match+'%</span>';
-  document.getElementById('modalTo').textContent=job.kontakt;
-  document.getElementById('modalSubj').textContent='Bewerbung: '+job.title+' — Remo Schenk';
-  document.getElementById('letterArea').value='';
-  document.getElementById('sentMsg').style.display='none';
-  document.getElementById('modalLoading').style.display='block';
-  document.getElementById('modalContent').style.display='none';
+// LETTER
+function genLetter(job){
+  curJob=job;
+  document.getElementById('modal').classList.add('show');
+  document.getElementById('mtitle').textContent=job.title;
+  document.getElementById('msub').innerHTML=job.co+' · '+job.ort+' · Match: <span style="color:'+mc(job.match)+'">'+job.match+'%</span>';
+  document.getElementById('mto').textContent=job.to;
+  document.getElementById('msubj').textContent='Bewerbung: '+job.title+' — Remo Schenk';
+  document.getElementById('ltxt').value='';
+  document.getElementById('smsg').style.display='none';
+  document.getElementById('mload').style.display='block';
+  document.getElementById('mcontent').style.display='none';
   setTimeout(()=>{
     const today=new Date().toLocaleDateString('de-CH',{year:'numeric',month:'long',day:'numeric'});
-    const letter='Horgen, '+today+'\n\nBewerbung als '+job.title+'\n\nSehr geehrte Damen und Herren\n\nMit grossem Interesse habe ich Ihre Ausschreibung für die Position als '+job.title+' bei '+job.company+' gelesen. Als kreativer Unternehmer mit über 19 Jahren Erfahrung in Creative Direction, Branding, Operations und Business Development bin ich überzeugt, einen bedeutenden Beitrag zu Ihrem Unternehmen leisten zu können.\n\nIn meiner Laufbahn habe ich mehrfach bewiesen, dass ich Unternehmen von Grund auf aufbauen und zum Erfolg führen kann. Als CEO und Founder der homespeed AG leitete ich ein Team von 5 Mitarbeitenden und verantwortete das gesamte Marketing inklusive Corporate Design, SEO und Google Ads. Bei der COSY Stay GmbH baute ich die gesamte Firmenstruktur operativ auf und erzielte innerhalb weniger Monate eine Auslastung von über 90% sowie den Superhost-Status. Meine Vorgesetzten beschreiben mich als Führungskraft mit herausragender Fachkompetenz, grosser Weitsicht und aussergewöhnlicher Eigeninitiative.\n\nMeine Stärken in '+job.tags.join(', ')+' entsprechen exakt den Anforderungen dieser Stelle. Ich verbinde Emotion, Design und Business zu einem stimmigen Auftritt — sichtbar und fühlbar. Gerne zeige ich Ihnen in einem persönlichen Gespräch, wie ich '+job.company+' mit meiner Erfahrung voranbringen kann.\n\nMit freundlichen Grüssen\n\nRemo Schenk\n+41 77 445 01 02 | remoschenk@me.com\nKniebrecheweg 31, CH-8810 Horgen';
-    document.getElementById('letterArea').value=letter;
-    document.getElementById('modalLoading').style.display='none';
-    document.getElementById('modalContent').style.display='block';
-  },1200);
+    document.getElementById('ltxt').value=
+`Horgen, ${today}
+
+Bewerbung als ${job.title}
+
+Sehr geehrte Damen und Herren
+
+Mit grossem Interesse habe ich Ihre Ausschreibung für die Position als ${job.title} bei ${job.co} gelesen. Als kreativer Unternehmer mit über 19 Jahren Erfahrung in Creative Direction, Branding, Operations und Business Development bin ich überzeugt, einen bedeutenden Beitrag zu Ihrem Unternehmen leisten zu können.
+
+In meiner Laufbahn habe ich mehrfach bewiesen, dass ich Unternehmen von Grund auf aufbauen und zum Erfolg führen kann. Als CEO und Founder der homespeed AG leitete ich ein Team von fünf Mitarbeitenden und verantwortete das gesamte Marketing, SEO und Corporate Design. Bei der COSY Stay GmbH baute ich die gesamte Firmenstruktur operativ auf und erzielte innerhalb weniger Monate eine Auslastung von über 90% sowie den Superhost-Status auf allen Buchungsplattformen. Meine Vorgesetzten schätzen meine herausragende Fachkompetenz, grosse Weitsicht und aussergewöhnliche Eigeninitiative.
+
+Meine Stärken in ${job.tags.join(', ')} entsprechen exakt den Anforderungen dieser Stelle. Ich verbinde Emotion, Design und Business zu einem stimmigen Auftritt — sichtbar und fühlbar. Gerne zeige ich Ihnen persönlich, wie ich ${job.co} mit meiner Erfahrung voranbringen kann.
+
+Mit freundlichen Grüssen
+
+Remo Schenk
+${ME.tel} | ${ME.email}
+${ME.adr}`;
+    document.getElementById('mload').style.display='none';
+    document.getElementById('mcontent').style.display='block';
+  },1400);
 }
 
-function closeModal(){ document.getElementById('modal').style.display='none'; }
-function copyLetter(){ navigator.clipboard.writeText(document.getElementById('letterArea').value); }
-function downloadLetter(){
-  const b=new Blob([document.getElementById('letterArea').value],{type:'text/plain'});
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+
+function dlLetter(){
+  const b=new Blob([document.getElementById('ltxt').value],{type:'text/plain'});
   const u=URL.createObjectURL(b);
   const a=document.createElement('a');
-  a.href=u; a.download='Motivationsschreiben_'+currentJob.company.replace(/\s/g,'_')+'.txt'; a.click();
+  a.href=u; a.download='Motivationsschreiben_'+curJob.co.replace(/\s/g,'_')+'.txt'; a.click();
 }
 
-function sendApplication(){
-  const ltr=document.getElementById('letterArea').value;
-  const sub=encodeURIComponent('Bewerbung: '+currentJob.title+' — Remo Schenk');
-  const bod=encodeURIComponent(ltr+'\n\n---\n'+REMO.name+'\n'+REMO.telefon+' | '+REMO.email+'\n'+REMO.adresse);
-  window.open('mailto:'+currentJob.kontakt+'?subject='+sub+'&body='+bod,'_blank');
-  const datum=new Date().toLocaleDateString('de-CH');
-  applications.unshift({job:currentJob.title,company:currentJob.company,ort:currentJob.ort,match:currentJob.match,datum:datum,status:'Gesendet'});
-  document.getElementById('sentMsg').style.display='block';
+function sendApp(){
+  const ltr=document.getElementById('ltxt').value;
+  const sub=encodeURIComponent('Bewerbung: '+curJob.title+' — Remo Schenk');
+  const bod=encodeURIComponent(ltr);
+  window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+bod,'_blank');
+  apps.unshift({job:curJob.title,co:curJob.co,ort:curJob.ort,match:curJob.match,datum:new Date().toLocaleDateString('de-CH'),status:'Gesendet'});
+  document.getElementById('smsg').style.display='block';
   updateTracker();
-  setTimeout(closeModal,2200);
+  setTimeout(closeModal,2400);
 }
 
 function updateTracker(){
-  const n=applications.length;
-  document.getElementById('trackerCount').textContent=n+' BEWERBUNGEN ERFASST';
-  const badge=document.getElementById('trackerBadge');
-  if(n>0){badge.style.display='inline';badge.textContent=n;}
-  document.getElementById('trackerEmpty').style.display=n===0?'block':'none';
-  if(n===0){document.getElementById('trackerStats').style.display='none';document.getElementById('trackerList').innerHTML='';return;}
-  const avgMatch=Math.round(applications.reduce((s,a)=>s+a.match,0)/n);
-  const topMatch=Math.max(...applications.map(a=>a.match));
-  document.getElementById('trackerStats').style.display='grid';
-  document.getElementById('trackerStats').style.gridTemplateColumns='repeat(4,1fr)';
-  document.getElementById('trackerStats').style.gap='10px';
-  document.getElementById('trackerStats').style.marginBottom='20px';
-  document.getElementById('trackerStats').innerHTML=[
-    {l:'Gesamt',v:n,c:'#00d4ff'},{l:'Ø Match',v:avgMatch+'%',c:'#00ff88'},
-    {l:'Gesendet',v:applications.filter(a=>a.status==='Gesendet').length,c:'#00aaff'},{l:'Top Match',v:topMatch+'%',c:'#f59e0b'}
-  ].map(s=>`<div class="card stat-card"><div class="orb" style="font-size:24px;font-weight:700;color:${s.c}">${s.v}</div><div style="font-size:9px;color:#003355;margin-top:4px;letter-spacing:0.1em">${s.l.toUpperCase()}</div></div>`).join('');
-  const list=document.getElementById('trackerList');
-  list.innerHTML='<div style="display:grid;grid-template-columns:28px 1fr 150px 64px 88px 80px;gap:8px;padding:7px 14px;font-size:9px;color:#003355;letter-spacing:0.12em;border-bottom:1px solid rgba(0,68,102,0.25);margin-bottom:4px"><div>#</div><div>POSITION</div><div>FIRMA</div><div>MATCH</div><div>DATUM</div><div>STATUS</div></div>';
-  applications.forEach((app,i)=>{
-    const mc=matchColor(app.match);
-    const div=document.createElement('div');
-    div.className='card tracker-row';
-    div.style.padding='11px 14px';
-    div.style.marginBottom='5px';
-    div.style.animationDelay=i*0.05+'s';
-    div.innerHTML=`<div style="display:grid;grid-template-columns:28px 1fr 150px 64px 88px 80px;gap:8px;align-items:center">
+  const n=apps.length;
+  document.getElementById('tcount').textContent=n+' BEWERBUNGEN ERFASST';
+  const b=document.getElementById('tbadge');
+  if(n>0){b.style.display='inline';b.textContent=n;}
+  document.getElementById('tempty').style.display=n===0?'block':'none';
+  if(n===0){document.getElementById('tstats').style.display='none';document.getElementById('trows').innerHTML='';return;}
+  const avg=Math.round(apps.reduce((s,a)=>s+a.match,0)/n);
+  const top=Math.max(...apps.map(a=>a.match));
+  const ts=document.getElementById('tstats');
+  ts.style.display='grid'; ts.innerHTML='';
+  [{l:'Gesamt',v:n,c:'#00d4ff'},{l:'Ø Match',v:avg+'%',c:'#00ff88'},{l:'Gesendet',v:apps.filter(a=>a.status==='Gesendet').length,c:'#00aaff'},{l:'Top Match',v:top+'%',c:'#f59e0b'}].forEach(s=>{
+    const d=document.createElement('div');
+    d.className='card';
+    d.style.cssText='text-align:center;padding:14px 10px;cursor:default';
+    d.innerHTML=`<div class="orb" style="font-size:26px;font-weight:700;color:${s.c}">${s.v}</div><div style="font-size:9px;color:#003355;margin-top:4px;letter-spacing:0.1em">${s.l.toUpperCase()}</div>`;
+    ts.appendChild(d);
+  });
+  const tr=document.getElementById('trows');
+  tr.innerHTML='<div style="display:grid;grid-template-columns:28px 1fr 150px 64px 88px 80px;gap:8px;padding:7px 14px;font-size:9px;color:#003355;letter-spacing:0.12em;border-bottom:1px solid rgba(0,68,102,0.2);margin-bottom:4px"><div>#</div><div>POSITION</div><div>FIRMA</div><div>MATCH</div><div>DATUM</div><div>STATUS</div></div>';
+  apps.forEach((a,i)=>{
+    const col=mc(a.match);
+    const d=document.createElement('div');
+    d.className='card'; d.style.cssText='padding:11px 14px;margin-bottom:5px;cursor:default';
+    d.style.animationDelay=i*.05+'s';
+    d.innerHTML=`<div style="display:grid;grid-template-columns:28px 1fr 150px 64px 88px 80px;gap:8px;align-items:center">
       <div class="orb" style="font-size:10px;color:#003355">${String(i+1).padStart(2,'0')}</div>
-      <div style="font-size:11px;color:#00d4ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${app.job}</div>
-      <div style="font-size:10px;color:#003355;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${app.company}</div>
-      <div class="orb" style="font-size:13px;color:${mc};font-weight:700">${app.match}%</div>
-      <div style="font-size:10px;color:#003355">${app.datum}</div>
-      <div style="font-size:9px;color:#00ff88;border:1px solid rgba(0,255,136,0.3);padding:2px 6px;text-align:center">${app.status}</div>
+      <div style="font-size:11px;color:#00d4ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.job}</div>
+      <div style="font-size:10px;color:#003355;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.co}</div>
+      <div class="orb" style="font-size:13px;color:${col};font-weight:700">${a.match}%</div>
+      <div style="font-size:10px;color:#003355">${a.datum}</div>
+      <div style="font-size:9px;color:#00ff88;border:1px solid rgba(0,255,136,0.3);padding:2px 6px;text-align:center">Gesendet</div>
     </div>`;
-    list.appendChild(div);
+    tr.appendChild(d);
   });
 }
+
+// INIT
+window.addEventListener('load',()=>{
+  initHex(); initArcs(); initSkills();
+  // Preload voices
+  if(window.speechSynthesis) window.speechSynthesis.getVoices();
+  if(window.speechSynthesis) window.speechSynthesis.onvoiceschanged=()=>{};
+});
 </script>
 
 </body>
