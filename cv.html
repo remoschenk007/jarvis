@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Remo Schenk — CV 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21,14 +23,13 @@
 }
 
 @media print{
-body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-@page{margin:0;size:A4}
+*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+@page{margin:0;size:A4 portrait}
 .noprint{display:none!important}
-html,body{background:#fff}
 }
 
 body{
-background:#eceae4;
+background:#eceae4!important;
 font-family:var(–sans);
 font-size:9.5px;
 color:var(–ink);
@@ -70,7 +71,7 @@ overflow:hidden;
 
 /* ── HEADER ── */
 .hdr{
-background:var(–ink);
+background:#08080f!important;
 padding:44px 48px 38px;
 position:relative;
 overflow:hidden;
