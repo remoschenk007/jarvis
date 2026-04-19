@@ -50,10 +50,10 @@ body{background:#000810;color:#00d4ff;font-family:'Share Tech Mono',monospace;ov
 .boot-line.last{color:#00ff88;font-size:15px}
 .boot-line .arrow{color:#002233;margin-right:10px}
 
-#hello-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;pointer-events:none;opacity:0;transition:opacity 0.5s}
+#hello-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;pointer-events:none;opacity:0;transition:opacity 0.6s ease;background:rgba(0,4,16,0.7);backdrop-filter:blur(2px)}
 #hello-screen.show{opacity:1}
-#hello-text{font-family:‘Orbitron’,sans-serif;font-size:clamp(32px,6vw,72px);font-weight:900;color:#00d4ff;letter-spacing:0.12em;text-shadow:0 0 40px #00d4ff,0 0 80px #0088ff,0 0 120px #0044cc;text-align:center;animation:helloIn 0.8s ease forwards}
-#hello-sub{margin-top:16px;font-size:clamp(11px,2vw,16px);color:#00aaff;letter-spacing:0.4em;opacity:0.8;text-align:center}
+#hello-text{font-family:‘Orbitron’,sans-serif;font-size:clamp(36px,8vw,88px);font-weight:900;color:#ffffff;letter-spacing:0.1em;text-shadow:0 0 30px #00d4ff,0 0 60px #00aaff,0 0 100px #0066ff,0 0 160px #0033cc;text-align:center;animation:helloIn 0.7s ease forwards}
+#hello-sub{margin-top:20px;font-size:clamp(12px,2.2vw,18px);color:#00ccff;letter-spacing:0.5em;opacity:0.85;text-align:center;font-family:‘Share Tech Mono’,monospace}
 
 #wave{display:none;align-items:center;gap:4px;margin-bottom:14px}
 .wbar{width:3px;border-radius:2px;background:#00d4ff;opacity:0.7}
@@ -377,33 +377,75 @@ setInterval(()=>{document.getElementById('cpu').textContent=((8+Date.now()/900%2
 // AUDIO ENGINE
 function arcSound(ctx){
   const t=ctx.currentTime;
-  // Rumble
-  const r=ctx.createOscillator(),rg=ctx.createGain();
-  r.type='sawtooth'; r.frequency.setValueAtTime(35,t); r.frequency.linearRampToValueAtTime(85,t+1.5);
-  rg.gain.setValueAtTime(0,t); rg.gain.linearRampToValueAtTime(0.2,t+0.4); rg.gain.linearRampToValueAtTime(0,t+3);
-  r.connect(rg); rg.connect(ctx.destination); r.start(t); r.stop(t+3);
-  // Sweep whine
-  const sw=ctx.createOscillator(),sg=ctx.createGain();
-  sw.type='sine'; sw.frequency.setValueAtTime(150,t+0.3); sw.frequency.exponentialRampToValueAtTime(2800,t+2);
-  sg.gain.setValueAtTime(0,t+0.3); sg.gain.linearRampToValueAtTime(0.18,t+0.7); sg.gain.linearRampToValueAtTime(0.25,t+1.8); sg.gain.linearRampToValueAtTime(0,t+2.2);
-  sw.connect(sg); sg.connect(ctx.destination); sw.start(t+0.3); sw.stop(t+2.2);
-  // Power click
-  const p=ctx.createOscillator(),pg=ctx.createGain();
-  p.type='square'; p.frequency.setValueAtTime(200,t+2); p.frequency.linearRampToValueAtTime(55,t+2.4);
-  pg.gain.setValueAtTime(0.4,t+2); pg.gain.exponentialRampToValueAtTime(0.001,t+2.4);
-  p.connect(pg); pg.connect(ctx.destination); p.start(t+2); p.stop(t+2.4);
-  // Steady hum
-  const h=ctx.createOscillator(),hg=ctx.createGain();
-  h.type='sine'; h.frequency.value=110;
-  hg.gain.setValueAtTime(0,t+2.2); hg.gain.linearRampToValueAtTime(0.06,t+2.7);
-  h.connect(hg); hg.connect(ctx.destination); h.start(t+2.2); h.stop(t+5.5);
-  // JARVIS scan beeps
-  [2.5,2.7,2.9,3.1].forEach((tt,i)=>{
-    const b=ctx.createOscillator(),bg=ctx.createGain();
-    b.type='triangle'; b.frequency.value=[880,1320,660,1760][i];
-    bg.gain.setValueAtTime(0.07,ctx.currentTime+tt); bg.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+tt+0.12);
-    b.connect(bg); bg.connect(ctx.destination); b.start(ctx.currentTime+tt); b.stop(ctx.currentTime+tt+0.15);
+
+  // === LAYER 1: Deep power-on thud (like Iron Man suit connecting) ===
+  const buf=ctx.createBuffer(1,ctx.sampleRate*0.3,ctx.sampleRate);
+  const dat=buf.getChannelData(0);
+  for(let i=0;i<dat.length;i++) dat[i]=(Math.random()*2-1)*Math.pow(1-i/dat.length,2)*0.8;
+  const noise=ctx.createBufferSource();
+  noise.buffer=buf;
+  const nf=ctx.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=180;
+  const ng=ctx.createGain(); ng.gain.setValueAtTime(0.9,t); ng.gain.exponentialRampToValueAtTime(0.001,t+0.35);
+  noise.connect(nf); nf.connect(ng); ng.connect(ctx.destination); noise.start(t);
+
+  // === LAYER 2: Arc reactor energy hum building up ===
+  const hum=ctx.createOscillator(),hg=ctx.createGain();
+  hum.type='sawtooth';
+  hum.frequency.setValueAtTime(55,t+0.1);
+  hum.frequency.linearRampToValueAtTime(110,t+1.8);
+  hg.gain.setValueAtTime(0,t+0.1);
+  hg.gain.linearRampToValueAtTime(0.15,t+0.5);
+  hg.gain.linearRampToValueAtTime(0.08,t+2.5);
+  hg.gain.linearRampToValueAtTime(0,t+3.5);
+  const humFilter=ctx.createBiquadFilter(); humFilter.type='bandpass'; humFilter.frequency.value=300; humFilter.Q.value=1.5;
+  hum.connect(humFilter); humFilter.connect(hg); hg.connect(ctx.destination);
+  hum.start(t+0.1); hum.stop(t+3.5);
+
+  // === LAYER 3: High whine sweep — the iconic JARVIS capacitor charge ===
+  const sweep=ctx.createOscillator(),sg=ctx.createGain();
+  sweep.type='sine';
+  sweep.frequency.setValueAtTime(300,t+0.4);
+  sweep.frequency.exponentialRampToValueAtTime(4200,t+2.0);
+  sg.gain.setValueAtTime(0,t+0.4);
+  sg.gain.linearRampToValueAtTime(0.0,t+0.5);
+  sg.gain.linearRampToValueAtTime(0.18,t+1.2);
+  sg.gain.linearRampToValueAtTime(0.28,t+1.9);
+  sg.gain.exponentialRampToValueAtTime(0.001,t+2.15);
+  sweep.connect(sg); sg.connect(ctx.destination);
+  sweep.start(t+0.4); sweep.stop(t+2.2);
+
+  // === LAYER 4: Power-on CLICK + spark ===
+  const click=ctx.createOscillator(),cg=ctx.createGain();
+  click.type='square';
+  click.frequency.setValueAtTime(280,t+2.05);
+  click.frequency.linearRampToValueAtTime(40,t+2.3);
+  cg.gain.setValueAtTime(0.5,t+2.05);
+  cg.gain.exponentialRampToValueAtTime(0.001,t+2.3);
+  click.connect(cg); cg.connect(ctx.destination);
+  click.start(t+2.05); click.stop(t+2.3);
+
+  // === LAYER 5: Steady reactor hum (running) ===
+  const run=ctx.createOscillator(),rg2=ctx.createGain();
+  run.type='sine'; run.frequency.value=130;
+  rg2.gain.setValueAtTime(0,t+2.2);
+  rg2.gain.linearRampToValueAtTime(0.055,t+2.8);
+  run.connect(rg2); rg2.connect(ctx.destination);
+  run.start(t+2.2); run.stop(t+6);
+
+  // === LAYER 6: JARVIS digital initialization pings ===
+  [[2.4,1047,0.09],[2.55,1319,0.07],[2.7,880,0.08],[2.85,1568,0.09],[3.0,1047,0.06]].forEach(([tt,freq,vol])=>{
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type='sine'; o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,t+tt); g.gain.exponentialRampToValueAtTime(0.001,t+tt+0.15);
+    o.connect(g); g.connect(ctx.destination); o.start(t+tt); o.stop(t+tt+0.18);
   });
+
+  // === LAYER 7: Sub bass pulse ===
+  const sub=ctx.createOscillator(),subg=ctx.createGain();
+  sub.type='sine'; sub.frequency.value=40;
+  subg.gain.setValueAtTime(0,t); subg.gain.linearRampToValueAtTime(0.3,t+0.08);
+  subg.gain.linearRampToValueAtTime(0,t+0.5);
+  sub.connect(subg); subg.connect(ctx.destination); sub.start(t); sub.stop(t+0.5);
 }
 
 function jarvisSpeak(text, rate, pitch){
@@ -443,7 +485,7 @@ function activateJarvis(){
     hs.style.opacity='1';
     hs.style.pointerEvents='none';
     jarvisSpeak('Hallo Remo. Willkommen zurück. Wie kann ich dir heute helfen?', 0.85, 0.68);
-    setTimeout(()=>{hs.style.opacity='0';},3800);
+    setTimeout(()=>{hs.style.opacity='0';},2800);
   },2200);
   // Start boot lines after sound
   setTimeout(()=>{
@@ -473,7 +515,7 @@ function runBoot(){
   // Read every other line to not overwhelm
   if(bIdx%2===0 && actx) jarvisSpeak(BOOT[bIdx].replace(/[◈✓·•%█]/g,''), 1.45, 0.72);
   bIdx++;
-  setTimeout(runBoot, bIdx===1?800:2000);
+  setTimeout(runBoot, bIdx===1?600:1200);
 }
 
 // NAV
