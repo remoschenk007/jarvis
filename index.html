@@ -823,24 +823,43 @@ function genLetter(job){
   document.getElementById('mcnt').style.display='none';
   setTimeout(()=>{
     const today=new Date().toLocaleDateString('de-CH',{year:'numeric',month:'long',day:'numeric'});
+    const tags=job.tags.map(t=>t.toLowerCase()).join(' ');
+
+    // Personalisierter KI-Paragraph je nach Stellentyp
+    let kiParagraph='';
+    if(/brand|creative|art|design|visual|kampagne|storytelling/.test(tags)){
+      kiParagraph=`Was mich zusätzlich auszeichnet: Ich setze KI aktiv als Kreativwerkzeug ein. Mit Claude AI, ChatGPT und modernen Methoden entwickle ich Marken, Konzepte und digitale Produkte schneller und präziser als je zuvor. Mein Projekt Stadtpuls (depuls.ch) — ein KI-gestützter City Guide für Zürich mit 230+ Locations und Live-Deployment — zeigt wie ich Kreativität, Technologie und Strategie zu einem echten Produkt verbinde. Diese Denkweise bringe ich direkt zu ${job.co}.`;
+    } else if(/operation|hospitality|luxury|property|guest/.test(tags)){
+      kiParagraph=`Ergänzend nutze ich KI gezielt für Prozessoptimierung. Mit Claude AI und automatisierten Workflows schaffe ich Strukturen, die skalieren. Diese Denkweise hat mir bei COSY Stay ermöglicht, innerhalb weniger Monate eine komplette Firmenstruktur aufzubauen, 90%+ Auslastung zu erreichen und den Superhost-Status auf allen Plattformen zu erzielen.`;
+    } else if(/marketing|digital|seo|social|performance|growth/.test(tags)){
+      kiParagraph=`Besonders relevant: Ich integriere KI aktiv in meine Marketingarbeit. Von KI-gestützter Content-Erstellung bis zu datengetriebenen Kampagnen — ich nutze Claude AI, ChatGPT und Analytics täglich. Mein Projekt Stadtpuls (depuls.ch) mit Google Search Console, Plausible Analytics und SEO-Grundstruktur zeigt diesen Ansatz in der Praxis.`;
+    } else if(/business|strategie|immobilien|lead|entwicklung/.test(tags)){
+      kiParagraph=`Ein entscheidender Vorteil: Ich nutze KI aktiv für Business Development und Marktanalyse. Mit Claude AI identifiziere ich Potenziale schneller und setze Strategien effizienter um. Mein Startup Stadtpuls (depuls.ch) — live, mit echter Nutzerbasis, eigener Domain und klarer Monetarisierungsstrategie via OpenTable und Ticketcorner — ist der Beweis dafür.`;
+    } else {
+      kiParagraph=`Was mich von anderen Kandidaten unterscheidet: Ich nutze KI aktiv als Arbeitswerkzeug — Claude AI, ChatGPT, GitHub — und baue damit produktionsreife Produkte. Mein Projekt Stadtpuls (depuls.ch), ein live City Guide für Zürich, zeigt wie ich Konzept, Technologie und Business schnell zur Umsetzung bringe.`;
+    }
+
     document.getElementById('ltxt').value=
 `Horgen, ${today}
 
-Bewerbung als ${job.title}
+Bewerbung als ${job.title} — ${job.co}
 
 Sehr geehrte Damen und Herren
 
-Mit grossem Interesse habe ich Ihre Ausschreibung für die Position als ${job.title} bei ${job.co} gelesen. Als kreativer Unternehmer mit über 19 Jahren Erfahrung in Creative Direction, Branding, Operations und Business Development bin ich überzeugt, einen bedeutenden Beitrag zu Ihrem Unternehmen leisten zu können.
+Mit grossem Interesse habe ich Ihre Ausschreibung für die Position als ${job.title} bei ${job.co} gelesen. Als kreativer Unternehmer mit über 19 Jahren Erfahrung in ${job.tags.join(', ')} bin ich überzeugt, einen bedeutenden Beitrag zu Ihrem Unternehmen leisten zu können.
 
-In meiner Laufbahn habe ich mehrfach bewiesen, dass ich Unternehmen von Grund auf aufbauen und zum Erfolg führen kann. Als CEO und Founder der homespeed AG leitete ich ein Team von fünf Mitarbeitenden und verantwortete das gesamte Marketing, SEO und Corporate Design. Bei der COSY Stay GmbH baute ich die gesamte Firmenstruktur operativ auf und erzielte innerhalb weniger Monate eine Auslastung von über 90% sowie den Superhost-Status. Meine Arbeitgeber beschreiben mich als Führungskraft mit herausragender Fachkompetenz, grosser Weitsicht und aussergewöhnlicher Eigeninitiative.
+In meiner Laufbahn habe ich mehrfach bewiesen, dass ich Unternehmen aufbauen und zum Erfolg führen kann. Als CEO und Founder der homespeed AG leitete ich fünf Mitarbeitende und verantwortete Marketing, SEO und Corporate Design. Bei der COSY Stay GmbH baute ich die gesamte Firmenstruktur operativ auf und erzielte innerhalb weniger Monate eine Auslastung von über 90% sowie den Superhost-Status auf allen Buchungsplattformen. Meine Arbeitgeber beschreiben mich als Führungskraft mit herausragender Fachkompetenz, grosser Weitsicht und aussergewöhnlicher Eigeninitiative — und würden mich jederzeit wieder einstellen.
 
-Meine Stärken in ${job.tags.join(', ')} entsprechen exakt den Anforderungen dieser Stelle. Ich verbinde Emotion, Design und Business zu einem stimmigen Auftritt — sichtbar und fühlbar. Gerne zeige ich Ihnen persönlich, wie ich ${job.co} voranbringen kann.
+${kiParagraph}
+
+Gerne zeige ich Ihnen persönlich, wie ich ${job.co} mit meiner Kombination aus kreativem Denken, unternehmerischer Erfahrung und modernen KI-Werkzeugen voranbringen kann. Ich spreche Deutsch und Italienisch als Muttersprache, Englisch und Spanisch verhandlungssicher.
 
 Mit freundlichen Grüssen
 
 Remo Schenk
 ${ME.tel} | ${ME.email}
-${ME.adr}`;
+${ME.adr}
+byraimondo.com`;
     document.getElementById('mload').style.display='none';
     document.getElementById('mcnt').style.display='block';
   },1000);
