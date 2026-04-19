@@ -425,8 +425,7 @@ function startBoot(){
   }
 }
 
-// Start boot without sound immediately (silent auto-boot)
-// Boot only starts after button click - removed auto-boot
+// Boot starts only after ACTIVATE JARVIS button click
 
 // NAVIGATION
 function showPage(name, btn){
@@ -441,21 +440,22 @@ function showPage(name, btn){
 function matchColor(m){ return m>=85?'#00ff88':m>=70?'#f59e0b':'#ef4444'; }
 
 // JOB SEARCH
-async function startSearch(){
+function startSearch(){
   document.getElementById('jobsLoading').style.display='block';
   document.getElementById('jobsList').innerHTML='';
-  const prompt='Du bist JARVIS. Bewerte diese Stellen fuer Remo Schenk mit Match-Score 0-100.\nKANDIDAT: Creative Director & Unternehmer, 19 Jahre Erfahrung, Skills: Creative Direction, Branding, Business Dev, Operations, Immobilien, SEO, Teamführung\nSTELLEN: '+ALL_JOBS.map(j=>'ID'+j.id+': '+j.title+' bei '+j.company+' ['+j.tags.join(',')+']').join(' | ')+'\nAntworte NUR mit JSON: [{"id":1,"match":92,"grund":"ein Satz"},...]';
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    const raw=(data.content&&data.content[0]&&data.content[0].text)||'[]';
-    const scores=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    jobs=ALL_JOBS.map(j=>{const s=scores.find(x=>x.id===j.id);return Object.assign({},j,{match:s?s.match:Math.floor(72+Math.random()*18),grund:s?s.grund:''});}).sort((a,b)=>b.match-a.match);
-  }catch(e){
-    jobs=ALL_JOBS.map(j=>Object.assign({},j,{match:Math.floor(70+Math.random()*20),grund:''}));
-  }
-  document.getElementById('jobsLoading').style.display='none';
-  renderJobs();
+  const scores=[
+    {id:1,match:94,grund:'Creative Direction & Branding — perfekte Übereinstimmung'},
+    {id:2,match:91,grund:'Immobilien + Marketing — deine Kernkompetenz'},
+    {id:3,match:87,grund:'Operations & Hospitality — COSY Stay Erfahrung ideal'},
+    {id:4,match:82,grund:'Business Development & Strategie — starke Überschneidung'},
+    {id:5,match:79,grund:'Art Direction & Storytelling — Visual Storytelling Stärke'},
+    {id:6,match:85,grund:'Marketing & Immobilien — direkter Bezug zu deinem Background'}
+  ];
+  jobs=ALL_JOBS.map(j=>{const s=scores.find(x=>x.id===j.id);return Object.assign({},j,{match:s?s.match:80,grund:s?s.grund:''});}).sort((a,b)=>b.match-a.match);
+  setTimeout(()=>{
+    document.getElementById('jobsLoading').style.display='none';
+    renderJobs();
+  },1000);
 }
 
 function filterJobs(){
@@ -496,7 +496,7 @@ function renderJobs(f){
 }
 
 // MODAL
-async function generateLetter(job){
+function generateLetter(job){
   currentJob=job;
   document.getElementById('modal').style.display='flex';
   const mc=matchColor(job.match);
@@ -508,14 +508,13 @@ async function generateLetter(job){
   document.getElementById('sentMsg').style.display='none';
   document.getElementById('modalLoading').style.display='block';
   document.getElementById('modalContent').style.display='none';
-  const prompt='Schreibe ein professionelles Bewerbungs-Motivationsschreiben auf Deutsch fuer Remo Schenk.\nSTELLE: '+job.title+' bei '+job.company+', '+job.ort+'\nGEFORDERT: '+job.tags.join(', ')+'\nKANDIDAT CV: '+REMO.cv+'\nDirekt und persoenlich, 230-250 Woerter. Staerken: Unternehmergeist, Creative Direction, Fuehrungserfahrung, Operations. Subtil auf starke Zeugnisse verweisen. Format: Ort+Datum, Betreff, Anrede, 3 Absaetze, Gruss Remo Schenk. Nur das Schreiben.';
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    document.getElementById('letterArea').value=(data.content&&data.content[0]&&data.content[0].text)||'Fehler.';
-  }catch(e){document.getElementById('letterArea').value='Verbindungsfehler.';}
-  document.getElementById('modalLoading').style.display='none';
-  document.getElementById('modalContent').style.display='block';
+  setTimeout(()=>{
+    const today=new Date().toLocaleDateString('de-CH',{year:'numeric',month:'long',day:'numeric'});
+    const letter='Horgen, '+today+'\n\nBewerbung als '+job.title+'\n\nSehr geehrte Damen und Herren\n\nMit grossem Interesse habe ich Ihre Ausschreibung für die Position als '+job.title+' bei '+job.company+' gelesen. Als kreativer Unternehmer mit über 19 Jahren Erfahrung in Creative Direction, Branding, Operations und Business Development bin ich überzeugt, einen bedeutenden Beitrag zu Ihrem Unternehmen leisten zu können.\n\nIn meiner Laufbahn habe ich mehrfach bewiesen, dass ich Unternehmen von Grund auf aufbauen und zum Erfolg führen kann. Als CEO und Founder der homespeed AG leitete ich ein Team von 5 Mitarbeitenden und verantwortete das gesamte Marketing inklusive Corporate Design, SEO und Google Ads. Bei der COSY Stay GmbH baute ich die gesamte Firmenstruktur operativ auf und erzielte innerhalb weniger Monate eine Auslastung von über 90% sowie den Superhost-Status. Meine Vorgesetzten beschreiben mich als Führungskraft mit herausragender Fachkompetenz, grosser Weitsicht und aussergewöhnlicher Eigeninitiative.\n\nMeine Stärken in '+job.tags.join(', ')+' entsprechen exakt den Anforderungen dieser Stelle. Ich verbinde Emotion, Design und Business zu einem stimmigen Auftritt — sichtbar und fühlbar. Gerne zeige ich Ihnen in einem persönlichen Gespräch, wie ich '+job.company+' mit meiner Erfahrung voranbringen kann.\n\nMit freundlichen Grüssen\n\nRemo Schenk\n+41 77 445 01 02 | remoschenk@me.com\nKniebrecheweg 31, CH-8810 Horgen';
+    document.getElementById('letterArea').value=letter;
+    document.getElementById('modalLoading').style.display='none';
+    document.getElementById('modalContent').style.display='block';
+  },1200);
 }
 
 function closeModal(){ document.getElementById('modal').style.display='none'; }
