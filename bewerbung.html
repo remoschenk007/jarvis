@@ -345,22 +345,34 @@ const p=new URLSearchParams(window.location.search);
 const stelle=p.get('stelle')||'Creative Director';
 const firma=p.get('firma')||'';
 
-// Get letter from localStorage (set by JARVIS bot)
-const letter=localStorage.getItem('jarvis_letter')||'';
-
 document.getElementById('h-stelle').textContent=stelle;
 if(firma){
   document.getElementById('nav-r').innerHTML=stelle+'<br>Bewerbung bei '+firma;
   document.getElementById('cta-email').href='mailto:remoschenk@me.com?subject=Antwort%3A+Bewerbung+als+'+encodeURIComponent(stelle)+'+%E2%80%94+Remo+Schenk';
 }
-if(letter){
-  document.getElementById('letter-box').textContent=letter;
-} else {
-  // Try URL param as fallback
-  const lp=p.get('letter');
-  if(lp) document.getElementById('letter-box').textContent=decodeURIComponent(lp);
-}
 document.title='Remo Schenk — Bewerbung als '+stelle+(firma?' bei '+firma:'');
+
+// Load letter: 1) from URL param 'l', 2) from localStorage
+const lUrl=p.get('l');
+const lStorage=localStorage.getItem('jarvis_letter');
+
+let letterText='';
+if(lUrl && lUrl.length>20){
+  letterText=decodeURIComponent(lUrl);
+} else if(lStorage && lStorage.length>20){
+  letterText=lStorage;
+}
+
+if(letterText){
+  document.getElementById('letter-box').textContent=letterText;
+  // If letter is truncated (800 char limit), show note
+  if(lUrl && lUrl.length>=790){
+    const note=document.createElement('div');
+    note.style.cssText='margin-top:12px;font-size:11px;color:#aaa;font-style:italic;padding:8px 12px;background:#f8f7f4;border-left:2px solid #ddd';
+    note.textContent='[Vollständiges Motivationsschreiben im E-Mail]';
+    document.getElementById('letter-box').after(note);
+  }
+}
 </script>
 
 </body>
