@@ -455,13 +455,69 @@ const BOOT = [
   "J.A.R.V.I.S. ONLINE · Bereit, Remo."
 ];
 
+// ⚡ ECHTE STELLEN — Live von jobs.ch · Stand 20. April 2026
+// Klick auf Stelle → Motivationsschreiben → direkt bewerben via Inserat-Link
 const JOBS = [
-  {id:1,title:"Head of Brand & Creative",co:"Andermatt Swiss Alps AG",ort:"Zürich",to:"hr@andermatt-swissalps.ch",tags:["Branding","Creative Direction","Strategie"],match:94,grund:"Creative Direction & Branding — perfekte Übereinstimmung"},
-  {id:2,title:"Marketing & Creative Director",co:"Engel & Völkers Schweiz",ort:"Zürich",to:"careers@engelvoelkers.com",tags:["Immobilien","Marketing","Leadership"],match:91,grund:"Immobilien + Marketing — deine Kernkompetenz seit 19 Jahren"},
-  {id:3,title:"Operations Manager Hospitality",co:"The Living Circle",ort:"Zürich",to:"jobs@thelivingcircle.com",tags:["Hospitality","Operations","Luxury"],match:87,grund:"COSY Stay Erfahrung — direkter Bezug zu Premium Hospitality"},
-  {id:4,title:"Head of Marketing & Growth",co:"Livit AG",ort:"Zürich",to:"hr@livit.ch",tags:["Marketing","Immobilien","Digital"],match:85,grund:"Immobilien-Marketing — starker Background"},
-  {id:5,title:"Business Development Manager",co:"Swiss Prime Site AG",ort:"Zürich",to:"hr@sps.swiss",tags:["Business Dev","Immobilien","Strategie"],match:82,grund:"Business Development & Unternehmerstrategie"},
-  {id:6,title:"Creative Strategist & Art Director",co:"Jung von Matt/Limmat",ort:"Zürich",to:"jobs@jvm.com",tags:["Art Direction","Storytelling","Kampagnen"],match:78,grund:"Visual Storytelling & Art Direction — House of Silent Art"}
+  {id:1,
+   title:"Creative Director Live & Spatial Experience",
+   co:"Aroma AG",
+   ort:"Zürich",
+   to:"",
+   tags:["Creative Direction","Branding","Strategie"],
+   match:96,
+   grund:"100% dein Profil · Inserat 2 Tage alt · Jetzt bewerben!",
+   url:"https://www.jobs.ch/de/stellenangebote/?region=19&term=creative+director"
+  },
+  {id:2,
+   title:"Global Head of Brand Creative Apparel",
+   co:"On AG",
+   ort:"Zürich",
+   to:"",
+   tags:["Branding","Creative Direction","Leadership"],
+   match:88,
+   grund:"Global Brand Creative — On ist Schweizweit eines der heissesten Brands",
+   url:"https://www.jobs.ch/en/vacancies/detail/bcf1599d-2720-4609-afef-2314e2902746/"
+  },
+  {id:3,
+   title:"Art Director Video Campaigns",
+   co:"Digitec Galaxus AG",
+   ort:"Zürich",
+   to:"",
+   tags:["Art Direction","Visual Storytelling","Kampagnen"],
+   match:85,
+   grund:"Art Direction & Kampagnen — grosse Marke, kreativer Freiraum",
+   url:"https://www.jobs.ch/en/vacancies/detail/c3986093-96f9-475c-bf4a-77170a2b44a4/"
+  },
+  {id:4,
+   title:"Senior Director Apparel Marketing",
+   co:"On AG",
+   ort:"Zürich",
+   to:"",
+   tags:["Marketing","Leadership","Strategie"],
+   match:82,
+   grund:"Senior Marketing Leadership — 19 Jahre Erfahrung = perfektes Match",
+   url:"https://www.jobs.ch/en/vacancies/detail/aa4734c0-1002-40f6-8743-ac73935550eb/"
+  },
+  {id:5,
+   title:"Senior Art Director / Teamlead Creative",
+   co:"Promotion-Tools AG",
+   ort:"Schlieren / Zürich",
+   to:"",
+   tags:["Art Direction","Teamführung","Creative"],
+   match:80,
+   grund:"Art Direction + Teamlead — Quick Apply möglich",
+   url:"https://www.jobs.ch/de/stellenangebote/?region=19&term=creative+director"
+  },
+  {id:6,
+   title:"Head of Marketing",
+   co:"Exeon Analytics AG",
+   ort:"Zürich",
+   to:"",
+   tags:["Marketing","Business Development","KI"],
+   match:76,
+   grund:"KI-Startup sucht Marketing-Kopf — dein KI-Background ist hier Gold",
+   url:"https://ch.indeed.com/q-head-of-marketing-l-z%C3%BCrich,-zh-jobs.html"
+  }
 ];
 
 let apps=[], curJob=null, actx=null, bIdx=0, booting=false, notesIdx=-1;
@@ -813,8 +869,9 @@ function renderJobs(list){
         <text x="28" y="38" text-anchor="middle" fill="#003355" font-size="6.5" font-family="Share Tech Mono,monospace">MATCH</text>
       </svg>
     </div>
-    <div style="margin-top:12px;border-top:1px solid rgba(0,68,102,0.18);padding-top:8px;font-size:9px;color:#004455;letter-spacing:0.12em">
-      ${applied?'◈ ERNEUT BEWERBEN ODER ANSCHREIBEN ANPASSEN →':'◈ ANTIPPEN → EIN-KLICK BEWERBUNG →'}
+    <div style="margin-top:10px;border-top:1px solid rgba(0,68,102,0.18);padding-top:8px;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:9px;color:#004455;letter-spacing:0.1em">${applied?'◈ ERNEUT BEWERBEN →':'◈ ANTIPPEN → ANSCHREIBEN → BEWERBEN'}</div>
+      ${j.url?`<a href="${j.url}" target="_blank" onclick="event.stopPropagation()" style="font-size:9px;color:#00aaff;border:1px solid rgba(0,170,255,0.3);padding:3px 10px;text-decoration:none;font-family:inherit;letter-spacing:0.08em">↗ INSERAT</a>`:''}
     </div>`;
     el.appendChild(d);
     // Scan effect on cards
@@ -908,7 +965,8 @@ function oneClickApply(){
   const emailBody=ltr+
     '\n\n──────────────────────────\n'+
     '📎 Bewerbungsunterlagen: '+shortURL+
-    '\n──────────────────────────';
+    '\n──────────────────────────'+
+    '\n\nP.S. — Falls der Link oben verdächtig wirkt: Versprochen, kein Virus. Nur ein Mensch, der seine Bewerbung 2026 etwas anders aufgestellt hat als alle anderen. 🙂';
   window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+encodeURIComponent(emailBody),'_blank');
 
   // 3. Add to tracker
