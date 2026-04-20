@@ -895,8 +895,12 @@ function oneClickApply(){
 
   // 2. Build email with letter + personal page link
   const sub=encodeURIComponent('Bewerbung als '+curJob.title+' — Remo Schenk');
-  // Short link for email
-  const shortURL='https://remoschenk007.github.io/jarvis/bewerbung.html?stelle='+stelle+'&firma='+firma;
+  // Store in localStorage (works if same device)
+  try{localStorage.setItem('jarvis_letter_'+curJob.id, ltr);}catch(e){}
+
+  // Also encode first 800 chars of letter in URL as fallback
+  const ltrShort=ltr.substring(0,800);
+  const shortURL='https://remoschenk007.github.io/jarvis/bewerbung.html?stelle='+stelle+'&firma='+firma+'&l='+encodeURIComponent(ltrShort);
   const emailBody=ltr+
     '\n\n─────────────────────\n'+
     '📎 Unterlagen: '+shortURL+
