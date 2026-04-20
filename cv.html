@@ -7,190 +7,125 @@
 <title>Remo Schenk — CV 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 @media print{
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
   @page{margin:0;size:A4 portrait}
   .noprint{display:none!important}
-  body{margin:0;padding:0}
 }
-body{
-  font-family:'DM Sans',sans-serif;
-  font-size:10px;
-  background:#f0ede8;
-  color:#111;
-  min-height:100vh;
-  padding:20px;
-}
-.wrap{
-  max-width:794px;
-  margin:0 auto;
-  background:#fff;
-  box-shadow:0 4px 40px rgba(0,0,0,0.12);
-}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:#f0ede8;color:#111;font-size:10px;line-height:1.6}
 
 /* PRINT BAR */
-.pbar{
-display:flex;justify-content:space-between;align-items:center;
-padding:10px 16px;background:#111;
-}
-.pbtn{
-background:#e8320a;color:#fff;border:none;
-padding:8px 20px;font-family:‘JetBrains Mono’,monospace;
-font-size:9px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;
-}
-.pnote{font-family:‘JetBrains Mono’,monospace;font-size:8px;color:rgba(255,255,255,0.35);letter-spacing:0.1em}
+.pbar{background:#08080f;padding:11px 40px;display:flex;justify-content:space-between;align-items:center}
+.pbar-note{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:rgba(255,255,255,0.28);letter-spacing:0.12em}
+.pbar-btn{background:#e8320a;color:#fff;border:none;padding:8px 22px;font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer}
+
+/* PAGE */
+.page{max-width:794px;margin:0 auto;background:#fff;box-shadow:0 4px 40px rgba(0,0,0,0.1)}
 
 /* HEADER */
-.hdr{
-background:#0a0a0f;
-padding:44px 48px 36px;
-position:relative;
-overflow:hidden;
-}
-.hdr-bg{
-position:absolute;right:-10px;top:-20px;
-font-family:‘Syne’,sans-serif;font-size:200px;font-weight:800;
-color:rgba(255,255,255,0.04);line-height:1;user-select:none;
-letter-spacing:-0.05em;pointer-events:none;
-}
-.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px}
-.hdr-tag{
-font-family:‘JetBrains Mono’,monospace;font-size:8px;
-color:#e8320a;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:10px;
-}
-.hdr-name{
-font-family:‘Syne’,sans-serif;font-size:62px;font-weight:800;
-color:#fff;line-height:0.9;letter-spacing:-0.02em;margin-bottom:14px;
-}
-.hdr-role{
-font-family:‘DM Sans’,sans-serif;font-size:11px;font-weight:300;
-color:rgba(255,255,255,0.4);letter-spacing:0.18em;text-transform:uppercase;
-}
-.hdr-contact{text-align:right;padding-top:6px}
-.hdr-contact div{
-font-family:‘JetBrains Mono’,monospace;font-size:8.5px;
-color:rgba(255,255,255,0.35);line-height:2.1;
-}
-.hdr-contact a{color:rgba(255,255,255,0.5);text-decoration:none}
-.hdr-bottom{
-border-top:1px solid rgba(255,255,255,0.07);
-padding-top:18px;display:flex;justify-content:space-between;align-items:flex-end;
-}
-.hdr-stmt{
-font-family:‘DM Sans’,sans-serif;font-size:12px;font-weight:400;
-color:rgba(255,255,255,0.55);line-height:1.65;max-width:400px;
-}
+.hdr{background:#08080f!important;padding:44px 48px 36px;position:relative;overflow:hidden}
+.hdr-ghost{position:absolute;right:-20px;top:-30px;font-family:‘Syne’,‘Arial Black’,Impact,sans-serif;font-size:220px;font-weight:800;color:rgba(255,255,255,0.04);line-height:0.85;pointer-events:none;user-select:none;letter-spacing:-0.04em}
+.hdr-tag{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;color:#e8320a;letter-spacing:0.32em;text-transform:uppercase;margin-bottom:8px;display:block}
+.hdr-name{font-family:‘Syne’,‘Arial Black’,Impact,sans-serif;font-size:62px;font-weight:800;color:#fff!important;line-height:0.9;letter-spacing:-0.02em;margin-bottom:12px}
+.hdr-role{font-family:‘DM Sans’,system-ui,sans-serif;font-size:11px;font-weight:300;color:rgba(255,255,255,0.4);letter-spacing:0.18em;text-transform:uppercase}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px;position:relative;z-index:1}
+.hdr-contact{text-align:right}
+.hdr-contact div{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8.5px;color:rgba(255,255,255,0.35);line-height:2.1}
+.hdr-bottom{border-top:1px solid rgba(255,255,255,0.07);padding-top:16px;display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1}
+.hdr-stmt{font-size:12px;font-weight:300;color:rgba(255,255,255,0.55);max-width:400px;line-height:1.65}
 .hdr-stmt strong{color:#fff;font-weight:600}
-.hdr-avail{
-font-family:‘JetBrains Mono’,monospace;font-size:8px;
-color:#e8320a;border:1px solid rgba(232,50,10,0.45);
-padding:6px 14px;letter-spacing:0.2em;text-transform:uppercase;white-space:nowrap;
-}
+.hdr-avail{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;color:#e8320a;border:1px solid rgba(232,50,10,0.45);padding:6px 14px;letter-spacing:0.2em;text-transform:uppercase;white-space:nowrap}
 
-/* BODY GRID */
-.body{display:grid;grid-template-columns:1fr 195px}
-.main{padding:34px 38px 40px 48px;border-right:1px solid #ebebeb}
-.side{padding:34px 22px 40px;background:#f8f7f4}
+/* BODY */
+.body{display:grid;grid-template-columns:1fr 192px}
+.main{padding:32px 36px 38px 48px;border-right:1px solid #ebebeb}
+.side{padding:32px 22px 38px;background:#f8f7f4}
 
 /* SECTION */
-.sec{margin-bottom:28px}
+.sec{margin-bottom:26px}
 .sec:last-child{margin-bottom:0}
-.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.sec-lbl{
-font-family:‘JetBrains Mono’,monospace;font-size:8px;
-letter-spacing:0.3em;text-transform:uppercase;color:#aaa;white-space:nowrap;
-}
-.sec-line{flex:1;height:1px;background:#e8e8e8}
-
-/* JOB */
-.job{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #f0f0f0}
-.job:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.job-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
-.job-role{font-family:‘Syne’,sans-serif;font-size:14px;font-weight:700;color:#111;letter-spacing:-0.01em}
-.job-date{font-family:‘JetBrains Mono’,monospace;font-size:8px;color:#aaa;letter-spacing:0.08em;white-space:nowrap}
-.job-co{font-size:9px;color:#e8320a;font-weight:500;letter-spacing:0.05em;margin-bottom:6px}
-.job-txt{font-size:9.5px;color:#444;line-height:1.7}
-.job-q{
-margin-top:8px;padding:7px 12px;
-background:#f8f7f4;border-left:2px solid #e8320a;
-font-size:8.5px;color:#666;line-height:1.6;font-style:italic;
-}
-
-/* PROJECTS */
-.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.proj{border:1px solid #e8e8e8;padding:12px;position:relative;overflow:hidden}
-.proj::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:#e8320a}
-.proj-name{font-family:‘Syne’,sans-serif;font-size:12px;font-weight:700;color:#111;margin-bottom:2px}
-.proj-url{font-family:‘JetBrains Mono’,monospace;font-size:8px;color:#e8320a;letter-spacing:0.08em;margin-bottom:6px}
-.proj-txt{font-size:8.5px;color:#555;line-height:1.6}
-.proj-tags{margin-top:7px;display:flex;flex-wrap:wrap;gap:3px}
-.ptag{font-family:‘JetBrains Mono’,monospace;font-size:7.5px;color:#999;border:1px solid #e8e8e8;padding:1px 5px}
-
-/* SIDE ELEMENTS */
-.slbl{font-family:‘JetBrains Mono’,monospace;font-size:7.5px;letter-spacing:0.28em;text-transform:uppercase;color:#aaa;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e8e8e8}
-.ssec{margin-bottom:20px}
-.ssec:last-child{margin-bottom:0}
-
-.lang{display:flex;justify-content:space-between;margin-bottom:7px;font-size:9px}
-.lang-n{color:#222;font-weight:500}
-.lang-l{font-family:‘JetBrains Mono’,monospace;font-size:8px;color:#aaa}
-
-.tags{display:flex;flex-wrap:wrap;gap:4px}
-.stag{font-family:‘JetBrains Mono’,monospace;font-size:7.5px;border:1px solid #ddd;padding:2px 6px;color:#555}
-
-.ai-box{background:#0a0a0f;padding:13px;margin-top:14px}
-.ai-ttl{font-family:‘JetBrains Mono’,monospace;font-size:8px;letter-spacing:0.2em;color:#e8320a;margin-bottom:6px;text-transform:uppercase}
-.ai-txt{font-size:8px;color:rgba(255,255,255,0.45);line-height:1.7}
-.ai-live{font-family:‘JetBrains Mono’,monospace;font-size:8px;color:rgba(255,255,255,0.25);margin-top:6px}
-.ai-live span{color:#e8320a}
+.slbl{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:#bbb;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.slbl::after{content:’’;flex:1;height:1px;background:#e8e8e8}
 
 /* PROFIL */
 .profil{font-size:10px;color:#333;line-height:1.8;border-left:2px solid #111;padding-left:14px;font-style:italic}
-.profil-sub{font-family:‘JetBrains Mono’,monospace;font-size:8px;color:#aaa;padding-left:16px;margin-top:4px;letter-spacing:0.04em}
+.profil-sub{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;color:#bbb;padding-left:16px;margin-top:4px;letter-spacing:0.04em}
+
+/* JOB */
+.job{margin-bottom:17px;padding-bottom:17px;border-bottom:1px solid #f0f0f0}
+.job:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.job-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.job-role{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:13px;font-weight:700;color:#111;letter-spacing:-0.01em}
+.job-date{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;color:#bbb;white-space:nowrap}
+.job-co{font-size:9px;color:#e8320a;font-weight:500;letter-spacing:0.05em;margin-bottom:5px}
+.job-txt{font-size:9.5px;color:#444;line-height:1.7}
+.job-q{margin-top:7px;padding:6px 12px;background:#f8f7f4;border-left:2px solid #e8320a;font-size:8.5px;color:#666;font-style:italic;line-height:1.6}
+
+/* PROJECTS */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.proj{border:1px solid #e8e8e8;padding:11px 13px;position:relative;overflow:hidden}
+.proj::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:#e8320a}
+.proj-name{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:12px;font-weight:700;color:#111;margin-bottom:2px}
+.proj-url{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;color:#e8320a;margin-bottom:5px}
+.proj-txt{font-size:8.5px;color:#555;line-height:1.6}
+.ptags{margin-top:6px;display:flex;flex-wrap:wrap;gap:3px}
+.ptag{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:7.5px;color:#bbb;border:1px solid #e8e8e8;padding:1px 5px}
+
+/* SIDE */
+.sslbl{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:7.5px;letter-spacing:0.28em;text-transform:uppercase;color:#bbb;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid #e8e8e8}
+.ssec{margin-bottom:18px}
+.ssec:last-child{margin-bottom:0}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.stag{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:7.5px;border:1px solid #ddd;padding:2px 6px;color:#555}
+.stag.hot{border-color:#e8320a;color:#fff;background:#e8320a}
+.lang{display:flex;justify-content:space-between;margin-bottom:6px;font-size:9px}
+.lang-n{color:#222;font-weight:500}
+.lang-l{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;color:#bbb}
+.ki-box{background:#08080f;padding:12px 13px;margin-top:12px}
+.ki-ttl{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;letter-spacing:0.2em;color:#e8320a;margin-bottom:5px;text-transform:uppercase}
+.ki-txt{font-size:8px;color:rgba(255,255,255,0.4);line-height:1.7}
+.ki-live{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;color:rgba(255,255,255,0.22);margin-top:5px}
+.ki-live span{color:#e8320a}
 
 /* FOOTER */
-.ftr{background:#0a0a0f;padding:12px 48px;display:flex;justify-content:space-between}
-.ftr div{font-family:‘JetBrains Mono’,monospace;font-size:7.5px;color:rgba(255,255,255,0.2);letter-spacing:0.1em}
+.ftr{background:#08080f;padding:11px 48px;display:flex;justify-content:space-between;align-items:center}
+.ftr div{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;letter-spacing:0.08em}
 </style>
 
 </head>
 <body>
 
 <div class="noprint pbar">
-  <span class="pnote">// remo_schenk_cv_2026.pdf</span>
-  <button class="pbtn" onclick="window.print()">↓ Als PDF speichern</button>
+  <span class="pbar-note">// remo_schenk_cv_2026.pdf</span>
+  <button class="pbar-btn" onclick="window.print()">↓ Als PDF speichern</button>
 </div>
 
-<div class="wrap">
+<div class="page">
 
 <!-- HEADER -->
 
 <div class="hdr">
-  <div class="hdr-bg">RS</div>
+  <div class="hdr-ghost">RS</div>
   <div class="hdr-top">
     <div>
-      <div class="hdr-tag">// CV · 2026 · Zürich, CH</div>
+      <span class="hdr-tag">// CV · 2026 · Zürich, CH</span>
       <div class="hdr-name">REMO<br>SCHENK</div>
       <div class="hdr-role">Creative Director · Unternehmer · KI-Builder</div>
     </div>
     <div class="hdr-contact">
       <div>+41 77 445 01 02</div>
-      <div><a href="mailto:remoschenk@me.com">remoschenk@me.com</a></div>
+      <div>remoschenk@me.com</div>
       <div>Horgen / Zürich, CH</div>
-
-```
-</div>
-```
-
+    </div>
   </div>
   <div class="hdr-bottom">
     <div class="hdr-stmt">
       19 Jahre Unternehmer. Mehrfach von Null aufgebaut.<br>
-      <strong>Emotion, Design und Business verbinden</strong> — und jetzt baue ich<br>
-      damit digitale Produkte, die live gehen. Auf einem iPad.
+      <strong>Emotion, Design und Business verbinden</strong> — und jetzt<br>
+      baue ich damit digitale Produkte, die live gehen.
     </div>
     <div class="hdr-avail">● verfügbar per sofort</div>
   </div>
@@ -205,38 +140,38 @@ font-size:8.5px;color:#666;line-height:1.6;font-style:italic;
 <div class="main">
 
   <div class="sec">
-    <div class="sec-hd"><div class="sec-lbl">Profil</div><div class="sec-line"></div></div>
+    <div class="slbl">Profil</div>
     <div class="profil">Kreativer Unternehmer mit über 19 Jahren Erfahrung in Creative Direction, Branding, Business Development und digitalen Geschäftsmodellen. Ich erkenne Potenziale, entwickle Ideen und baue daraus funktionsfähige Produkte und Firmen — vom Konzept bis zum Live-Deployment. Meine Stärke liegt im Verbinden von Emotion, Design und Business. 2026 baue ich produktionsreife KI-Produkte — und das unterscheidet mich.</div>
     <div class="profil-sub">// CEO · Founder · Creative Director · KI-Builder · Art Photographer</div>
   </div>
 
   <div class="sec">
-    <div class="sec-hd"><div class="sec-lbl">Berufserfahrung</div><div class="sec-line"></div></div>
+    <div class="slbl">Berufserfahrung</div>
 
 ```
 <div class="job">
   <div class="job-top"><div class="job-role">Founder & Creative Director</div><div class="job-date">2025 — heute</div></div>
   <div class="job-co">House of Silent Art · Galerie Reitz Zürich</div>
-  <div class="job-txt">Art Photography Studio. Creative Direction, visuelle Konzepte, Markenentwicklung. Marketing & Creative Consulting Galerie Reitz.</div>
+  <div class="job-txt">Art Photography Studio. Creative Direction, visuelle Konzepte, Markenentwicklung. Marketing & Creative Consulting Galerie Reitz Zürich.</div>
 </div>
 
 <div class="job">
   <div class="job-top"><div class="job-role">Property & Operations Manager</div><div class="job-date">Feb — Jul 2025</div></div>
   <div class="job-co">COSY Stay GmbH · Zürich / Hergiswil</div>
-  <div class="job-txt">Operativer Aufbau der gesamten Firmenstruktur. Entwicklung des visuellen Auftritts, Branding und Online-Präsenz (Airbnb, Booking.com, Social Media, Corporate Site). 5 Premium-Apartments Zürich. Channel-Management, Revenue-Management, Personalführung. Auslastung 90%+, Superhost-Status auf allen Plattformen.</div>
+  <div class="job-txt">Operativer Aufbau der Firmenstruktur. Entwicklung des visuellen Auftritts, Branding und Online-Präsenz. 5 Premium-Apartments, 90%+ Auslastung, Superhost-Status auf allen Plattformen.</div>
   <div class="job-q">Mit herausragender Fachkompetenz, Weitsicht und Eigeninitiative — würden ihn jederzeit wieder einstellen.</div>
 </div>
 
 <div class="job">
   <div class="job-top"><div class="job-role">Inhaber & Geschäftsführer</div><div class="job-date">2006 — 2023</div></div>
   <div class="job-co">Schenk Real Estate GmbH · Zürich</div>
-  <div class="job-txt">17 Jahre eigenständige Unternehmensführung. Objekt- und Kundenakquise, Strategie, SEO, Marketing, Verkaufspräsentationen, Notariat.</div>
+  <div class="job-txt">17 Jahre eigenständige Unternehmensführung. Strategie, SEO, Marketing, Verkaufspräsentationen, Notariat.</div>
 </div>
 
 <div class="job">
   <div class="job-top"><div class="job-role">CEO · Founder · VR-Mitglied</div><div class="job-date">2012 — 2018</div></div>
   <div class="job-co">homespeed AG · Zürich — Immobilienportal</div>
-  <div class="job-txt">Selbst gegründet. Gesamtleitung, 5 Mitarbeitende. Business Development, Produktentwicklung, Marketing-Budget, Google Ads/SEO, Corporate Design.</div>
+  <div class="job-txt">Selbst gegründet. 5 Mitarbeitende. Business Development, Marketing-Budget, Google Ads/SEO, Corporate Design, Social Media.</div>
   <div class="job-q">Äusserst wertvolle Führungskraft. Hervorragendes Fachwissen. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt.</div>
 </div>
 
@@ -250,23 +185,19 @@ font-size:8.5px;color:#666;line-height:1.6;font-style:italic;
   </div>
 
   <div class="sec">
-    <div class="sec-hd"><div class="sec-lbl">KI-Projekte · Live 2026</div><div class="sec-line"></div></div>
+    <div class="slbl">KI-Projekte · Live 2026</div>
     <div class="proj-grid">
       <div class="proj">
         <div class="proj-name">Stadtpuls</div>
         <div class="proj-url">depuls.ch · live</div>
-        <div class="proj-txt">City Guide Zürich. 230+ Locations, Supabase DB, API-Anbindung, SEO, Analytics. Soft Launch 4. Juni 2026. Roadmap: Hamburg → Berlin → Wien.</div>
-        <div class="proj-tags">
-          <span class="ptag">Supabase</span><span class="ptag">GitHub</span><span class="ptag">Claude AI</span><span class="ptag">SEO</span>
-        </div>
+        <div class="proj-txt">City Guide Zürich. 230+ Locations, Supabase DB, API, SEO, Analytics. Soft Launch 4. Juni 2026. Roadmap: Hamburg → Berlin → Wien.</div>
+        <div class="ptags"><span class="ptag">Supabase</span><span class="ptag">Claude AI</span><span class="ptag">GitHub</span><span class="ptag">SEO</span></div>
       </div>
       <div class="proj">
         <div class="proj-name">JARVIS Bot</div>
         <div class="proj-url">remoschenk007.github.io/jarvis</div>
-        <div class="proj-txt">KI-Recruitment-System. Auto-Matching, personalisierte Motivationsschreiben, Bewerbungs-Tracker, PDF-Reports.</div>
-        <div class="proj-tags">
-          <span class="ptag">Claude AI</span><span class="ptag">GitHub Pages</span><span class="ptag">Vibe Coding</span>
-        </div>
+        <div class="proj-txt">KI-Recruitment-System. Auto-Matching, Motivationsschreiben, Tracker, PDF-Reports.</div>
+        <div class="ptags"><span class="ptag">Claude AI</span><span class="ptag">GitHub Pages</span><span class="ptag">Vibe Coding</span></div>
       </div>
     </div>
   </div>
@@ -278,13 +209,13 @@ font-size:8.5px;color:#666;line-height:1.6;font-style:italic;
 <div class="side">
 
   <div class="ssec">
-    <div class="slbl">Kernkompetenzen</div>
+    <div class="sslbl">Kernkompetenzen</div>
     <div class="tags">
-      <span class="stag">Creative Direction</span>
-      <span class="stag">Art Direction</span>
-      <span class="stag">Branding</span>
+      <span class="stag hot">Creative Direction</span>
+      <span class="stag hot">Art Direction</span>
+      <span class="stag hot">Branding & CI</span>
+      <span class="stag hot">Visual Storytelling</span>
       <span class="stag">Markenentwicklung</span>
-      <span class="stag">Visual Storytelling</span>
       <span class="stag">Business Dev</span>
       <span class="stag">Startup-Aufbau</span>
       <span class="stag">CEO-Erfahrung</span>
@@ -300,7 +231,7 @@ font-size:8.5px;color:#666;line-height:1.6;font-style:italic;
   </div>
 
   <div class="ssec">
-    <div class="slbl">Sprachen</div>
+    <div class="sslbl">Sprachen</div>
     <div class="lang"><div class="lang-n">Deutsch</div><div class="lang-l">Muttersprache</div></div>
     <div class="lang"><div class="lang-n">Italiano</div><div class="lang-l">Muttersprache</div></div>
     <div class="lang"><div class="lang-n">English</div><div class="lang-l">Verhandlungssicher</div></div>
@@ -309,28 +240,27 @@ font-size:8.5px;color:#666;line-height:1.6;font-style:italic;
   </div>
 
   <div class="ssec">
-    <div class="slbl">Tools & Tech</div>
+    <div class="sslbl">Tools & Tech</div>
     <div style="display:flex;flex-direction:column;gap:5px">
-      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono',monospace">Claude AI · ChatGPT</div>
-      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono',monospace">GitHub · Supabase</div>
-      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono',monospace">PostgreSQL · PostGIS</div>
-      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono',monospace">Google Analytics/Ads</div>
-      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono',monospace">MS Office · G Suite</div>
-      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono',monospace">Airtable · Plausible</div>
+      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono','Courier New',monospace">Claude AI · ChatGPT</div>
+      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono','Courier New',monospace">GitHub · Supabase</div>
+      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono','Courier New',monospace">PostgreSQL · PostGIS</div>
+      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono','Courier New',monospace">Google Analytics / Ads</div>
+      <div style="font-size:8.5px;color:#444;font-family:'JetBrains Mono','Courier New',monospace">Plausible · Search Console</div>
     </div>
   </div>
 
   <div class="ssec">
-    <div class="slbl">Ausbildung</div>
+    <div class="sslbl">Ausbildung</div>
     <div style="font-size:9px;color:#444;line-height:1.9">
       Privatschule ZG<br>
       Gymnasium GR<br>
-      <span style="color:#aaa;font-size:8.5px">+ 19 Jahre on-the-job</span>
+      <span style="color:#bbb;font-size:8.5px">+ 19 Jahre on-the-job</span>
     </div>
   </div>
 
   <div class="ssec">
-    <div class="slbl">Interessen</div>
+    <div class="sslbl">Interessen</div>
     <div style="font-size:9px;color:#444;line-height:1.9">
       Kunst & Fotografie<br>
       Design & Innenarchitektur<br>
@@ -339,11 +269,11 @@ font-size:8.5px;color:#666;line-height:1.6;font-style:italic;
     </div>
   </div>
 
-  <div class="ai-box">
-    <div class="ai-ttl">◈ KI aktiv · 2026</div>
-    <div class="ai-txt">Produktionsreife Apps mit KI. Vom Konzept bis Live. Auf einem iPad.</div>
-    <div class="ai-live"><span>●</span> depuls.ch — live</div>
-    <div class="ai-live"><span>●</span> JARVIS Bot — live</div>
+  <div class="ki-box">
+    <div class="ki-ttl">◈ KI aktiv · 2026</div>
+    <div class="ki-txt">Produktionsreife Apps mit KI. Vom Konzept bis Live. Auf einem iPad.</div>
+    <div class="ki-live"><span>●</span> depuls.ch — live</div>
+    <div class="ki-live"><span>●</span> JARVIS Bot — live</div>
   </div>
 
 </div>
@@ -352,8 +282,8 @@ font-size:8.5px;color:#666;line-height:1.6;font-style:italic;
 <!-- FOOTER -->
 
 <div class="ftr">
-  <div style="color:rgba(255,255,255,0.35)">© 2026 Remo Schenk · Alle Rechte vorbehalten · Konzept & Design: Remo Schenk</div>
-  <div style="color:rgba(255,255,255,0.45)">+41 77 445 01 02 · remoschenk@me.com</div>
+  <div style="color:rgba(255,255,255,0.25)">© 2026 Remo Schenk · Alle Rechte vorbehalten · Konzept & Design: Remo Schenk</div>
+  <div style="color:rgba(255,255,255,0.35)">+41 77 445 01 02 · remoschenk@me.com</div>
 </div>
 
 </div>
