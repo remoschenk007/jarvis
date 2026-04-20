@@ -896,11 +896,10 @@ function oneClickApply(){
   const sub=encodeURIComponent('Bewerbung als '+curJob.title+' — Remo Schenk');
   const emailBody=ltr+
     '\n\n' +
-    '─────────────────────────────────────────\n' +
-    '◈ Meine vollständigen Bewerbungsunterlagen:\n' +
-    bewerbungsURL + '\n' +
-    '─────────────────────────────────────────\n' +
-    'CV · Arbeitszeugnisse · Projekte · Referenzen';
+    '──────────────────────────────\n' +
+    '📎 Vollständige Unterlagen online:\n' +
+    bewerbungsURL +
+    '\n──────────────────────────────';
   window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+encodeURIComponent(emailBody),'_blank');
 
   // 3. Add to tracker
