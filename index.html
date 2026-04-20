@@ -452,7 +452,7 @@ const BOOT = [
   "19 years · Creative Direction · Branding · KI",
   "References: COSY Stay ✓ · homespeed AG ✓",
   "Scanning jobs.ch · linkedin · xing...",
-  "J.A.R.V.I.S. ONLINE · Guten Abend, Herr Schenk."
+  "J.A.R.V.I.S. ONLINE · Bereit, Remo."
 ];
 
 const JOBS = [
@@ -674,7 +674,9 @@ function activate(){
   // Hello splash
   setTimeout(()=>{
     const h=document.getElementById('hello'); h.classList.add('on');
-    jarvisSpeak('Hallo Remo. Willkommen zurück. Wie kann ich dir heute helfen?',0.84,0.68);
+    const hr=new Date().getHours();
+    const greet=hr<12?'Guten Morgen':hr<18?'Guten Tag':'Guten Abend';
+    jarvisSpeak(greet+', Remo. Willkommen zurück. Ich bin bereit.',0.84,0.68);
     setTimeout(()=>h.classList.remove('on'),3000);
   },2100);
   // Boot lines
@@ -872,8 +874,7 @@ Mit freundlichen Grüssen
 
 Remo Schenk
 ${ME.tel} | ${ME.email}
-${ME.adr}
-byraimondo.com`;
+${ME.adr}`;
     document.getElementById('mload').style.display='none';
     document.getElementById('mcnt').style.display='block';
   },1000);
@@ -894,12 +895,12 @@ function oneClickApply(){
 
   // 2. Build email with letter + personal page link
   const sub=encodeURIComponent('Bewerbung als '+curJob.title+' — Remo Schenk');
+  // Short link for email
+  const shortURL='https://remoschenk007.github.io/jarvis/bewerbung.html?stelle='+stelle+'&firma='+firma;
   const emailBody=ltr+
-    '\n\n' +
-    '──────────────────────────────\n' +
-    '📎 Vollständige Unterlagen online:\n' +
-    bewerbungsURL +
-    '\n──────────────────────────────';
+    '\n\n─────────────────────\n'+
+    '📎 Unterlagen: '+shortURL+
+    '\n─────────────────────';
   window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+encodeURIComponent(emailBody),'_blank');
 
   // 3. Add to tracker
