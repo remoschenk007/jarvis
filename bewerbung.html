@@ -10,185 +10,192 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px}
 body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:#f0ede8;color:#111;line-height:1.6}
+.syne{font-family:'Syne','Arial Black',Impact,sans-serif!important}
+.mono{font-family:'JetBrains Mono','Courier New',monospace!important}
 
-/* FORCE FONTS FALLBACK */
-.syne{font-family:‘Syne’,‘Arial Black’,Impact,sans-serif}
-.mono{font-family:‘JetBrains Mono’,‘Courier New’,monospace}
-
-/* NAV */
+/* ── NAV ── */
 nav{
-background:#08080f;
-padding:14px 40px;
+background:#08080f;padding:14px 48px;
 display:flex;justify-content:space-between;align-items:center;
 position:sticky;top:0;z-index:100;
 }
-.nav-l .mono{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.2em;display:block;margin-bottom:2px}
-.nav-l .syne{font-size:19px;font-weight:800;color:#fff;letter-spacing:0.02em}
-.nav-r{font-size:10px;color:rgba(255,255,255,0.3);text-align:right;font-family:‘JetBrains Mono’,‘Courier New’,monospace;line-height:1.8}
+.nl .tag{display:block;font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:rgba(255,255,255,0.28);letter-spacing:0.22em;margin-bottom:3px}
+.nl .name{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:0.02em}
+.nr{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:rgba(255,255,255,0.28);text-align:right;line-height:1.9;letter-spacing:0.1em}
 
-/* HERO */
-.hero{
-background:#08080f;
-padding:60px 40px 52px;
-position:relative;overflow:hidden;
-border-bottom:1px solid #1a1a2e;
+/* ── HERO ── */
+.hero{background:#08080f!important;padding:64px 48px 56px;position:relative;overflow:hidden}
+.ghost{
+position:absolute;right:-30px;top:-30px;
+font-family:‘Syne’,‘Arial Black’,sans-serif;
+font-size:min(38vw,340px);font-weight:800;
+color:rgba(255,255,255,0.04);line-height:0.85;
+pointer-events:none;user-select:none;letter-spacing:-0.04em;
 }
-.hero-ghost{
-position:absolute;right:-20px;top:-40px;
-font-family:‘Syne’,‘Arial Black’,Impact,sans-serif;
-font-size:260px;font-weight:800;
-color:rgba(255,255,255,0.045);
-line-height:1;pointer-events:none;
-letter-spacing:-0.04em;
-user-select:none;
-}
-.hero-tag{
+.hero-inner{position:relative;z-index:1;max-width:1060px;margin:0 auto}
+.h-eyebrow{
 font-family:‘JetBrains Mono’,‘Courier New’,monospace;
 font-size:10px;color:#e8320a;
-letter-spacing:0.3em;text-transform:uppercase;
-margin-bottom:18px;display:block;
+letter-spacing:0.32em;text-transform:uppercase;margin-bottom:6px
 }
-.hero-h{
-font-family:‘Syne’,‘Arial Black’,Impact,sans-serif;
-font-size:clamp(44px,7vw,82px);
-font-weight:800;color:#ffffff!important;
-line-height:0.92;letter-spacing:-0.02em;
-margin-bottom:22px;
+.h-name{
+font-family:‘Syne’,‘Arial Black’,sans-serif;
+font-size:clamp(15px,2.5vw,24px);font-weight:800;
+color:rgba(255,255,255,0.2);letter-spacing:0.1em;
+margin-bottom:14px;text-transform:uppercase;
 }
-.hero-h span{color:rgba(255,255,255,0.22)}
-.hero-txt{
-font-size:15px;font-weight:300;
-color:rgba(255,255,255,0.55);
-max-width:520px;line-height:1.7;
-margin-bottom:30px;
+.h-title{
+font-family:‘Syne’,‘Arial Black’,sans-serif;
+font-size:clamp(52px,8.5vw,96px);
+font-weight:800;color:#fff;
+line-height:0.9;letter-spacing:-0.025em;
+margin-bottom:26px;
 }
-.hero-txt strong{color:#fff;font-weight:600}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
+.h-title .dim{color:rgba(255,255,255,0.2)}
+.h-sub{
+font-size:16px;font-weight:300;color:rgba(255,255,255,0.5);
+max-width:500px;line-height:1.7;margin-bottom:32px;
+}
+.h-sub strong{color:#fff;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{
 font-family:‘JetBrains Mono’,‘Courier New’,monospace;
-font-size:9px;letter-spacing:0.15em;
-border:1px solid rgba(255,255,255,0.1);
-color:rgba(255,255,255,0.35);
-padding:6px 13px;text-transform:uppercase;
+font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
+border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.3);
+padding:7px 14px;
 }
-.chip.red{border-color:rgba(232,50,10,0.5);color:#e8320a}
+.chip.hot{border-color:rgba(232,50,10,0.6);color:#e8320a;background:rgba(232,50,10,0.08)}
 
-/* WRAP */
-.w{max-width:1060px;margin:0 auto;padding:0 40px}
-@media(max-width:680px){.w{padding:0 20px}nav{padding:12px 20px}.hero{padding:44px 20px 40px}}
+/* ── LAYOUT ── */
+.w{max-width:1060px;margin:0 auto;padding:0 48px}
+@media(max-width:700px){
+.w{padding:0 20px}
+nav{padding:12px 20px}
+.hero{padding:48px 20px 44px}
+.ghost{font-size:52vw}
+}
 
-/* SECTION */
-.sec{padding:52px 0;border-bottom:1px solid #ddd}
+/* ── SECTION ── */
+.sec{padding:56px 0;border-bottom:1px solid #ddd}
 .sec:last-child{border-bottom:none}
-.sec-lbl{
+.slbl{
 font-family:‘JetBrains Mono’,‘Courier New’,monospace;
-font-size:9px;color:#aaa;letter-spacing:0.3em;
-text-transform:uppercase;margin-bottom:22px;
-display:flex;align-items:center;gap:12px;
+font-size:9px;color:#aaa;letter-spacing:0.3em;text-transform:uppercase;
+margin-bottom:24px;display:flex;align-items:center;gap:14px;
 }
-.sec-lbl::after{content:’’;flex:1;height:1px;background:#ccc}
+.slbl::after{content:’’;flex:1;height:1px;background:#ddd}
 
-/* LETTER */
+/* ── LETTER ── */
 .letter{
-background:#fff;border:1px solid #ddd;
-border-top:3px solid #08080f;
-padding:44px;max-width:680px;
-font-size:15px;line-height:1.85;
-color:#222;white-space:pre-wrap;
+background:#fff;border:1px solid #ddd;border-top:3px solid #111;
+padding:48px;max-width:700px;
+font-size:15px;line-height:1.9;color:#222;
+white-space:pre-wrap;font-family:‘DM Sans’,system-ui,sans-serif;
 }
 
-/* PROFILE GRID */
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#ddd;border:1px solid #ddd}
-@media(max-width:680px){.pgrid{grid-template-columns:1fr}}
-.pcell{background:#fff;padding:24px 28px}
-.pcell-l{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;letter-spacing:0.25em;color:#aaa;text-transform:uppercase;margin-bottom:6px}
-.pcell-v{font-size:15px;font-weight:500;color:#111;line-height:1.4}
-.pcell-v.big{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:22px;font-weight:800}
-.pcell-v.green{color:#059669;font-weight:600}
+/* ── PROFILE ── */
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#ddd;border:1px solid #ddd}
+@media(max-width:700px){.pg{grid-template-columns:1fr 1fr}}
+.pc{background:#fff;padding:26px 30px}
+.pclbl{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;letter-spacing:0.25em;color:#bbb;text-transform:uppercase;margin-bottom:7px}
+.pcv{font-size:15px;font-weight:500;color:#111;line-height:1.4}
+.pcv.big{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:24px;font-weight:800}
+.pcv.go{color:#059669;font-weight:600;font-size:16px}
 
-/* EXPERIENCE */
+/* ── EXPERIENCE ── */
 .explist{display:flex;flex-direction:column;gap:1px;background:#ddd}
-.expitem{background:#fff;padding:26px 28px;display:grid;grid-template-columns:170px 1fr;gap:22px}
-@media(max-width:680px){.expitem{grid-template-columns:1fr}}
-.exp-period{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:10px;color:#aaa;margin-bottom:3px}
-.exp-co{font-size:13px;font-weight:600;color:#e8320a;line-height:1.4}
-.exp-role{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:17px;font-weight:700;color:#111;margin-bottom:7px}
-.exp-txt{font-size:13px;color:#444;line-height:1.7}
-.exp-q{margin-top:10px;padding:8px 14px;background:#f8f7f4;border-left:2px solid #e8320a;font-size:12px;color:#555;font-style:italic;line-height:1.65}
+.ei{background:#fff;padding:28px 30px;display:grid;grid-template-columns:175px 1fr;gap:24px}
+@media(max-width:700px){.ei{grid-template-columns:1fr}}
+.ei-l .period{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:10px;color:#bbb;margin-bottom:4px}
+.ei-l .co{font-size:13px;font-weight:600;color:#e8320a;line-height:1.45}
+.ei-r .role{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:18px;font-weight:700;color:#111;margin-bottom:8px}
+.ei-r .txt{font-size:13px;color:#444;line-height:1.7}
+.ei-r .q{margin-top:11px;padding:9px 15px;background:#f8f7f4;border-left:2px solid #e8320a;font-size:12.5px;color:#555;font-style:italic;line-height:1.65}
 
-/* SKILLS */
+/* ── SKILLS ── */
 .skillwrap{display:flex;flex-wrap:wrap;gap:7px}
-.skill{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;border:1px solid #ccc;padding:5px 12px;color:#555;letter-spacing:0.04em}
-.skill.hot{border-color:#e8320a;color:#fff;background:#e8320a}
+.sk{
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:9px;border:1px solid #ccc;padding:6px 13px;color:#555;
+letter-spacing:0.04em;
+}
+.sk.h{border-color:#e8320a;color:#fff;background:#e8320a;font-weight:500}
 
-/* PROJECTS */
-.projgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#ddd}
-@media(max-width:680px){.projgrid{grid-template-columns:1fr}}
-.proj{background:#fff;padding:28px;position:relative;overflow:hidden}
-.proj::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;background:#ccc}
-.proj.live::before{background:#e8320a}
-.proj-badge{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#e8320a;margin-bottom:8px;letter-spacing:0.12em}
-.proj-name{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:21px;font-weight:800;color:#111;margin-bottom:3px}
-.proj-sub{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#aaa;margin-bottom:10px}
-.proj-txt{font-size:13px;color:#444;line-height:1.7;margin-bottom:12px}
+/* ── PROJECTS ── */
+.pg2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#ddd}
+@media(max-width:700px){.pg2{grid-template-columns:1fr}}
+.pj{background:#fff;padding:30px;position:relative;overflow:hidden}
+.pj::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;background:#ddd}
+.pj.live::before{background:#e8320a}
+.pj .badge{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#e8320a;margin-bottom:9px;letter-spacing:0.12em}
+.pj .pname{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:22px;font-weight:800;color:#111;margin-bottom:3px}
+.pj .psub{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#bbb;margin-bottom:11px}
+.pj .ptxt{font-size:13px;color:#444;line-height:1.7;margin-bottom:13px}
 .ptags{display:flex;flex-wrap:wrap;gap:4px}
-.ptag{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;border:1px solid #ddd;padding:2px 7px;color:#aaa}
+.ptag{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:8px;border:1px solid #ddd;padding:2px 8px;color:#bbb}
 
-/* REFS */
-.refgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#ddd}
-@media(max-width:680px){.refgrid{grid-template-columns:1fr}}
-.ref{background:#fff;padding:28px}
-.ref-from{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#e8320a;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px}
-.ref-q{font-size:14px;color:#333;line-height:1.75;font-style:italic;margin-bottom:12px}
-.ref-who{font-size:12px;color:#888;font-weight:500}
+/* ── REFS ── */
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#ddd}
+@media(max-width:700px){.rg{grid-template-columns:1fr}}
+.ref{background:#fff;padding:30px}
+.ref .rfrom{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#e8320a;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px}
+.ref .rq{font-size:14px;color:#333;line-height:1.8;font-style:italic;margin-bottom:13px}
+.ref .rwho{font-size:12px;color:#999;font-weight:500}
 
-/* LANGS */
-.langgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#ddd}
-@media(max-width:680px){.langgrid{grid-template-columns:1fr 1fr}}
-.lang{background:#fff;padding:18px 22px}
-.lang-n{font-size:15px;font-weight:600;margin-bottom:2px}
-.lang-l{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#aaa;letter-spacing:0.08em}
+/* ── LANGS ── */
+.lg{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#ddd}
+@media(max-width:700px){.lg{grid-template-columns:1fr 1fr}}
+.lc{background:#fff;padding:20px 24px}
+.lc .ln{font-size:16px;font-weight:600;margin-bottom:3px}
+.lc .ll{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#bbb;letter-spacing:0.08em}
 
-/* CTA */
-.cta{background:#08080f;padding:52px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
-.cta-t{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:28px;font-weight:800;color:#fff;margin-bottom:6px}
-.cta-s{font-size:13px;color:rgba(255,255,255,0.35)}
-.cta-btns{display:flex;gap:10px;flex-wrap:wrap}
-.cbtn{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:13px 24px;text-decoration:none;display:inline-block;cursor:pointer;border:none}
-.cbtn.pri{background:#e8320a;color:#fff}
-.cbtn.sec{background:transparent;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.5)}
+/* ── CTA ── */
+.cta{background:#08080f!important;padding:56px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
+.cta-t{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:32px;font-weight:800;color:#fff;margin-bottom:6px}
+.cta-s{font-size:13px;color:rgba(255,255,255,0.3)}
+.ctabtns{display:flex;gap:10px;flex-wrap:wrap}
+.cb{
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+padding:14px 26px;text-decoration:none;display:inline-block;
+}
+.cb.pri{background:#e8320a;color:#fff}
+.cb.sec{background:transparent;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.45)}
 
-/* FOOTER */
-footer{background:#050508;padding:16px 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-footer div{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.08em}
+/* ── FOOTER ── */
+footer{background:#050508;padding:16px 48px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+footer span{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:0.08em}
 </style>
 
 </head>
 <body>
 
 <nav>
-  <div class="nav-l">
-    <span class="mono">// Bewerbungsunterlagen · 2026</span>
-    <span class="syne">Remo Schenk</span>
+  <div class="nl">
+    <span class="tag">// Bewerbungsunterlagen · 2026</span>
+    <span class="name">Remo Schenk</span>
   </div>
-  <div class="nav-r" id="nav-r">Creative Director<br>Per sofort verfügbar</div>
+  <div class="nr" id="nav-r">Creative Director<br>Per sofort verfügbar</div>
 </nav>
 
 <div class="hero">
-  <div class="hero-ghost">RS</div>
-  <div class="w">
-    <span class="hero-tag">// Bewerbung als <span id="h-stelle">Creative Director</span></span>
-    <div style="font-family:'Syne','Arial Black',sans-serif;font-size:clamp(14px,2.2vw,22px);font-weight:800;color:rgba(255,255,255,0.18);letter-spacing:0.08em;margin-bottom:10px">REMO SCHENK</div>
-    <div class="hero-h syne">Ich bin<br><span>der richtige</span><br>Mann.</div>
-    <div class="hero-txt">
+  <div class="ghost">RS</div>
+  <div class="hero-inner">
+    <div class="h-eyebrow">// Bewerbung als <span id="h-stelle">Creative Director</span></div>
+    <div class="h-name">Remo Schenk</div>
+    <div class="h-title">
+      Ich bin<br>
+      <span class="dim">der richtige</span><br>
+      Mann.
+    </div>
+    <div class="h-sub">
       19 Jahre Unternehmer. Mehrfach von Null aufgebaut.<br>
       <strong>Emotion, Design und Business verbinden</strong> — und jetzt<br>
       baue ich damit digitale Produkte, die live gehen.
     </div>
     <div class="chips">
-      <div class="chip red">● Verfügbar per sofort</div>
+      <div class="chip hot">● Verfügbar per sofort</div>
       <div class="chip">19 Jahre Erfahrung</div>
       <div class="chip">Horgen / Zürich</div>
       <div class="chip">Creative Direction</div>
@@ -200,7 +207,7 @@ footer div{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-siz
 <div class="w">
 
 <div class="sec">
-  <div class="sec-lbl">01 · Motivationsschreiben</div>
+  <div class="slbl">01 · Motivationsschreiben</div>
   <div class="letter" id="letter-box">Horgen, 20. April 2026
 
 Sehr geehrte Damen und Herren
@@ -210,98 +217,108 @@ Mit grossem Interesse habe ich Ihre Ausschreibung gelesen…</div>
 </div>
 
 <div class="sec">
-  <div class="sec-lbl">02 · Kandidaten-Profil</div>
-  <div class="pgrid">
-    <div class="pcell"><div class="pcell-l">Name</div><div class="pcell-v big">Remo Schenk</div></div>
-    <div class="pcell"><div class="pcell-l">Funktion</div><div class="pcell-v">Creative Director<br>Unternehmer · KI-Builder</div></div>
-    <div class="pcell"><div class="pcell-l">Kontakt</div><div class="pcell-v">+41 77 445 01 02<br>remoschenk@me.com<br>Horgen / Zürich, CH</div></div>
-    <div class="pcell"><div class="pcell-l">Erfahrung</div><div class="pcell-v big">19 Jahre</div></div>
-    <div class="pcell"><div class="pcell-l">Verfügbarkeit</div><div class="pcell-v green">Per sofort</div></div>
-    <div class="pcell"><div class="pcell-l">Profil</div><div class="pcell-v" style="font-size:13px;color:#555;line-height:1.6">Kreativer Unternehmer der Emotion, Design und Business zu einem stimmigen Auftritt verbindet — sichtbar und fühlbar.</div></div>
+  <div class="slbl">02 · Kandidaten-Profil</div>
+  <div class="pg">
+    <div class="pc"><div class="pclbl">Name</div><div class="pcv big">Remo Schenk</div></div>
+    <div class="pc"><div class="pclbl">Funktion</div><div class="pcv">Creative Director<br>Unternehmer · KI-Builder</div></div>
+    <div class="pc"><div class="pclbl">Kontakt</div><div class="pcv">+41 77 445 01 02<br>remoschenk@me.com<br>Horgen / Zürich, CH</div></div>
+    <div class="pc"><div class="pclbl">Erfahrung</div><div class="pcv big">19 Jahre</div></div>
+    <div class="pc"><div class="pclbl">Verfügbarkeit</div><div class="pcv go">Per sofort</div></div>
+    <div class="pc"><div class="pclbl">Profil</div><div class="pcv" style="font-size:13px;color:#555;line-height:1.6">Kreativer Unternehmer der Emotion, Design und Business zu einem stimmigen Auftritt verbindet — sichtbar und fühlbar.</div></div>
   </div>
 </div>
 
 <div class="sec">
-  <div class="sec-lbl">03 · Berufserfahrung</div>
+  <div class="slbl">03 · Berufserfahrung</div>
   <div class="explist">
-    <div class="expitem">
-      <div><div class="exp-period">2025 — heute</div><div class="exp-co">House of Silent Art · Galerie Reitz Zürich</div></div>
-      <div><div class="exp-role syne">Founder & Creative Director</div><div class="exp-txt">Art Photography Studio. Creative Direction, visuelle Konzepte, Markenentwicklung. Marketing & Creative Consulting Galerie Reitz Zürich.</div></div>
+    <div class="ei">
+      <div class="ei-l"><div class="period">2025 — heute</div><div class="co">House of Silent Art<br>Galerie Reitz Zürich</div></div>
+      <div class="ei-r"><div class="role">Founder & Creative Director</div><div class="txt">Art Photography Studio. Creative Direction, visuelle Konzepte, Markenentwicklung. Marketing & Creative Consulting Galerie Reitz Zürich.</div></div>
     </div>
-    <div class="expitem">
-      <div><div class="exp-period">Feb — Jul 2025</div><div class="exp-co">COSY Stay GmbH · Zürich</div></div>
-      <div><div class="exp-role syne">Property & Operations Manager</div><div class="exp-txt">Operativer Aufbau der Firmenstruktur. Entwicklung des visuellen Auftritts, Branding und Online-Präsenz. 5 Premium-Apartments, 90%+ Auslastung, Superhost-Status.</div><div class="exp-q">Mit herausragender Fachkompetenz, Weitsicht und Eigeninitiative — würden ihn jederzeit wieder einstellen.</div></div>
+    <div class="ei">
+      <div class="ei-l"><div class="period">Feb — Jul 2025</div><div class="co">COSY Stay GmbH<br>Zürich / Hergiswil</div></div>
+      <div class="ei-r"><div class="role">Property & Operations Manager</div><div class="txt">Operativer Aufbau der Firmenstruktur. Entwicklung des visuellen Auftritts, Branding, Online-Präsenz. 5 Premium-Apartments, 90%+ Auslastung, Superhost-Status.</div><div class="q">Mit herausragender Fachkompetenz, Weitsicht und Eigeninitiative — würden ihn jederzeit wieder einstellen.</div></div>
     </div>
-    <div class="expitem">
-      <div><div class="exp-period">2006 — 2023</div><div class="exp-co">Schenk Real Estate GmbH · Zürich</div></div>
-      <div><div class="exp-role syne">Inhaber & Geschäftsführer</div><div class="exp-txt">17 Jahre eigenständige Unternehmensführung. Strategie, SEO, Marketing, Verkaufspräsentationen, Notariat.</div></div>
+    <div class="ei">
+      <div class="ei-l"><div class="period">2006 — 2023</div><div class="co">Schenk Real Estate GmbH<br>Zürich</div></div>
+      <div class="ei-r"><div class="role">Inhaber & Geschäftsführer</div><div class="txt">17 Jahre eigenständige Unternehmensführung. Strategie, SEO, Marketing, Verkaufspräsentationen.</div></div>
     </div>
-    <div class="expitem">
-      <div><div class="exp-period">2012 — 2018</div><div class="exp-co">homespeed AG · Zürich</div></div>
-      <div><div class="exp-role syne">CEO · Founder · VR-Mitglied</div><div class="exp-txt">Selbst gegründet. 5 Mitarbeitende. Business Development, Marketing-Budget, Google Ads/SEO, Corporate Design.</div><div class="exp-q">Äusserst wertvolle Führungskraft. Hervorragendes Fachwissen. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt.</div></div>
+    <div class="ei">
+      <div class="ei-l"><div class="period">2012 — 2018</div><div class="co">homespeed AG · Zürich<br>Immobilienportal</div></div>
+      <div class="ei-r"><div class="role">CEO · Founder · VR-Mitglied</div><div class="txt">Selbst gegründet. 5 Mitarbeitende. Business Development, Marketing, Google Ads/SEO, Corporate Design.</div><div class="q">Äusserst wertvolle Führungskraft. Hervorragendes Fachwissen. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt.</div></div>
     </div>
   </div>
 </div>
 
 <div class="sec">
-  <div class="sec-lbl">04 · Kompetenzen</div>
+  <div class="slbl">04 · Kompetenzen</div>
   <div class="skillwrap">
-    <span class="skill hot">Creative Direction</span><span class="skill hot">Art Direction</span>
-    <span class="skill hot">Branding & CI</span><span class="skill hot">Visual Storytelling</span>
-    <span class="skill">Markenentwicklung</span><span class="skill">Business Development</span>
-    <span class="skill">Startup-Aufbau</span><span class="skill">CEO-Erfahrung</span>
-    <span class="skill">Operations Management</span><span class="skill">Immobilienhandel</span>
-    <span class="skill">Sales & Verhandlung</span><span class="skill">SEO & Google Ads</span>
-    <span class="skill">Social Media</span><span class="skill">Teamführung</span>
-    <span class="skill hot">Claude AI · ChatGPT</span><span class="skill hot">GitHub · Supabase</span>
-    <span class="skill hot">Vibe Coding</span><span class="skill">Art Photography</span>
+    <span class="sk h">Creative Direction</span>
+    <span class="sk h">Art Direction</span>
+    <span class="sk h">Branding & CI</span>
+    <span class="sk h">Visual Storytelling</span>
+    <span class="sk">Markenentwicklung</span>
+    <span class="sk">Business Development</span>
+    <span class="sk">Startup-Aufbau</span>
+    <span class="sk">CEO-Erfahrung</span>
+    <span class="sk">Operations Management</span>
+    <span class="sk">Immobilienhandel</span>
+    <span class="sk">Sales & Verhandlung</span>
+    <span class="sk">SEO & Google Ads</span>
+    <span class="sk">Social Media</span>
+    <span class="sk">Teamführung</span>
+    <span class="sk">Projektleitung</span>
+    <span class="sk h">Claude AI · ChatGPT</span>
+    <span class="sk h">GitHub · Supabase</span>
+    <span class="sk h">Vibe Coding</span>
+    <span class="sk">Art Photography</span>
   </div>
 </div>
 
 <div class="sec">
-  <div class="sec-lbl">05 · KI-Projekte · Live 2026</div>
-  <div class="projgrid">
-    <div class="proj live">
-      <div class="proj-badge">● LIVE · depuls.ch</div>
-      <div class="proj-name syne">Stadtpuls</div>
-      <div class="proj-sub">City Guide Zürich — «dä puls vo dä Stadt»</div>
-      <div class="proj-txt">230+ Locations, Supabase DB, Zürich Tourismus API, Google Search Console, Plausible Analytics. Soft Launch 4. Juni 2026. Roadmap: Hamburg → Berlin → Wien.</div>
+  <div class="slbl">05 · KI-Projekte · Live 2026</div>
+  <div class="pg2">
+    <div class="pj live">
+      <div class="badge">● LIVE · depuls.ch</div>
+      <div class="pname">Stadtpuls</div>
+      <div class="psub">City Guide Zürich — «dä puls vo dä Stadt»</div>
+      <div class="ptxt">230+ Locations, Supabase DB, Zürich Tourismus API, Google Search Console, Plausible Analytics. Soft Launch 4. Juni 2026. Roadmap: Hamburg → Berlin → Wien.</div>
       <div class="ptags"><span class="ptag">Supabase</span><span class="ptag">Claude AI</span><span class="ptag">GitHub Pages</span><span class="ptag">SEO</span></div>
     </div>
-    <div class="proj live">
-      <div class="proj-badge">● LIVE · remoschenk007.github.io/jarvis</div>
-      <div class="proj-name syne">JARVIS Bot</div>
-      <div class="proj-sub">KI-Recruitment-Intelligence-System</div>
-      <div class="proj-txt">Vollautomatischer Bewerbungs-Workflow. KI-Matching, personalisierte Motivationsschreiben, Tracker, PDF-Reports. Diese Seite wurde damit generiert.</div>
+    <div class="pj live">
+      <div class="badge">● LIVE · remoschenk007.github.io/jarvis</div>
+      <div class="pname">JARVIS Bot</div>
+      <div class="psub">KI-Recruitment-Intelligence-System</div>
+      <div class="ptxt">Vollautomatischer Bewerbungs-Workflow. KI-Matching, personalisierte Motivationsschreiben, Tracker, PDF-Reports. Diese Seite wurde damit generiert.</div>
       <div class="ptags"><span class="ptag">Claude AI</span><span class="ptag">GitHub Pages</span><span class="ptag">Vibe Coding</span></div>
     </div>
   </div>
 </div>
 
 <div class="sec">
-  <div class="sec-lbl">06 · Arbeitszeugnisse</div>
-  <div class="refgrid">
+  <div class="slbl">06 · Arbeitszeugnisse</div>
+  <div class="rg">
     <div class="ref">
-      <div class="ref-from">COSY Stay GmbH · 2025</div>
-      <div class="ref-q">"Mit herausragender Fachkompetenz, großer Weitsicht und beeindruckender Eigeninitiative setzte Herr Schenk sämtliche Projekte termingerecht und in höchster Qualität um. Außergewöhnliche Führungsstärke. Wir würden ihn jederzeit wieder einstellen."</div>
-      <div class="ref-who">Friedrich Obermeier · Geschäftsführer COSY Stay GmbH</div>
+      <div class="rfrom">COSY Stay GmbH · 2025</div>
+      <div class="rq">"Mit herausragender Fachkompetenz, großer Weitsicht und beeindruckender Eigeninitiative setzte Herr Schenk sämtliche Projekte termingerecht und in höchster Qualität um. Außergewöhnliche Führungsstärke. Wir würden ihn jederzeit wieder einstellen."</div>
+      <div class="rwho">Friedrich Obermeier · Geschäftsführer COSY Stay GmbH</div>
     </div>
     <div class="ref">
-      <div class="ref-from">homespeed AG · 2017</div>
-      <div class="ref-q">"Remo Schenk verfügt über hervorragendes, in die Tiefe gehendes Fachwissen. Äusserst wertvolle Führungskraft. Trifft Entscheidungen sehr selbstständig, vorausschauend und mit hoher Sachkenntnis. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt."</div>
-      <div class="ref-who">Marc Hess · Verwaltungsrat homespeed AG</div>
+      <div class="rfrom">homespeed AG · 2017</div>
+      <div class="rq">"Remo Schenk verfügt über hervorragendes, in die Tiefe gehendes Fachwissen. Äusserst wertvolle Führungskraft. Trifft Entscheidungen sehr selbstständig, vorausschauend und mit hoher Sachkenntnis. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt."</div>
+      <div class="rwho">Marc Hess · Verwaltungsrat homespeed AG</div>
     </div>
   </div>
 </div>
 
 <div class="sec">
-  <div class="sec-lbl">07 · Sprachen</div>
-  <div class="langgrid">
-    <div class="lang"><div class="lang-n">Deutsch</div><div class="lang-l">Muttersprache</div></div>
-    <div class="lang"><div class="lang-n">Italiano</div><div class="lang-l">Muttersprache</div></div>
-    <div class="lang"><div class="lang-n">English</div><div class="lang-l">Verhandlungssicher</div></div>
-    <div class="lang"><div class="lang-n">Español</div><div class="lang-l">Verhandlungssicher</div></div>
-    <div class="lang"><div class="lang-n">Français</div><div class="lang-l">Grundkenntnisse</div></div>
+  <div class="slbl">07 · Sprachen</div>
+  <div class="lg">
+    <div class="lc"><div class="ln">Deutsch</div><div class="ll">Muttersprache</div></div>
+    <div class="lc"><div class="ln">Italiano</div><div class="ll">Muttersprache</div></div>
+    <div class="lc"><div class="ln">English</div><div class="ll">Verhandlungssicher</div></div>
+    <div class="lc"><div class="ln">Español</div><div class="ll">Verhandlungssicher</div></div>
+    <div class="lc"><div class="ln">Français</div><div class="ll">Grundkenntnisse</div></div>
   </div>
 </div>
 
@@ -309,32 +326,40 @@ Mit grossem Interesse habe ich Ihre Ausschreibung gelesen…</div>
 
 <div class="cta">
   <div>
-    <div class="cta-t syne">Bereit für ein Gespräch?</div>
+    <div class="cta-t">Bereit für ein Gespräch?</div>
     <div class="cta-s">+41 77 445 01 02 · remoschenk@me.com · Horgen / Zürich</div>
   </div>
-  <div class="cta-btns">
-    <a class="cbtn pri" id="cta-email" href="mailto:remoschenk@me.com">E-Mail schreiben →</a>
-    <a class="cbtn sec" href="tel:+41774450102">Direkt anrufen</a>
+  <div class="ctabtns">
+    <a class="cb pri" id="cta-email" href="mailto:remoschenk@me.com">E-Mail schreiben →</a>
+    <a class="cb sec" href="tel:+41774450102">Direkt anrufen</a>
   </div>
 </div>
 
 <footer>
-  <div>© 2026 Remo Schenk · Alle Rechte vorbehalten</div>
-  <div>Erstellt mit J.A.R.V.I.S. Recruitment Intelligence</div>
+  <span>© 2026 Remo Schenk · Alle Rechte vorbehalten</span>
+  <span>Erstellt mit J.A.R.V.I.S. Recruitment Intelligence</span>
 </footer>
 
 <script>
 const p=new URLSearchParams(window.location.search);
 const stelle=p.get('stelle')||'Creative Director';
 const firma=p.get('firma')||'';
-const letter=p.get('letter')||'';
+
+// Get letter from localStorage (set by JARVIS bot)
+const letter=localStorage.getItem('jarvis_letter')||'';
 
 document.getElementById('h-stelle').textContent=stelle;
 if(firma){
   document.getElementById('nav-r').innerHTML=stelle+'<br>Bewerbung bei '+firma;
-  document.getElementById('cta-email').href='mailto:remoschenk@me.com?subject=Antwort: Bewerbung als '+stelle+' — Remo Schenk';
+  document.getElementById('cta-email').href='mailto:remoschenk@me.com?subject=Antwort%3A+Bewerbung+als+'+encodeURIComponent(stelle)+'+%E2%80%94+Remo+Schenk';
 }
-if(letter) document.getElementById('letter-box').textContent=decodeURIComponent(letter);
+if(letter){
+  document.getElementById('letter-box').textContent=letter;
+} else {
+  // Try URL param as fallback
+  const lp=p.get('letter');
+  if(lp) document.getElementById('letter-box').textContent=decodeURIComponent(lp);
+}
 document.title='Remo Schenk — Bewerbung als '+stelle+(firma?' bei '+firma:'');
 </script>
 
