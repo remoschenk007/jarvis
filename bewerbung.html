@@ -25,7 +25,7 @@ display:flex;justify-content:space-between;align-items:center;
 position:sticky;top:0;z-index:100;
 }
 .nav-l .mono{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.2em;display:block;margin-bottom:2px}
-.nav-l .syne{font-size:17px;font-weight:800;color:#fff}
+.nav-l .syne{font-size:19px;font-weight:800;color:#fff;letter-spacing:0.02em}
 .nav-r{font-size:10px;color:rgba(255,255,255,0.3);text-align:right;font-family:‘JetBrains Mono’,‘Courier New’,monospace;line-height:1.8}
 
 /* HERO */
@@ -39,7 +39,7 @@ border-bottom:1px solid #1a1a2e;
 position:absolute;right:-20px;top:-40px;
 font-family:‘Syne’,‘Arial Black’,Impact,sans-serif;
 font-size:260px;font-weight:800;
-color:rgba(255,255,255,0.028);
+color:rgba(255,255,255,0.045);
 line-height:1;pointer-events:none;
 letter-spacing:-0.04em;
 user-select:none;
@@ -52,9 +52,9 @@ margin-bottom:18px;display:block;
 }
 .hero-h{
 font-family:‘Syne’,‘Arial Black’,Impact,sans-serif;
-font-size:clamp(40px,6vw,72px);
-font-weight:800;color:#fff!important;
-line-height:0.95;letter-spacing:-0.02em;
+font-size:clamp(44px,7vw,82px);
+font-weight:800;color:#ffffff!important;
+line-height:0.92;letter-spacing:-0.02em;
 margin-bottom:22px;
 }
 .hero-h span{color:rgba(255,255,255,0.22)}
@@ -88,7 +88,7 @@ font-size:9px;color:#aaa;letter-spacing:0.3em;
 text-transform:uppercase;margin-bottom:22px;
 display:flex;align-items:center;gap:12px;
 }
-.sec-lbl::after{content:’’;flex:1;height:1px;background:#ddd}
+.sec-lbl::after{content:’’;flex:1;height:1px;background:#ccc}
 
 /* LETTER */
 .letter{
@@ -121,13 +121,13 @@ color:#222;white-space:pre-wrap;
 /* SKILLS */
 .skillwrap{display:flex;flex-wrap:wrap;gap:7px}
 .skill{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;border:1px solid #ccc;padding:5px 12px;color:#555;letter-spacing:0.04em}
-.skill.hot{border-color:#e8320a;color:#e8320a}
+.skill.hot{border-color:#e8320a;color:#fff;background:#e8320a}
 
 /* PROJECTS */
 .projgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#ddd}
 @media(max-width:680px){.projgrid{grid-template-columns:1fr}}
 .proj{background:#fff;padding:28px;position:relative;overflow:hidden}
-.proj::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;background:#08080f}
+.proj::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;background:#ccc}
 .proj.live::before{background:#e8320a}
 .proj-badge{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-size:9px;color:#e8320a;margin-bottom:8px;letter-spacing:0.12em}
 .proj-name{font-family:‘Syne’,‘Arial Black’,sans-serif;font-size:21px;font-weight:800;color:#111;margin-bottom:3px}
@@ -180,6 +180,7 @@ footer div{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-siz
   <div class="hero-ghost">RS</div>
   <div class="w">
     <span class="hero-tag">// Bewerbung als <span id="h-stelle">Creative Director</span></span>
+    <div style="font-family:'Syne','Arial Black',sans-serif;font-size:clamp(14px,2.2vw,22px);font-weight:800;color:rgba(255,255,255,0.18);letter-spacing:0.08em;margin-bottom:10px">REMO SCHENK</div>
     <div class="hero-h syne">Ich bin<br><span>der richtige</span><br>Mann.</div>
     <div class="hero-txt">
       19 Jahre Unternehmer. Mehrfach von Null aufgebaut.<br>
