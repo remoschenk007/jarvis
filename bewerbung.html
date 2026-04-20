@@ -176,7 +176,15 @@ footer span{font-family:‘JetBrains Mono’,‘Courier New’,monospace;font-si
     <span class="tag">// Bewerbungsunterlagen · 2026</span>
     <span class="name">Remo Schenk</span>
   </div>
-  <div class="nr" id="nav-r">Creative Director<br>Per sofort verfügbar</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="https://remoschenk007.github.io/jarvis/cv.html" target="_blank"
+       style="font-family:'JetBrains Mono','Courier New',monospace;font-size:9px;
+       letter-spacing:0.15em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.2);
+       color:rgba(255,255,255,0.5);padding:7px 14px;text-decoration:none;white-space:nowrap">
+      ↓ CV öffnen
+    </a>
+    <div class="nr" id="nav-r">Creative Director<br>Per sofort verfügbar</div>
+  </div>
 </nav>
 
 <div class="hero">
@@ -324,6 +332,21 @@ Mit grossem Interesse habe ich Ihre Ausschreibung gelesen…</div>
 
 </div>
 
+<!-- CV DOWNLOAD -->
+
+<div style="background:#f8f7f4;border-top:1px solid #ddd;padding:32px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+  <div>
+    <div style="font-family:'Syne','Arial Black',sans-serif;font-size:18px;font-weight:800;color:#111;margin-bottom:4px">Curriculum Vitae</div>
+    <div style="font-family:'JetBrains Mono','Courier New',monospace;font-size:10px;color:#aaa;letter-spacing:0.1em">Vollständiges CV · Druckbar als PDF · Alle Stationen</div>
+  </div>
+  <a href="https://remoschenk007.github.io/jarvis/cv.html" target="_blank"
+     style="font-family:'JetBrains Mono','Courier New',monospace;font-size:10px;
+     letter-spacing:0.15em;text-transform:uppercase;padding:13px 28px;
+     background:#111;color:#fff;text-decoration:none;display:inline-block">
+    ↓ CV ÖFFNEN & HERUNTERLADEN
+  </a>
+</div>
+
 <div class="cta">
   <div>
     <div class="cta-t">Bereit für ein Gespräch?</div>
@@ -344,6 +367,7 @@ Mit grossem Interesse habe ich Ihre Ausschreibung gelesen…</div>
 const p=new URLSearchParams(window.location.search);
 const stelle=p.get('stelle')||'Creative Director';
 const firma=p.get('firma')||'';
+const today=new Date().toLocaleDateString('de-CH',{year:'numeric',month:'long',day:'numeric'});
 
 document.getElementById('h-stelle').textContent=stelle;
 if(firma){
@@ -352,27 +376,57 @@ if(firma){
 }
 document.title='Remo Schenk — Bewerbung als '+stelle+(firma?' bei '+firma:'');
 
-// Load letter: 1) from URL param 'l', 2) from localStorage
-const lUrl=p.get('l');
-const lStorage=localStorage.getItem('jarvis_letter');
-
+// Load letter: 1) sessionStorage (same browser session), 2) localStorage, 3) auto-generate
 let letterText='';
-if(lUrl && lUrl.length>20){
-  letterText=decodeURIComponent(lUrl);
-} else if(lStorage && lStorage.length>20){
-  letterText=lStorage;
+try{
+  const ss=sessionStorage.getItem('jarvis_letter');
+  const ls=localStorage.getItem('jarvis_letter');
+  const lsFirma=localStorage.getItem('jarvis_firma')||'';
+  const lsStelle=localStorage.getItem('jarvis_stelle')||'';
+  // Use stored letter if it matches current job
+  if(ss && ss.length>100) letterText=ss;
+  else if(ls && ls.length>100) letterText=ls;
+}catch(e){}
+
+// Auto-generate letter if none found
+if(!letterText){
+  const tags=stelle.toLowerCase();
+  let kiPara='';
+  if(/brand|creative|art|design|visual|kampagne|storytelling/.test(tags)){
+    kiPara='Was mich zusätzlich auszeichnet: Ich setze KI aktiv als Kreativwerkzeug ein. Mit Claude AI, ChatGPT und modernen Methoden entwickle ich Marken, Konzepte und digitale Produkte schneller und präziser als je zuvor. Mein Projekt Stadtpuls (depuls.ch) — ein KI-gestützter City Guide für Zürich mit 230+ Locations und Live-Deployment — zeigt wie ich Kreativität, Technologie und Strategie zu einem echten Produkt verbinde.';
+  } else if(/operation|hospitality|luxury|property/.test(tags)){
+    kiPara='Ergänzend nutze ich KI gezielt für Prozessoptimierung und Effizienzsteigerung. Diese Denkweise hat mir bei COSY Stay ermöglicht, innerhalb weniger Monate eine komplette Firmenstruktur aufzubauen, über 90% Auslastung zu erreichen und den Superhost-Status auf allen Plattformen zu erzielen.';
+  } else if(/marketing|digital|seo|social|performance|growth/.test(tags)){
+    kiPara='Besonders relevant: Ich integriere KI aktiv in meine Marketingarbeit. Von KI-gestützter Content-Erstellung bis zu datengetriebenen Kampagnen — ich nutze Claude AI, ChatGPT und Analytics täglich. Mein Projekt Stadtpuls (depuls.ch) mit Google Search Console und Plausible Analytics zeigt diesen Ansatz in der Praxis.';
+  } else if(/business|strategie|immobilien|entwicklung/.test(tags)){
+    kiPara='Ein entscheidender Vorteil: Ich nutze KI aktiv für Business Development und Marktanalyse. Mein Startup Stadtpuls (depuls.ch) — live, mit echter Nutzerbasis und klarer Monetarisierungsstrategie — ist der Beweis dafür.';
+  } else {
+    kiPara='Was mich von anderen Kandidaten unterscheidet: Ich nutze KI aktiv als Arbeitswerkzeug — Claude AI, ChatGPT, GitHub — um Ideen schneller umzusetzen. Mein Projekt Stadtpuls (depuls.ch), ein live City Guide für Zürich, zeigt wie ich Konzept, Technologie und Business zu einem echten Produkt verbinde.';
+  }
+
+  const firmaText=firma||'Ihr Unternehmen';
+  letterText=`Horgen, ${today}
+
+Bewerbung als ${stelle}${firma?' — '+firma:''}
+
+Sehr geehrte Damen und Herren
+
+Mit grossem Interesse habe ich Ihre Ausschreibung für die Position als ${stelle}${firma?' bei '+firma:''} gelesen. Als kreativer Unternehmer mit über 19 Jahren Erfahrung bin ich überzeugt, einen bedeutenden Beitrag zu leisten.
+
+In meiner Laufbahn habe ich mehrfach bewiesen, dass ich Unternehmen aufbauen und zum Erfolg führen kann. Als CEO und Founder der homespeed AG leitete ich fünf Mitarbeitende und verantwortete Marketing, SEO und Corporate Design. Bei der COSY Stay GmbH baute ich die gesamte Firmenstruktur operativ auf und erzielte innerhalb weniger Monate eine Auslastung von über 90% sowie den Superhost-Status. Meine Arbeitgeber beschreiben mich als Führungskraft mit herausragender Fachkompetenz, grosser Weitsicht und aussergewöhnlicher Eigeninitiative — und würden mich jederzeit wieder einstellen.
+
+${kiPara}
+
+Gerne zeige ich Ihnen persönlich, wie ich ${firmaText} mit meiner Kombination aus kreativem Denken, unternehmerischer Erfahrung und modernen KI-Werkzeugen voranbringen kann. Ich spreche Deutsch und Italienisch als Muttersprache, Englisch und Spanisch verhandlungssicher.
+
+Mit freundlichen Grüssen
+
+Remo Schenk
++41 77 445 01 02 | remoschenk@me.com
+Kniebrecheweg 31, CH-8810 Horgen`;
 }
 
-if(letterText){
-  document.getElementById('letter-box').textContent=letterText;
-  // If letter is truncated (800 char limit), show note
-  if(lUrl && lUrl.length>=790){
-    const note=document.createElement('div');
-    note.style.cssText='margin-top:12px;font-size:11px;color:#aaa;font-style:italic;padding:8px 12px;background:#f8f7f4;border-left:2px solid #ddd';
-    note.textContent='[Vollständiges Motivationsschreiben im E-Mail]';
-    document.getElementById('letter-box').after(note);
-  }
-}
+document.getElementById('letter-box').textContent=letterText;
 </script>
 
 </body>
