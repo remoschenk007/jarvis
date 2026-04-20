@@ -895,16 +895,21 @@ function oneClickApply(){
 
   // 2. Build email with letter + personal page link
   const sub=encodeURIComponent('Bewerbung als '+curJob.title+' — Remo Schenk');
-  // Store in localStorage (works if same device)
-  try{localStorage.setItem('jarvis_letter_'+curJob.id, ltr);}catch(e){}
+  // Store FULL letter in both storages
+  try{
+    localStorage.setItem('jarvis_letter', ltr);
+    localStorage.setItem('jarvis_stelle', curJob.title);
+    localStorage.setItem('jarvis_firma', curJob.co);
+    sessionStorage.setItem('jarvis_letter', ltr);
+  }catch(e){}
 
-  // Also encode first 800 chars of letter in URL as fallback
-  const ltrShort=ltr.substring(0,800);
-  const shortURL='https://remoschenk007.github.io/jarvis/bewerbung.html?stelle='+stelle+'&firma='+firma+'&l='+encodeURIComponent(ltrShort);
+  // URL with stelle + firma only (no letter in URL = clean link)
+  const shortURL='https://remoschenk007.github.io/jarvis/bewerbung.html?stelle='+stelle+'&firma='+firma;
   const emailBody=ltr+
-    '\n\n─────────────────────\n'+
-    '📎 Unterlagen: '+shortURL+
-    '\n─────────────────────';
+    '\n\n─────────────────────────────────\n'+
+    '📎 Vollständige Bewerbungsunterlagen:\n'+
+    shortURL+
+    '\n─────────────────────────────────';
   window.open('mailto:'+curJob.to+'?subject='+sub+'&body='+encodeURIComponent(emailBody),'_blank');
 
   // 3. Add to tracker
