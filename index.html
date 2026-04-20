@@ -42,8 +42,9 @@ body{background:#000810;color:#00d4ff;font-family:'Share Tech Mono',monospace;ov
 /* boot-label styled inline */
 #wave{display:none;align-items:center;gap:4px;margin-bottom:12px}
 .wbar{width:3px;border-radius:2px;background:#00d4ff;opacity:0.7}
-#boot-lines{width:580px;max-width:93vw}
-.bl{font-size:13px;color:#00aaff;margin-bottom:11px;opacity:0;transition:opacity 0.7s ease;line-height:1.55;max-width:580px}
+#boot-lines{width:520px;max-width:88vw}
+.bl{font-size:13px;color:#00aaff;margin-bottom:11px;opacity:0;transition:opacity 0.7s ease;line-height:1.55;max-width:88vw}
+@media(max-width:600px){.bl{font-size:11px;margin-bottom:9px}}
 .bl.show{opacity:1}
 .bl.last{color:#00ff88;font-size:15px;font-weight:600;letter-spacing:0.05em}
 .bl .ar{color:#001e33;margin-right:10px}
@@ -441,14 +442,14 @@ const ME = {
 };
 
 const BOOT = [
-  "REMO SCHENK — RECRUITMENT INTELLIGENCE SUITE v4.2",
+  "REMO SCHENK · RECRUITMENT INTELLIGENCE v4.2",
   "Initializing J.A.R.V.I.S. core systems...",
-  "Arc Reactor power: 100%",
-  "Candidate profile loaded: Remo Schenk, Horgen CH",
-  "Experience matrix: 19 years — Creative Direction, Branding, KI & Strategie",
-  "References verified: COSY Stay ✓  homespeed AG ✓",
+  "Arc Reactor: 100% · Systems nominal",
+  "Candidate: Remo Schenk · Horgen CH",
+  "19 years · Creative Direction · Branding · KI",
+  "References: COSY Stay ✓ · homespeed AG ✓",
   "Scanning jobs.ch · linkedin · xing...",
-  "J.A.R.V.I.S. ONLINE — Guten Abend, Herr Schenk."
+  "J.A.R.V.I.S. ONLINE · Guten Abend, Herr Schenk."
 ];
 
 const JOBS = [
