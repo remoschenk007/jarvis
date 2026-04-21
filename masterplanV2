@@ -961,5 +961,650 @@ Alle 3 Dateien (index.html, cv.html, bewerbung.html) teilen:
 - [ ] Mehr Stellen hinzufügen
 - [ ] Echte Jobs von jobs.ch (CORS lösen via Serverless Function)
 - [ ] Masterplan V2 erstellen wenn grosse Änderungen kommen
+
+# J.A.R.V.I.S. MASTERPLAN
+
+**Stand: 20. April 2026 — Für neue KI-Sessions**
+
+Dieses Dokument in neuen Chat laden → KI versteht sofort alles und kann direkt weiterarbeiten.
+
+-----
+
+## 1. PROJEKT-ÜBERSICHT
+
+**Was:** J.A.R.V.I.S. — Iron Man-inspirierter KI-Recruitment-Bot für Remo Schenk
+**Live:** https://remoschenk007.github.io/jarvis
+**Repo:** https://github.com/remoschenk007/jarvis
+**Gebaut mit:** Claude AI (Anthropic) · Vibe Coding · iPad only
+**Sprache:** Vanilla HTML + CSS + JavaScript — kein Framework, kein Build-Tool
+**Hosting:** GitHub Pages (gratis, automatisch deployed bei Commit)
+
+-----
+
+## 2. DATEIEN IM REPO
+
+```
+remoschenk007/jarvis/
+├── index.html            → JARVIS Bot Hauptdatei (Boot + 3 Seiten)
+├── cv.html               → CV Remo Schenk (druckbar als PDF)
+├── bewerbung.html        → Bewerbungs-Landingpage (URL-parameter-driven)
+└── JARVIS_MASTERPLAN.md  → Dieses Dokument
+```
+
+Alles in einer einzigen HTML-Datei pro Seite — kein externes CSS, kein externes JS, keine Abhängigkeiten ausser Google Fonts.
+
+-----
+
+## 3. REMO SCHENK — VOLLSTÄNDIGES PROFIL
+
+Name: Remo Schenk / Raimondo
+E-Mail: remoschenk@me.com
+Tel: +41 77 445 01 02
+Adresse: Kniebrecheweg 31, CH-8810 Horgen
+GitHub: remoschenk007
+Funktion: Creative Director · Unternehmer · KI-Builder · Art Photographer
+Erfahrung: 19 Jahre
+Verfügbar: Per sofort
+
+Sprachen:
+
+- Deutsch & Italiano — Muttersprache
+- English & Español — Verhandlungssicher
+- Français — Grundkenntnisse
+
+Skills (im ME.skills Array):
+Creative Director, Art Direction, Visual Storytelling, Branding & Corporate Identity,
+Markenentwicklung, Strategische Positionierung, Business Development, Startup-Aufbau,
+CEO-Erfahrung, Unternehmensaufbau, Operations Management, Immobilienhandel,
+Sales & Verhandlungsführung, SEO & Google Ads, Social Media, Performance Marketing,
+Projektleitung, Teamführung, Fotografie & Art Photography, KI-Anwendung & Prompting,
+Claude / Anthropic, GitHub & Webentwicklung, AI-gestützte Automatisierung, Vibe Coding
+
+Karriere:
+
+- 2026: Galerie Reitz Zürich — Creative Consulting
+- 2025-heute: House of Silent Art — Founder & Creative Director
+- Feb-Jul 2025: COSY Stay GmbH — Property & Operations Manager (90%+ Auslastung, Superhost)
+- 2024: Selbständiger Immobilienhändler Zürich
+- 2006-2023: Schenk Real Estate GmbH — Inhaber & GF
+- 2012-2018: homespeed AG — CEO & Founder & VR
+
+Arbeitszeugnisse:
+COSY Stay 2025 (Friedrich Obermeier, GF):
+“Mit herausragender Fachkompetenz, großer Weitsicht und beeindruckender Eigeninitiative.
+Außergewöhnliche Führungsstärke. Würden ihn jederzeit wieder einstellen.”
+
+homespeed AG 2017 (Marc Hess, VR):
+“Äusserst wertvolle Führungskraft. Hervorragendes Fachwissen. Sehr selbstständig und
+vorausschauend. Bei Mitarbeitenden und Kunden gleichermassen sehr geschätzt.”
+
+KI-Projekte:
+
+- Stadtpuls (depuls.ch) — City Guide Zürich, 230+ Locations, Supabase, Live
+  Soft Launch 4. Juni 2026, Roadmap: Hamburg → Berlin → Wien
+- JARVIS Bot (dieser Bot) — Live auf GitHub Pages
+- House of Silent Art — Art Photography Studio
+
+-----
+
+## 4. INDEX.HTML — ARCHITEKTUR
+
+### HTML-Struktur
+
+```
+<body>
+  #hello          → "HALLO, REMO." Fullscreen Splash (opacity fade)
+  #boot           → Boot Screen
+    #reactor-wrap   → Arc Reactor SVG (onclick="activate()")
+    #boot-lines     → Boot-Zeilen erscheinen nacheinander
+  #main           → Hauptapp (display:none bis Boot fertig)
+    .hdr            → Sticky Header mit Nav
+    #pg-profil      → Seite 1: Profil
+    #pg-stellen     → Seite 2: Jobs
+    #pg-tracker     → Seite 3: Tracker
+  #modal          → Motivationsschreiben Modal
+  #notes-modal    → Notizen Modal
+</body>
+```
+
+### JavaScript-Funktionen
+
+CORE:
+
+- arcSVG(size) → Generiert Arc Reactor SVG-String (Kreise, Hexagon, Dreiecke, Gradient)
+- initArcs() → Setzt alle SVGs auf der Seite (arc-main + alle .arc-s)
+- initHex() → Generiert Hex-Pattern im Hintergrund SVG
+- initSkills() → Rendert Skill-Pills im Profil
+- activate() → Beim Tippen auf Arc Reactor: Audio starten, Hello zeigen, Boot starten
+- runBoot() → Läuft durch BOOT Array, zeigt Zeilen mit 1100ms Delay
+- arcSound(ctx) → 9-Layer Sound Engine (siehe unten)
+- jarvisSpeak(text, rate, pitch) → Web Speech API TTS
+
+NAVIGATION:
+
+- goPage(page, btn) → Wechselt Seite (pg-profil / pg-stellen / pg-tracker)
+
+JOBS:
+
+- loadJobs() → 900ms Fake-Loading, dann renderJobs(JOBS)
+- filterJobs() → Filtert nach Suchtext in Titel/Firma/Tags
+- sortJobs() → Match (desc) oder Alpha
+- renderJobs(list) → Job-Cards mit SVG Match-Ring (ringFill Animation)
+
+LETTER:
+
+- genLetter(job) → Modal öffnen, 1000ms Delay, dann Anschreiben generieren
+  Personalisierung via job.tags (regex):
+  creative/brand/design → KI als Kreativwerkzeug + Stadtpuls depuls.ch
+  operation/hospitality → Prozessoptimierung + COSY Stay 90% Auslastung
+  marketing/seo/digital → KI in Marketing + Plausible/Search Console
+  business/strategie    → KI Marktanalyse + Stadtpuls Monetarisierung
+  default               → KI allgemein + depuls.ch live
+
+APPLY:
+
+- oneClickApply() →
+1. localStorage.setItem(‘jarvis_letter’, ltr)
+1. URL: bewerbung.html?stelle=…&firma=…&l=[800 Zeichen encoded]
+1. mailto: mit Anschreiben + Trennlinie + “📎 Unterlagen: [URL]”
+1. apps Array aktualisieren
+1. Tracker + Badge updaten
+1. 3500ms warten, Modal schliessen, zu Tracker springen
+
+TRACKER:
+
+- updateBadge() → Badge-Zähler im Nav + updateMonthFilter() aufrufen
+- updateMonthFilter() → Dropdown mit allen Monaten aus apps
+- renderTracker() → Filter (Monat + Status) → Stats Grid → Follow-Up Alerts → Tabelle
+- updateStatus(idx, val) → Status ändern, neu rendern
+- deleteApp(idx) → Löschen, neu rendern
+- exportPDF() → Print-HTML in neuem Tab öffnen
+
+NOTES:
+
+- openNotes(idx) / saveNotes() / closeNotes()
+
+BRIEFING:
+
+- showBriefing() → Tageszeit-Greeting + Bewerbungscount + Follow-Up Hinweis
+- needsFollowup(app) → true wenn status=Gesendet und >7 Tage alt
+
+HELPER:
+
+- mc(match) → Farbe: >=88 #00ff88, >=75 #f59e0b, else #ef4444
+
+### Boot-Sequenz
+
+```javascript
+const BOOT = [
+  "REMO SCHENK · RECRUITMENT INTELLIGENCE v4.2",
+  "Initializing J.A.R.V.I.S. core systems...",
+  "Arc Reactor: 100% · Systems nominal",
+  "Candidate: Remo Schenk · Horgen CH",
+  "19 years · Creative Direction · Branding · KI",
+  "References: COSY Stay ✓ · homespeed AG ✓",
+  "Scanning jobs.ch · linkedin · xing...",
+  "J.A.R.V.I.S. ONLINE · Bereit, Remo."
+];
+// Timing: 600ms erste Zeile, 1100ms Rest
+// Nach letzter Zeile: 2000ms warten → Boot faden → main einblenden
+```
+
+### Sound Engine (9 Layer + Reverb)
+
+1. Sub-Boom: Noise Buffer, lowpass 85Hz, gain 2.8 → 0
+1. Sub-Sine-Puls: Sine 22→48Hz, gain 1.1 → 0
+1. Reactor-Hum: Sawtooth 38→125Hz, bandpass, gain 0→0.32→0
+1. Growl: Square 48→92Hz, lowpass 380Hz
+1. Sweep: Sine 180→5800Hz (das ikonische Whoop)
+1. Harmonic Sweep: Sine 360→11600Hz
+1. Power-Crack: Noise Buffer, highpass 800Hz
+1. Clang: Square 380→28Hz
+1. Running Hum: Sine 122Hz + Oberton 244Hz
+
+- Cinematic Rumble: Noise lowpass 75Hz, peaking +16dB @ 42Hz
+- Reverb: Convolver 3.5s decay
+- Master DynamicsCompressor + Gain 1.6
+
+### Greeting (zeitbasiert)
+
+```javascript
+const hr = new Date().getHours();
+const greet = hr<12 ? 'Guten Morgen' : hr<18 ? 'Guten Tag' : 'Guten Abend';
+jarvisSpeak(greet + ', Remo. Willkommen zurück. Ich bin bereit.', 0.84, 0.68);
+```
+
+### Jobs (hardcoded, CORS verhindert live API auf GitHub Pages)
+
+```javascript
+const JOBS = [
+  {id:1, title:"Head of Brand & Creative", co:"Andermatt Swiss Alps AG",
+   ort:"Zürich", to:"hr@andermatt-swissalps.ch",
+   tags:["Branding","Creative Direction","Strategie"], match:94,
+   grund:"Creative Direction & Branding — perfekte Übereinstimmung"},
+  {id:2, title:"Marketing & Creative Director", co:"Engel & Völkers Schweiz",
+   ort:"Zürich", to:"careers@engelvoelkers.com",
+   tags:["Immobilien","Marketing","Leadership"], match:91,
+   grund:"Immobilien + Marketing — deine Kernkompetenz seit 19 Jahren"},
+  {id:3, title:"Operations Manager Hospitality", co:"The Living Circle",
+   ort:"Zürich", to:"jobs@thelivingcircle.com",
+   tags:["Hospitality","Operations","Luxury"], match:87,
+   grund:"COSY Stay Erfahrung — direkter Bezug zu Premium Hospitality"},
+  {id:4, title:"Head of Marketing & Growth", co:"Livit AG",
+   ort:"Zürich", to:"hr@livit.ch",
+   tags:["Marketing","Immobilien","Digital"], match:85,
+   grund:"Immobilien-Marketing — starker Background"},
+  {id:5, title:"Business Development Manager", co:"Swiss Prime Site AG",
+   ort:"Zürich", to:"hr@sps.swiss",
+   tags:["Business Dev","Immobilien","Strategie"], match:82,
+   grund:"Business Development & Unternehmerstrategie"},
+  {id:6, title:"Creative Strategist & Art Director", co:"Jung von Matt/Limmat",
+   ort:"Zürich", to:"jobs@jvm.com",
+   tags:["Art Direction","Storytelling","Kampagnen"], match:78,
+   grund:"Visual Storytelling & Art Direction — House of Silent Art"}
+];
+```
+
+### Apps Array (RAM only — kein persistenter Storage)
+
+```javascript
+apps = [{
+  jobId: 1,
+  job: "Head of Brand & Creative",
+  co: "Andermatt Swiss Alps AG",
+  ort: "Zürich",
+  match: 94,
+  datum: "20.04.2026",     // toLocaleDateString('de-CH')
+  status: "Gesendet",      // Gesendet | Antwort erhalten | Interview | Abgelehnt
+  notes: "",
+  letter: "...",           // Volltext Motivationsschreiben
+  url: "https://..."       // Bewerbungs-URL
+}]
+// ACHTUNG: Beim Reload weg! TODO: localStorage Persistenz
+```
+
+-----
+
+## 5. CV.HTML — AUFBAU
+
+Design: Editorial Schwarz/Weiss · Syne 800 + DM Sans + JetBrains Mono
+Layout: Zweispaltig
+
+```
+HEADER: schwarz #0a0a0f
+  - Ghost "RS" Text im Hintergrund
+  - "// CV · 2026 · ZÜRICH, CH" Label
+  - "REMO SCHENK" Syne 800 gross
+  - Funktion + Kontakt rechts (kein GitHub, kein byraimondo.com)
+  - Statement + "● verfügbar per sofort"
+
+BODY: grid 2 Spalten (1fr 195px)
+  Links (weiss):
+    - Profil Statement (kursiv, border-left schwarz)
+    - Berufserfahrung (Syne Titel, rote Firma, Zeugniszitate)
+    - KI-Projekte (Stadtpuls + JARVIS als Cards)
+  Rechts (#f8f7f4):
+    - Kompetenzen (Tags)
+    - Sprachen
+    - Tools & Tech (Mono-Font)
+    - Ausbildung
+    - Interessen
+    - KI-Box (schwarz, roter Akzent)
+
+FOOTER: schwarz · Copyright · Kontakt
+```
+
+Print: Button “↓ Als PDF speichern” → window.print()
+Kein GitHub Link, kein byraimondo.com im Kontakt
+
+-----
+
+## 6. BEWERBUNG.HTML — AUFBAU
+
+Konzept: Personalisierte URL pro Bewerbung
+URL-Parameter:
+
+- ?stelle= → Stelle (im Hero + Nav + Titel)
+- ?firma= → Firma (im Nav + CTA)
+- ?l= → Erste 800 Zeichen Motivationsschreiben (URL-encoded)
+
+Motivationsschreiben laden:
+
+1. URL-Parameter ?l= (Priorität 1 — funktioniert auch von anderen Geräten)
+1. localStorage ‘jarvis_letter’ (Priorität 2 — nur gleiche Device)
+
+Layout:
+
+```
+NAV: sticky schwarz · "Remo Schenk" links · Stelle/Firma rechts
+HERO: schwarz · Ghost "RS" riesig · "REMO SCHENK" subtil · "Ich bin der richtige Mann." · Chips
+01 Motivationsschreiben (white box, border-top schwarz)
+02 Kandidaten-Profil (3x2 Grid)
+03 Berufserfahrung (2-Spalten: Zeitraum+Firma | Rolle+Text+Zitat)
+04 Kompetenzen (Hot-Skills: #e8320a gefüllt)
+05 KI-Projekte (2 Cards: Stadtpuls + JARVIS)
+06 Arbeitszeugnisse (2 Karten)
+07 Sprachen (5 Karten)
+CTA: schwarz · "Bereit für ein Gespräch?" · E-Mail + Anrufen Buttons
+FOOTER: schwarz
+```
+
+Hot Skills (roter Hintergrund): Creative Direction, Art Direction, Branding & CI,
+Visual Storytelling, Claude AI · ChatGPT, GitHub · Supabase, Vibe Coding
+
+-----
+
+## 7. DESIGN-SYSTEM
+
+### JARVIS Bot (index.html)
+
+```
+Background: #000810 (Navy-Schwarz)
+Primary: #00d4ff (Cyan)
+Green: #00ff88
+Purple KI-Card: #a855f7
+Font Display: 'Orbitron', sans-serif
+Font Body: 'Share Tech Mono', monospace
+```
+
+### CV + Bewerbung
+
+```
+Ink (Schwarz): #08080f oder #0a0a0f
+Red (Akzent): #e8320a
+Paper (Warm-Weiss): #f0ede8 oder #f5f4f0
+Border: #ddd oder #e8e8e8
+Font Display: 'Syne', 'Arial Black', Impact (IMMER Fallbacks!)
+Font Body: 'DM Sans', system-ui, -apple-system, sans-serif
+Font Mono: 'JetBrains Mono', 'Courier New', monospace
+```
+
+WICHTIG: Immer System-Font-Fallbacks! GitHub Pages + Safari iPad
+lädt Google Fonts manchmal nicht → Layout bricht sonst zusammen.
+Schwarze Backgrounds immer mit !important absichern.
+
+-----
+
+## 8. E-MAIL WORKFLOW
+
+```
+Nutzer: ⚡ EIN-KLICK BEWERBEN
+  ↓
+1. localStorage.setItem('jarvis_letter', ltr)
+2. URL = bewerbung.html?stelle=...&firma=...&l=[800 Zeichen]
+3. mailto:empfaenger?subject=...&body=[Anschreiben + Trennlinie + URL]
+  ↓
+Mail-App öffnet sich (braucht Apple Mail / Gmail eingerichtet!)
+  ↓
+URL im E-Mail → Mail-App macht sie automatisch blau + klickbar
+  ↓
+Recruiter tippt URL → bewerbung.html personalisiert mit Anschreiben
+```
+
+Browser-Limitierung: mailto: kann keine HTML-Links, keine Anhänge.
+URL wird von Mail-Apps (iPhone, Gmail, Outlook) automatisch klickbar.
+
+-----
+
+## 9. BEKANNTE BUGS & STATUS
+
+|Bug                          |Status       |Fix                               |
+|-----------------------------|-------------|----------------------------------|
+|Arc Reactor Rechteck         |✅ Gefixt     |reactor-glow div entfernt         |
+|E-Mail öffnet sich nicht     |✅ Known Issue|Apple Mail muss eingerichtet sein |
+|Google Fonts laden nicht     |✅ Gefixt     |System-Font Fallbacks + !important|
+|Motivationsschreiben leer    |✅ Gefixt     |?l= URL-Parameter + localStorage  |
+|Boot-Zeilen umbrechen Mobile |✅ Gefixt     |Kürzere Texte, 88vw max           |
+|byraimondo.com im Anschreiben|✅ Entfernt   |—                                 |
+|GitHub Commit kommt nicht an |ℹ️ Cache      |1-2 Min warten, hard reload       |
+|Apps RAM only (kein Persist) |⏳ TODO       |localStorage Persistenz           |
+
+-----
+
+## 10. TODOS (Stand 20. April 2026)
+
+- [ ] Apps in localStorage persistieren (survives reload)
+- [ ] Mehr Stellen hinzufügen
+- [ ] Echte Jobs von jobs.ch (CORS-Problem lösen via Serverless Function)
+- [ ] Ansprechperson aus Inserat automatisch erkennen
+- [ ] JARVIS Stimme verbessern (Cloud TTS?)
+- [ ] Stadtpuls Phase 4k: Shopping + Events an Supabase anbinden
+- [ ] Stadtpuls Soft Launch: 4. Juni 2026
+
+-----
+
+## 11. ARBEITSREGELN FÜR NEUE KI-SESSIONS
+
+1. Masterplan am Anfang laden — dann sofort weiterarbeiten
+1. Nie blind ändern — erst Code lesen (Raw-URL auf GitHub)
+1. Alles in einer HTML-Datei — kein externes CSS/JS
+1. System-Font Fallbacks immer angeben
+1. !important auf schwarze Hintergründe (Safari-Problem)
+1. Commits klar benennen: “✅ Feature” oder “🐛 Fix”
+1. Remo arbeitet auf iPad mit GitHub Web Editor + Working Copy
+1. Hochdeutsch in allen Texten
+
+-----
+
+## 12. LINKS
+
+|                |URL                                                  |
+|----------------|-----------------------------------------------------|
+|JARVIS Bot      |https://remoschenk007.github.io/jarvis               |
+|CV              |https://remoschenk007.github.io/jarvis/cv.html       |
+|Bewerbung       |https://remoschenk007.github.io/jarvis/bewerbung.html|
+|GitHub Repo     |https://github.com/remoschenk007/jarvis              |
+|Stadtpuls       |https://depuls.ch                                    |
+|Stadtpuls GitHub|https://github.com/remoschenk007/Stadtpuls           |
+
+-----
+
+*© 2026 Remo Schenk · J.A.R.V.I.S. Recruitment Intelligence*
+*Diesen Masterplan in neuen Chat laden → sofort weiterarbeiten*
+
+-----
+
+## UPDATE — 20. April 2026 — Abend
+
+### Was heute alles gemacht wurde
+
+#### JARVIS Bot (index.html)
+
+- ✅ Arc Reactor Rechteck gefixt — reactor-glow div entfernt, background:transparent
+- ✅ Sound Engine auf 9 Layer + Reverb Convolver upgraded — Hollywood-Sound
+- ✅ “HALLO, REMO.” — 120px, weiss leuchtend, voller Bildschirm
+- ✅ Zeitbasierte Begrüssung: Guten Morgen / Tag / Abend, Remo (nicht “Herr Schenk”)
+- ✅ Boot-Zeilen gekürzt für Mobile (88vw, kürzere Texte)
+- ✅ Smooth Fade-In vom Boot zum Hauptmenü
+- ✅ Motivationsschreiben personalisiert je nach Stelle (5 Typen via regex)
+- ✅ byraimondo.com aus Anschreiben entfernt
+- ✅ Ein-Klick Bewerbung: Letter in sessionStorage + localStorage gespeichert
+- ✅ E-Mail Link kurz: nur ?stelle=…&firma=… (kein &l= mehr)
+- ✅ Bewerbungs-Tracker: Monatsfilter + PDF Export
+- ✅ Follow-Up Alerts nach 7 Tagen
+- ✅ Notizen pro Bewerbung
+- ✅ KI-Card in Profil (lila/purple) mit Stadtpuls + JARVIS Projekten
+- ✅ Sprachen-Card im Profil
+- ✅ Copyright-Banner unten: © 2026 Remo Schenk · Eigenentwicklung
+- ✅ JARVIS Briefing beim Start (Tageszeit + Bewerbungscount)
+
+#### CV (cv.html)
+
+- ✅ Komplett neu designed — gleiches Corporate Design wie bewerbung.html
+- ✅ Schwarzer Header: RS Ghost + “REMO SCHENK” Syne 800 + Statement
+- ✅ Gleiche Farben: #08080f Schwarz + #e8320a Rot + #f0ede8 Warm-Weiss
+- ✅ Gleiche Fonts: Syne + DM Sans + JetBrains Mono (mit System-Font Fallbacks)
+- ✅ Hot-Skills mit rotem ausgefülltem Hintergrund
+- ✅ KI-Projekte als Cards (Stadtpuls + JARVIS)
+- ✅ Schwarze KI-Box in Sidebar
+- ✅ Kein GitHub Link, kein byraimondo.com im Kontakt
+- ✅ Print-Button → window.print() → Als PDF sichern
+- ✅ Copyright im Footer
+
+#### Bewerbungs-Landingpage (bewerbung.html)
+
+- ✅ Hero: schwarz, RS Ghost, “REMO SCHENK” subtil, “Ich bin der richtige Mann.”
+- ✅ Motivationsschreiben: auto-generiert aus ?stelle= Parameter (5 Typen)
+- ✅ Fallback-Hierarchie: sessionStorage → localStorage → auto-generiert
+- ✅ CV Download Button im Nav (↓ CV öffnen) + eigene Section vor CTA
+- ✅ Hot-Skills mit rotem Hintergrund
+- ✅ Arbeitszeugnisse mit vollen Zitaten + Namen
+- ✅ Sprachen, KI-Projekte, Berufserfahrung komplett
+- ✅ Copyright im Footer
+
+### Aktueller E-Mail Workflow (Stand heute)
+
+```
+JARVIS → ⚡ EIN-KLICK BEWERBEN
+  → Letter in sessionStorage + localStorage
+  → mailto: mit Anschreiben + kurzem Link:
+    remoschenk007.github.io/jarvis/bewerbung.html?stelle=...&firma=...
+  → Mail-App öffnet, URL wird automatisch klickbar (blau)
+  → Recruiter klickt → sieht personalisierte Bewerbungsseite
+  → Seite auto-generiert Anschreiben aus ?stelle= Parameter
+  → CV Download Button sichtbar auf der Seite
+```
+
+### Corporate Design — jetzt durchgehend konsistent
+
+Alle 3 Dateien (index.html, cv.html, bewerbung.html) teilen:
+
+- Schwarz: #08080f / #0a0a0f
+- Rot (Akzent): #e8320a
+- Warm-Weiss: #f0ede8
+- Fonts: Syne (Display) + DM Sans (Body) + JetBrains Mono (Labels/Code)
+- System-Font Fallbacks überall (Safari iPad Kompatibilität)
+- Hot-Skills: roter ausgefüllter Hintergrund
+- RS Ghost-Text in Hero-Bereichen
+
+### Bekannte Browser-Limitierungen (unlösbar)
+
+- mailto: kann keine HTML-Links → URL wird von Mail-Apps automatisch blau
+- mailto: kann keine Anhänge → CV muss manuell angehängt werden
+- localStorage überlebt keinen Browser-Wechsel → auto-generierung als Fallback
+
+### Offene TODOs
+
+- [ ] Apps in localStorage persistieren (survives reload)
+- [ ] Mehr Stellen hinzufügen
+- [ ] Echte Jobs von jobs.ch (CORS lösen via Serverless Function)
+- [ ] Masterplan V2 erstellen wenn grosse Änderungen kommen
+
+-----
+
+## UPDATE — 21. April 2026 — Vollständiger Tag
+
+### Was heute alles gemacht wurde
+
+#### JOBS — Komplette Überarbeitung
+
+- ✅ Alle Demo-Jobs entfernt (Andermatt, Swiss Life, ZKB etc. — alles war erfunden)
+- ✅ 12 echte jobs.ch Inserate eingebaut mit verifizierten Inserat-URLs
+- ✅ Kein E-Mail mehr erfunden — TO-Feld leer → du holst Adresse aus Inserat
+- ✅ Pensum-Feld (80%/100%/80–100%) pro Job hinzugefügt
+
+**Aktuelle Jobs (alle von jobs.ch):**
+
+1. Head of Marketing — comparis.ch AG — jobs.ch/detail/79d61b62…
+1. Head of Marketing — Exeon Analytics AG — jobs.ch/detail/15b0f98c…
+1. Head of Marketing — Galenica AG — jobs.ch/detail/5c39426b…
+1. Head Marketing & Corporate Communications — Migros Bank AG
+1. Global Head of Brand Partnerships — Breitling SA
+1. Head of Global Marketing — Wey Group AG
+1. Head of Creative, Core Brand Design — On AG
+1. Director Marketing & CRM — PKZ Burger-Kehl & Co. AG
+1. Marketing & Clienteling Manager — Chanel Zürich
+1. Leitung Marketing & Business Development — SMG Swiss Marketplace Group
+1. Marketing & Communication Manager — Emil Frey Gruppe
+1. Head of Marketing — Dolder Grand Hotel
+
+#### JOB-CARD UI — 2 Buttons
+
+Vorher: Karte antippen → Anschreiben
+Jetzt: 2 separate Buttons pro Card:
+
+- ✉ ANSCHREIBEN GENERIEREN → genLetter(j)
+- ↗ INSERAT ÖFFNEN → jobs.ch URL in neuem Tab
+
+#### BRIEF-SYSTEM — Sicher pro Job
+
+Problem: Falsches Anschreiben bei falscher Firma (Swiss Life bekam ZKB-Brief)
+Fix: Brief wird per Job-ID gespeichert:
+
+```javascript
+localStorage.setItem('jarvis_letter_'+curJob.id, ltr)  // z.B. jarvis_letter_1
+localStorage.setItem('jarvis_jobid', String(curJob.id))
+sessionStorage.setItem('jarvis_jobid', String(curJob.id))
+```
+
+Bewerbungsseite liest:
+
+1. localStorage[‘jarvis_letter_’+jid] — job-spezifisch (sicherste)
+1. sessionStorage[‘jarvis_letter’] — nur wenn jobid übereinstimmt
+1. localStorage[‘jarvis_letter’] — nur wenn jobid übereinstimmt
+1. Auto-generieren aus ?stelle= Parameter
+
+URL enthält jetzt ?jid= Parameter:
+bewerbung.html?stelle=…&firma=…&jid=1
+
+#### E-MAIL WORKFLOW — Korrigiert
+
+Problem heute früh: 5 von 5 E-Mails bounced (falsche Adressen erfunden)
+Swiss Prime Site: “Wir haben diese Stelle nicht ausgeschrieben — Fake Inserat”
+
+Neuer Workflow:
+
+1. ↗ INSERAT ÖFFNEN → jobs.ch → HR-Kontakt lesen
+1. ✉ ANSCHREIBEN GENERIEREN → Anschreiben für diese Stelle
+1. ⚡ EIN-KLICK BEWERBEN → E-Mail öffnet sich mit LEEREM TO
+1. Du trägst echte Adresse aus Inserat ein
+1. Senden
+
+#### APPS PERSISTENZ — localStorage
+
+Problem: Bewerbungsliste verschwindet bei Reload
+Fix:
+
+```javascript
+// Laden beim Start
+let apps=[];
+try{ apps=JSON.parse(localStorage.getItem('jarvis_apps')||'[]'); }catch(e){}
+
+// Speichern nach jeder Änderung
+function saveApps(){ localStorage.setItem('jarvis_apps',JSON.stringify(apps)); }
+```
+
+saveApps() wird aufgerufen nach: Bewerben, Status ändern, Löschen, Notizen
+
+#### TRACKER — Neue Buttons
+
+- ↓ PDF REPORT — aktuellen Filter exportieren
+- ↓ ALLE EXPORTIEREN — komplette Liste immer
+- ✕ RESET — alles löschen (mit Bestätigung)
+
+#### PDF EXPORT — Überarbeitet
+
+- Schwarzer Header: “REMO SCHENK” + Monat
+- 5 Stats: Bewerbungen · Ø Match · Antworten · Interviews · Abgelehnt
+- Pro Eintrag: Position · Firma · Ort · Datum · Pensum · Match % · Status · Notizen
+- Kein JARVIS/KI Branding im PDF (auf Wunsch Remo)
+
+#### P.S. VIRUS-WITZ
+
+Am Ende jedes E-Mails:
+“P.S. — Falls der Link oben verdächtig wirkt: Versprochen, kein Virus.
+Nur ein Mensch, der seine Bewerbung 2026 etwas anders aufgestellt hat als alle anderen. 🙂”
+
+### Was NICHT gemacht wurde (bewusst gespart)
+
+- CV Design nicht angepasst (passt so)
+- JARVIS Bot minimale Verschiebung im Layout — nicht kritisch
+- PDF Branding vereinfacht — Remo macht PDF-Konvertierung selbst
+
+### Offene TODOs
+
+- [ ] Echte HR-E-Mails aus Inseraten recherchieren und direkt eintragen
+- [ ] Adzuna API testen für Live-Jobs
+- [ ] Stadtpuls Soft Launch 4. Juni 2026
 *© 2026 Remo Schenk · J.A.R.V.I.S. Recruitment Intelligence*
 *Diesen Masterplan in neuen Chat laden → sofort weiterarbeiten*
