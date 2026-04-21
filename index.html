@@ -356,6 +356,12 @@ select option{background:#000c22}
         <button class="btn grn" onclick="exportPDF()" style="font-size:10px;padding:8px 14px">
           ↓ PDF REPORT
         </button>
+        <button class="btn" onclick="exportPDF('all')" style="font-size:10px;padding:8px 14px;background:rgba(0,212,255,0.08);border:1px solid #00d4ff;color:#00d4ff">
+          ↓ ALLE EXPORTIEREN
+        </button>
+        <button onclick="if(confirm('Alle Bewerbungen löschen?')){apps=[];saveApps();updateBadge();renderTracker();showBriefing();}" style="font-size:10px;padding:8px 12px;background:transparent;border:1px solid rgba(255,0,0,0.2);color:rgba(255,100,100,0.5);cursor:pointer">
+          ✕ RESET
+        </button>
       </div>
     </div>
 
@@ -457,129 +463,30 @@ const BOOT = [
 
 // ⚡ ECHTE STELLEN — Nur Firmen, keine Agenturen · Stand 21. April 2026
 const JOBS = [
-  {id:1,
-   title:"Director Brand & Communications",
-   co:"Andermatt Swiss Alps AG",
-   ort:"Andermatt / Zürich",
-   to:"hr@andermatt-swissalps.ch",
-   tags:["Branding","Luxury","Strategie"],
-   match:96,
-   grund:"Luxus-Resort · Premium Brand · Branding + Creative + Strategie · Top-Fit",
-   url:"https://www.andermatt-swissalps.ch/de/jobs"
-  },
-  {id:2,
-   title:"Marketing Director Schweiz",
-   co:"Engel & Völkers Schweiz AG",
-   ort:"Zürich",
-   to:"careers@engelvoelkers.com",
-   tags:["Marketing","Immobilien","Leadership"],
-   match:94,
-   grund:"Immobilien + Marketing = dein Kernprofil seit 19 Jahren · Top-Fit",
-   url:"https://www.engelvoelkers.com/de-ch/karriere/"
-  },
-  {id:3,
-   title:"Head of Brand & Creative Direction",
-   co:"Victorinox AG",
-   ort:"Ibach / Zürich",
-   to:"hr@victorinox.com",
-   tags:["Branding","Creative Direction","Iconic Brand"],
-   match:93,
-   grund:"Ikonischste Schweizer Marke weltweit · Brand + Creative = 100% dein Profil",
-   url:"https://www.victorinox.com/de/CH/Karriere"
-  },
-  {id:4,
-   title:"Global Head of Brand Creative",
-   co:"On AG",
-   ort:"Zürich",
-   to:"talent@on.com",
-   tags:["Branding","Creative","Leadership"],
-   match:88,
-   grund:"Heissestes Sportbrand der Schweiz · Global Brand Creative Führung",
-   url:"https://www.on.com/de-ch/careers"
-  },
-  {id:5,
-   title:"Head of Marketing & Brand",
-   co:"Swiss Prime Site AG",
-   ort:"Zürich",
-   to:"hr@sps.swiss",
-   tags:["Marketing","Immobilien","Corporate"],
-   match:87,
-   grund:"Grösste Schweizer Immobilien-AG · Immobilien + Marketing = perfekter Match",
-   url:"https://www.sps.swiss/de/unternehmen/karriere"
-  },
-  {id:6,
-   title:"Head of Marketing & Communications",
-   co:"Livit AG",
-   ort:"Zürich",
-   to:"hr@livit.ch",
-   tags:["Marketing","Immobilien","Digital"],
-   match:86,
-   grund:"Grösste Immobilienverwaltung Schweiz · Immobilien-DNA + Marketing",
-   url:"https://www.livit.ch/de/unternehmen/karriere"
-  },
-  {id:7,
-   title:"Head of Brand Experience",
-   co:"Mövenpick Hotels & Resorts",
-   ort:"Zürich",
-   to:"careers.switzerland@movenpick.com",
-   tags:["Branding","Hospitality","Creative"],
-   match:87,
-   grund:"Premium Hospitality · COSY Stay Erfahrung + Brand = direkter Bezug",
-   url:"https://www.movenpick.com/de/karriere"
-  },
-  {id:8,
-   title:"Head of Marketing",
-   co:"Exeon Analytics AG",
-   ort:"Zürich",
-   to:"careers@exeon.com",
-   tags:["Marketing","KI","Startup"],
-   match:85,
-   grund:"KI-Firma · dein KI- und Stadtpuls-Background ist hier Gold · Wachstum",
-   url:"https://www.exeon.com/careers"
-  },
-  {id:9,
-   title:"Head of Brand & Marketing",
-   co:"Swiss Life AG",
-   ort:"Zürich",
-   to:"recruiting@swisslife.ch",
-   tags:["Marketing","Branding","Leadership"],
-   match:83,
-   grund:"Schweizer Top-Arbeitgeber · Grosses Marketingteam · 19 Jahre = Match",
-   url:"https://www.swisslife.com/de/home/jobs.html"
-  },
-  {id:10,
-   title:"Head of Marketing",
-   co:"Comparis AG",
-   ort:"Zürich",
-   to:"hr@comparis.ch",
-   tags:["Marketing","Digital","Growth"],
-   match:82,
-   grund:"Bekannteste Schweizer Vergleichsplattform · Digital + Brand + KI-affin",
-   url:"https://www.comparis.ch/comparis/jobs"
-  },
-  {id:11,
-   title:"Director Marketing & Communications",
-   co:"Zurich Insurance Group",
-   ort:"Zürich",
-   to:"careers@zurich.com",
-   tags:["Marketing","Corporate","Brand"],
-   match:80,
-   grund:"Global Top-Brand · Zürich HQ · Grosse Marketingabteilung · Stabilität",
-   url:"https://www.zurich.com/de-ch/careers"
-  },
-  {id:12,
-   title:"Leiter Marketing & Kommunikation",
-   co:"Zürcher Kantonalbank",
-   ort:"Zürich",
-   to:"jobs@zkb.ch",
-   tags:["Marketing","Kommunikation","Leadership"],
-   match:79,
-   grund:"Grösste Kantonsbank · Führungsposition · Sehr gute Konditionen CH",
-   url:"https://www.zkb.ch/de/ueber-uns/jobs.html"
-  }
+  {id:1,title:"Director Brand & Communications",co:"Andermatt Swiss Alps AG",ort:"Andermatt / Zürich",to:"hr@andermatt-swissalps.ch",tags:["Branding","Luxury","Strategie"],match:96,pensum:"100%",grund:"Luxus-Resort · Premium Brand · Branding + Creative + Strategie · Top-Fit",url:"https://www.andermatt-swissalps.ch/de/jobs"},
+  {id:2,title:"Marketing Director Schweiz",co:"Engel & Völkers Schweiz AG",ort:"Zürich",to:"careers@engelvoelkers.com",tags:["Marketing","Immobilien","Leadership"],match:94,pensum:"100%",grund:"Immobilien + Marketing = dein Kernprofil seit 19 Jahren · Top-Fit",url:"https://www.engelvoelkers.com/de-ch/karriere/"},
+  {id:3,title:"Head of Brand & Creative Direction",co:"Victorinox AG",ort:"Ibach / Zürich",to:"hr@victorinox.com",tags:["Branding","Creative Direction","Iconic Brand"],match:93,pensum:"100%",grund:"Ikonischste Schweizer Marke weltweit · Brand + Creative = 100% dein Profil",url:"https://www.victorinox.com/de/CH/Karriere"},
+  {id:4,title:"Global Head of Brand Creative",co:"On AG",ort:"Zürich",to:"talent@on.com",tags:["Branding","Creative","Leadership"],match:88,pensum:"100%",grund:"Heissestes Sportbrand der Schweiz · Global Brand Creative Führung",url:"https://www.on.com/de-ch/careers"},
+  {id:5,title:"Head of Marketing & Brand",co:"Swiss Prime Site AG",ort:"Zürich",to:"hr@sps.swiss",tags:["Marketing","Immobilien","Corporate"],match:87,pensum:"80–100%",grund:"Grösste Schweizer Immobilien-AG · Immobilien + Marketing = perfekter Match",url:"https://www.sps.swiss/de/unternehmen/karriere"},
+  {id:6,title:"Head of Marketing & Communications",co:"Livit AG",ort:"Zürich",to:"hr@livit.ch",tags:["Marketing","Immobilien","Digital"],match:86,pensum:"100%",grund:"Grösste Immobilienverwaltung Schweiz · Immobilien-DNA + Marketing",url:"https://www.livit.ch/de/unternehmen/karriere"},
+  {id:7,title:"Head of Brand Experience",co:"Mövenpick Hotels & Resorts",ort:"Zürich",to:"careers.switzerland@movenpick.com",tags:["Branding","Hospitality","Creative"],match:87,pensum:"100%",grund:"Premium Hospitality · COSY Stay Erfahrung + Brand = direkter Bezug",url:"https://www.movenpick.com/de/karriere"},
+  {id:8,title:"Head of Marketing",co:"Exeon Analytics AG",ort:"Zürich",to:"careers@exeon.com",tags:["Marketing","KI","Startup"],match:85,pensum:"80–100%",grund:"KI-Firma · dein KI- und Stadtpuls-Background ist hier Gold · Wachstum",url:"https://www.exeon.com/careers"},
+  {id:9,title:"Head of Brand & Marketing",co:"Swiss Life AG",ort:"Zürich",to:"recruiting@swisslife.ch",tags:["Marketing","Branding","Leadership"],match:83,pensum:"100%",grund:"Schweizer Top-Arbeitgeber · Grosses Marketingteam · 19 Jahre = Match",url:"https://www.swisslife.com/de/home/jobs.html"},
+  {id:10,title:"Head of Marketing",co:"Comparis AG",ort:"Zürich",to:"hr@comparis.ch",tags:["Marketing","Digital","Growth"],match:82,pensum:"80–100%",grund:"Bekannteste Schweizer Vergleichsplattform · Digital + Brand + KI-affin",url:"https://www.comparis.ch/comparis/jobs"},
+  {id:11,title:"Director Marketing & Communications",co:"Zurich Insurance Group",ort:"Zürich",to:"careers@zurich.com",tags:["Marketing","Corporate","Brand"],match:80,pensum:"100%",grund:"Global Top-Brand · Zürich HQ · Grosse Marketingabteilung · Stabilität",url:"https://www.zurich.com/de-ch/careers"},
+  {id:12,title:"Leiter Marketing & Kommunikation",co:"Zürcher Kantonalbank",ort:"Zürich",to:"jobs@zkb.ch",tags:["Marketing","Kommunikation","Leadership"],match:79,pensum:"80–100%",grund:"Grösste Kantonsbank · Führungsposition · Sehr gute Konditionen CH",url:"https://www.zkb.ch/de/ueber-uns/jobs.html"}
 ];
 
+// ── APPS: aus localStorage laden (überlebt Reload) ──
 let apps=[], curJob=null, actx=null, bIdx=0, booting=false, notesIdx=-1;
+try{
+  const saved=localStorage.getItem('jarvis_apps');
+  if(saved) apps=JSON.parse(saved);
+}catch(e){apps=[];}
+
+function saveApps(){
+  try{localStorage.setItem('jarvis_apps',JSON.stringify(apps));}catch(e){}
+}
 
 // ═══════════════════════════════════════════
 // ARC REACTOR SVG
@@ -1032,13 +939,14 @@ function oneClickApply(){
   const existing=apps.findIndex(a=>a.jobId===curJob.id);
   const entry={
     jobId:curJob.id, job:curJob.title, co:curJob.co, ort:curJob.ort,
-    match:curJob.match, datum:new Date().toLocaleDateString('de-CH'),
+    match:curJob.match, pensum:curJob.pensum||'100%',
+    datum:new Date().toLocaleDateString('de-CH'),
     status:'Gesendet', notes:'', letter:ltr, url:bewerbungsURL
   };
   if(existing>=0) apps[existing]=entry; else apps.unshift(entry);
 
   // 4. Update
-  updateBadge(); renderTracker(); showBriefing();
+  saveApps(); updateBadge(); renderTracker(); showBriefing();
 
   // 5. Feedback
   const msg=document.getElementById('smsg');
@@ -1096,19 +1004,17 @@ function updateMonthFilter(){
 // ═══════════════════════════════════════════
 // PDF EXPORT
 // ═══════════════════════════════════════════
-function exportPDF(){
-  const month = document.getElementById('tmonth').value;
-  const tf = document.getElementById('tfilter').value;
+function exportPDF(override){
+  const month = override==='all' ? 'all' : document.getElementById('tmonth').value;
+  const tf = override==='all' ? 'all' : document.getElementById('tfilter').value;
   let filtered = apps;
   if(month!=='all') filtered=filtered.filter(a=>{
     const p=a.datum.split('.');
     return (p[2]+'-'+p[1])===month;
   });
   if(tf!=='all') filtered=filtered.filter(a=>a.status===tf);
+  if(filtered.length===0){ alert('Keine Bewerbungen für diesen Filter.'); return; }
 
-  if(filtered.length===0){ alert('Keine Bewerbungen für diesen Monat/Filter.'); return; }
-
-  // Get month label
   let monthLabel='Alle Bewerbungen';
   if(month!=='all'){
     const [y,mo]=month.split('-');
@@ -1118,25 +1024,33 @@ function exportPDF(){
   const avg=Math.round(filtered.reduce((s,a)=>s+a.match,0)/filtered.length);
   const interviews=filtered.filter(a=>a.status==='Interview').length;
   const antworten=filtered.filter(a=>a.status==='Antwort erhalten').length;
+  const abgelehnt=filtered.filter(a=>a.status==='Abgelehnt').length;
+  const today=new Date().toLocaleDateString('de-CH',{day:'numeric',month:'long',year:'numeric'});
 
-  const statusColor = s => s==='Interview'?'#f59e0b':s==='Antwort erhalten'?'#00ff88':s==='Abgelehnt'?'#ef4444':'#00d4ff';
+  const statusColor=s=>s==='Interview'?'#d97706':s==='Antwort erhalten'?'#059669':s==='Abgelehnt'?'#dc2626':'#2563eb';
+  const statusBg=s=>s==='Interview'?'#fef3c7':s==='Antwort erhalten'?'#d1fae5':s==='Abgelehnt'?'#fee2e2':'#dbeafe';
+  const matchColor=m=>m>=90?'#059669':m>=80?'#2563eb':m>=70?'#d97706':'#dc2626';
 
-  const rows = filtered.map((a,i)=>`
-    <tr>
-      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-family:monospace;color:#374151;font-weight:600">${String(i+1).padStart(2,'0')}</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;color:#111827">${a.job}</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;color:#374151">${a.co}</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;color:#374151">${a.ort||'Zürich'}</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:center">
-        <span style="font-weight:700;color:${a.match>=88?'#059669':a.match>=75?'#d97706':'#dc2626'};font-family:monospace;font-size:15px">${a.match}%</span>
-      </td>
-      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;color:#374151;font-family:monospace">${a.datum}</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:center">
-        <span style="background:${statusColor(a.status)}22;color:${statusColor(a.status)};border:1px solid ${statusColor(a.status)}66;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600">${a.status}</span>
-      </td>
-    </tr>
-    ${a.notes?`<tr><td colspan="7" style="padding:6px 12px 10px 40px;border-bottom:1px solid #f3f4f6;font-size:11px;color:#6b7280;font-style:italic">📝 ${a.notes}</td></tr>`:''}
-  `).join('');
+  const cards=filtered.map((a,i)=>`
+  <div style="border:1px solid #e5e7eb;border-left:4px solid ${matchColor(a.match)};margin-bottom:12px;background:#fff;page-break-inside:avoid">
+    <div style="padding:14px 18px;display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:start">
+      <div style="font-family:monospace;font-size:11px;color:#9ca3af;font-weight:600;padding-top:2px">${String(i+1).padStart(2,'0')}.</div>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:3px">${a.job}</div>
+        <div style="font-size:12px;color:#374151;margin-bottom:6px">${a.co} · <span style="color:#6b7280">${a.ort||'Zürich'}</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:10px;background:#f3f4f6;padding:2px 8px;color:#374151">📅 ${a.datum}</span>
+          <span style="font-size:10px;background:#f3f4f6;padding:2px 8px;color:#374151">⏱ ${a.pensum||'100%'}</span>
+          ${a.notes?`<span style="font-size:10px;color:#6b7280;font-style:italic">📝 ${a.notes}</span>`:''}
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:22px;font-weight:900;color:${matchColor(a.match)};font-family:monospace;line-height:1">${a.match}%</div>
+        <div style="font-size:9px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:8px">KI-MATCH</div>
+        <div style="background:${statusBg(a.status)};color:${statusColor(a.status)};border:1px solid ${statusColor(a.status)}44;padding:4px 10px;font-size:10px;font-weight:600;text-align:center">${a.status}</div>
+      </div>
+    </div>
+  </div>`).join('');
 
   const html=`<!DOCTYPE html>
 <html lang="de">
@@ -1144,10 +1058,12 @@ function exportPDF(){
 <meta charset="UTF-8"/>
 <title>Bewerbungs-Report ${monthLabel} — Remo Schenk</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap');
-  body{font-family:'Helvetica Neue',Arial,sans-serif;background:#fff;color:#111;padding:40px;max-width:1000px;margin:0 auto}
-  @media print{body{padding:20px}@page{margin:20mm}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:#f9fafb;color:#111;padding:32px;max-width:820px;margin:0 auto}
+@media print{
+  body{background:#fff;padding:16px}
+  @page{margin:15mm;size:A4}
+}
 </style>
 
 </head>
@@ -1155,67 +1071,51 @@ function exportPDF(){
 
 <!-- HEADER -->
 
-<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;padding-bottom:24px;border-bottom:3px solid #000">
+<div style="background:#08080f;color:#fff;padding:28px 32px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center">
   <div>
-    <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:#000;letter-spacing:0.15em;margin-bottom:4px">J.A.R.V.I.S.</div>
-    <div style="font-size:11px;color:#6b7280;letter-spacing:0.2em;text-transform:uppercase">Stark Recruitment Intelligence</div>
+    <div style="font-size:11px;letter-spacing:0.35em;color:rgba(255,255,255,0.35);margin-bottom:6px">J.A.R.V.I.S. RECRUITMENT INTELLIGENCE</div>
+    <div style="font-size:26px;font-weight:800;letter-spacing:0.02em">REMO SCHENK</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:4px">remoschenk@me.com · +41 77 445 01 02 · Horgen / Zürich</div>
   </div>
   <div style="text-align:right">
-    <div style="font-size:22px;font-weight:700;color:#111;margin-bottom:4px">Remo Schenk</div>
-    <div style="font-size:11px;color:#6b7280">remoschenk@me.com · +41 77 445 01 02</div>
-    <div style="font-size:11px;color:#6b7280">Horgen / Zürich, CH</div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.2em;margin-bottom:4px">BEWERBUNGS-REPORT</div>
+    <div style="font-size:20px;font-weight:700">${monthLabel}</div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px">${today}</div>
   </div>
-</div>
-
-<!-- TITLE -->
-
-<div style="margin-bottom:28px">
-  <div style="font-size:13px;color:#6b7280;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px">Bewerbungs-Report</div>
-  <div style="font-size:32px;font-weight:900;color:#111;margin-bottom:4px">${monthLabel}</div>
-  <div style="font-size:12px;color:#9ca3af">Erstellt am ${new Date().toLocaleDateString('de-CH',{day:'numeric',month:'long',year:'numeric'})}</div>
 </div>
 
 <!-- STATS -->
 
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:36px">
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px">
   ${[
     {l:'Bewerbungen',v:filtered.length,c:'#2563eb'},
     {l:'Ø KI-Match',v:avg+'%',c:'#059669'},
     {l:'Antworten',v:antworten,c:'#7c3aed'},
-    {l:'Interviews',v:interviews,c:'#d97706'}
+    {l:'Interviews',v:interviews,c:'#d97706'},
+    {l:'Abgelehnt',v:abgelehnt,c:'#dc2626'}
   ].map(s=>`
-    <div style="border:2px solid ${s.c}22;background:${s.c}08;padding:18px;border-radius:8px;text-align:center;border-top:3px solid ${s.c}">
-      <div style="font-size:36px;font-weight:900;color:${s.c};font-family:monospace;margin-bottom:6px">${s.v}</div>
-      <div style="font-size:10px;color:#6b7280;letter-spacing:0.12em;text-transform:uppercase">${s.l}</div>
+    <div style="background:#fff;border:1px solid #e5e7eb;border-top:3px solid ${s.c};padding:14px 12px;text-align:center">
+      <div style="font-size:28px;font-weight:900;color:${s.c};font-family:monospace">${s.v}</div>
+      <div style="font-size:9px;color:#6b7280;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px">${s.l}</div>
     </div>
   `).join('')}
 </div>
 
-<!-- TABLE -->
+<!-- CARDS -->
 
-<table style="width:100%;border-collapse:collapse;margin-bottom:36px">
-  <thead>
-    <tr style="background:#f9fafb">
-      <th style="padding:10px 12px;text-align:left;font-size:9px;letter-spacing:0.15em;color:#6b7280;text-transform:uppercase;border-bottom:2px solid #e5e7eb">#</th>
-      <th style="padding:10px 12px;text-align:left;font-size:9px;letter-spacing:0.15em;color:#6b7280;text-transform:uppercase;border-bottom:2px solid #e5e7eb">Position</th>
-      <th style="padding:10px 12px;text-align:left;font-size:9px;letter-spacing:0.15em;color:#6b7280;text-transform:uppercase;border-bottom:2px solid #e5e7eb">Firma</th>
-      <th style="padding:10px 12px;text-align:left;font-size:9px;letter-spacing:0.15em;color:#6b7280;text-transform:uppercase;border-bottom:2px solid #e5e7eb">Ort</th>
-      <th style="padding:10px 12px;text-align:center;font-size:9px;letter-spacing:0.15em;color:#6b7280;text-transform:uppercase;border-bottom:2px solid #e5e7eb">Match</th>
-      <th style="padding:10px 12px;text-align:left;font-size:9px;letter-spacing:0.15em;color:#6b7280;text-transform:uppercase;border-bottom:2px solid #e5e7eb">Datum</th>
-      <th style="padding:10px 12px;text-align:center;font-size:9px;letter-spacing:0.15em;color:#6b7280;text-transform:uppercase;border-bottom:2px solid #e5e7eb">Status</th>
-    </tr>
-  </thead>
-  <tbody>${rows}</tbody>
-</table>
+<div style="margin-bottom:24px">
+  <div style="font-size:9px;letter-spacing:0.25em;color:#6b7280;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #e5e7eb">${filtered.length} BEWERBUNG${filtered.length!==1?'EN':''} · ${monthLabel.toUpperCase()}</div>
+  ${cards}
+</div>
 
 <!-- FOOTER -->
 
-<div style="border-top:1px solid #e5e7eb;padding-top:20px;display:flex;justify-content:space-between;align-items:center">
-  <div style="font-size:10px;color:#9ca3af">J.A.R.V.I.S. Recruitment Intelligence · remoschenk007.github.io/jarvis</div>
-  <div style="font-size:10px;color:#9ca3af">${filtered.length} Bewerbung${filtered.length!==1?'en':''} · ${monthLabel}</div>
+<div style="border-top:1px solid #e5e7eb;padding-top:16px;display:flex;justify-content:space-between;align-items:center">
+  <div style="font-size:9px;color:#9ca3af;letter-spacing:0.08em">© 2026 Remo Schenk · J.A.R.V.I.S. Recruitment Intelligence</div>
+  <div style="font-size:9px;color:#9ca3af">remoschenk007.github.io/jarvis</div>
 </div>
 
-<script>window.onload=()=>window.print()<\/script>
+<script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script>
 </body>
 </html>`;
 
@@ -1310,11 +1210,12 @@ function renderTracker(){
 }
 
 function updateStatus(idx,val){
-  if(apps[idx]){apps[idx].status=val;renderTracker();showBriefing();}
+  if(apps[idx]){apps[idx].status=val;saveApps();renderTracker();showBriefing();}
 }
 
 function deleteApp(idx){
   apps.splice(idx,1);
+  saveApps();
   updateBadge();
   renderTracker();
   showBriefing();
@@ -1335,6 +1236,7 @@ function openNotes(idx){
 function saveNotes(){
   if(notesIdx>=0&&apps[notesIdx]){
     apps[notesIdx].notes=document.getElementById('notes-txt').value;
+    saveApps();
     renderTracker();
   }
   closeNotes();
