@@ -367,6 +367,7 @@ Mit grossem Interesse habe ich Ihre Ausschreibung gelesen…</div>
 const p=new URLSearchParams(window.location.search);
 const stelle=p.get('stelle')||'Creative Director';
 const firma=p.get('firma')||'';
+const jid=p.get('jid')||'';
 const today=new Date().toLocaleDateString('de-CH',{year:'numeric',month:'long',day:'numeric'});
 
 document.getElementById('h-stelle').textContent=stelle;
@@ -376,16 +377,27 @@ if(firma){
 }
 document.title='Remo Schenk — Bewerbung als '+stelle+(firma?' bei '+firma:'');
 
-// Load letter: 1) sessionStorage (same browser session), 2) localStorage, 3) auto-generate
+// ── SICHER: Brief per Job-ID laden ──
+// Priorität: 1) Job-spezifisch per jid, 2) sessionStorage, 3) localStorage
+// Sicherheitscheck: Brief muss zu Stelle+Firma passen
 let letterText='';
 try{
-  const ss=sessionStorage.getItem('jarvis_letter');
-  const ls=localStorage.getItem('jarvis_letter');
-  const lsFirma=localStorage.getItem('jarvis_firma')||'';
-  const lsStelle=localStorage.getItem('jarvis_stelle')||'';
-  // Use stored letter if it matches current job
-  if(ss && ss.length>100) letterText=ss;
-  else if(ls && ls.length>100) letterText=ls;
+  if(jid){
+    const byId=localStorage.getItem('jarvis_letter_'+jid)||'';
+    if(byId.length>100) letterText=byId;
+  }
+  if(!letterText){
+    const ss=sessionStorage.getItem('jarvis_letter')||'';
+    const ssId=sessionStorage.getItem('jarvis_jobid')||'';
+    // sessionStorage nur nehmen wenn Job-ID übereinstimmt
+    if(ss.length>100 && (ssId===jid || !jid)) letterText=ss;
+  }
+  if(!letterText){
+    const ls=localStorage.getItem('jarvis_letter')||'';
+    const lsId=localStorage.getItem('jarvis_jobid')||'';
+    // localStorage nur nehmen wenn Job-ID übereinstimmt
+    if(ls.length>100 && (lsId===jid || !jid)) letterText=ls;
+  }
 }catch(e){}
 
 // Auto-generate letter if none found
